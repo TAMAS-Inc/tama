@@ -2,3 +2,5 @@ build
 coverage
 dist
 *.config.ts
+*.config.cjs
+.*
