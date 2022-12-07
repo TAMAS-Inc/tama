@@ -1,4 +1,5 @@
-import { twMerge as tw } from 'tailwind-merge';
+import { tw } from '@/utils/tailwindMerge';
+import { Icon } from '@/components/Icon';
 
 type IconButtonProps<T extends React.ElementType> = Component<T>;
 
@@ -6,33 +7,16 @@ export function IconButton({
   children,
   className,
   ...restProps
-}: IconButtonProps<'div'>) {
+}: IconButtonProps<'button'>) {
   return (
-    <div
+    <button
+      type="button"
       className={tw('flex items-center justify-center ', className)}
       {...restProps}
     >
       {children}
-    </div>
+    </button>
   );
 }
 
-type IconProps<T extends React.ElementType> = {
-  icon: (
-    props: React.ComponentProps<'svg'> & {
-      title?: string;
-      titleId?: string;
-    }
-  ) => JSX.Element;
-} & Component<T>;
-
-function IconContainer({
-  children,
-  className,
-  icon: Icon,
-  ...restProps
-}: IconProps<'svg'>) {
-  return <Icon className={tw('', className)} {...restProps} />;
-}
-
-IconButton.IconContainer = IconContainer;
+IconButton.Icon = Icon;

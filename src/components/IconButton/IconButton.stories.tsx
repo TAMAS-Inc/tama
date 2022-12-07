@@ -23,29 +23,25 @@ export const Sync: ComponentStory<typeof IconButton> = (args) => (
     {...args}
     className="h-12 w-12 rounded-full bg-Primary-600 text-Primary-100"
   >
-    <IconButton.IconContainer icon={ArrowPathIcon} className="h-6 w-6" />
+    <IconButton.Icon icon={ArrowPathIcon} className="h-6 w-6" />
   </IconButton>
 );
 
 export const Reset: ComponentStory<typeof IconButton> = (args) => (
   <IconButton {...args} className="h-4 w-4">
-    <IconButton.IconContainer icon={XCircleIcon} className="text-Gray-500" />
+    <IconButton.Icon icon={XCircleIcon} className="text-Gray-500" />
   </IconButton>
 );
 
 export const Predict: ComponentStory<typeof IconButton> = (args) => (
   <IconButton {...args} className="h-6 w-6">
-    <IconButton.IconContainer
-      icon={ClockIcon}
-      className="text-black"
-      stroke-width="2"
-    />
+    <IconButton.Icon icon={ClockIcon} className="text-black" stroke-width="2" />
   </IconButton>
 );
 
 export const Info: ComponentStory<typeof IconButton> = (args) => (
   <IconButton {...args} className="h-6 w-6">
-    <IconButton.IconContainer
+    <IconButton.Icon
       icon={InformationCircleIcon}
       className="text-Primary-600"
       stroke-width="2"
