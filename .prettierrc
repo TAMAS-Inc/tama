@@ -14,5 +14,6 @@
   "parser": "typescript",
   "plugins": [
     "prettier-plugin-tailwindcss"
-  ]
+  ],
+  "pluginSearchDirs": false
 }
