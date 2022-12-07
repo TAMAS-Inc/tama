@@ -11,5 +11,9 @@
   "tabWidth": 2,
   "trailingComma": "es5",
   "useTabs": false,
-  "parser": "typescript"
+  "parser": "typescript",
+  "plugins": [
+    "prettier-plugin-tailwindcss"
+  ],
+  "pluginSearchDirs": false
 }

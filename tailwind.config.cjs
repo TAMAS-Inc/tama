@@ -48,14 +48,4 @@ module.exports = {
       },
     },
   },
-  plugins: [
-    ({ addUtilities }) => {
-      addUtilities({
-        '.Body1_Bold': {
-          fontSize: '20px',
-          fontWeight: '700',
-        },
-      });
-    },
-  ],
 };
