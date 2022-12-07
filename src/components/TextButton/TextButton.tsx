@@ -1,6 +1,6 @@
-import { twMerge as tw } from 'tailwind-merge';
+import { tw } from '@/utils/tailwindMerge';
 
-type TextButtonProps<T extends React.ElementType> = {} & Component<T>;
+type TextButtonProps<T extends React.ElementType> = Component<T>;
 
 export function TextButton({
   children,
@@ -10,7 +10,7 @@ export function TextButton({
   return (
     <button
       type="button"
-      className={tw('text-Body3 px-3 h-6 bg-Gray-100 rounded', className)}
+      className={tw('h-6 rounded bg-Gray-100 px-3 text-body3', className)}
       {...restProps}
     >
       {children}
