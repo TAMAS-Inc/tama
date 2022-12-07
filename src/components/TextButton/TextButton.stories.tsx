@@ -24,7 +24,7 @@ export const Default: ComponentStory<typeof TextButton> = (args) => (
 );
 
 export const Edit: ComponentStory<typeof TextButton> = (args) => (
-  <TextButton {...args} className="text-Body1 h-8 bg-White">
+  <TextButton {...args} className="h-8 bg-White text-body1">
     버튼
   </TextButton>
 );
