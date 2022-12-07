@@ -1,5 +1,6 @@
 import { createContext, useMemo } from 'react';
 import { tw } from '@/utils/tailwindMerge';
+import { Icon } from '@/components/Icon';
 
 interface StatusButtonContextValue {
   disabled: boolean | undefined;
@@ -31,7 +32,7 @@ export function StatusButton({
         className={tw(
           'relative h-16 w-[358px] rounded bg-Primary-300 text-body1 text-Black',
           className,
-          disabled ? 'bg-Gray-300 text-White' : ''
+          disabled && 'bg-Gray-300 text-White'
         )}
         disabled={disabled}
         {...restProps}
@@ -42,22 +43,4 @@ export function StatusButton({
   );
 }
 
-type IconProps<T extends React.ElementType> = {
-  icon: (
-    props: React.ComponentProps<'svg'> & {
-      title?: string;
-      titleId?: string;
-    }
-  ) => JSX.Element;
-} & Component<T>;
-
-function IconContainer({
-  children,
-  className,
-  icon: Icon,
-  ...restProps
-}: IconProps<'svg'>) {
-  return <Icon className={tw('', className)} {...restProps} />;
-}
-
-StatusButton.Icon = IconContainer;
+StatusButton.Icon = Icon;
