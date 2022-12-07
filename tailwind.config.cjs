@@ -1,7 +1,9 @@
 const plugin = require('tailwindcss/plugin');
+
 /** @type {import('tailwindcss').Config} */
+
 module.exports = {
-  content: ['./src/**/*.{html,js,ts,tsx,jsx}'],
+  content: ['./index.html', './src/**/*.{html,js,ts,tsx,jsx}'],
   theme: {
     colors: {
       Black: '#181818',
@@ -46,6 +48,12 @@ module.exports = {
         'icon-close': 'url(/public/assets/images/icon-close.svg)',
         'icon-search': 'url(/public/assets/images/icon-search.svg)',
       },
+      fontSize: {
+        body1: '20px',
+        body2: '16px',
+        body3: '12px',
+      },
     },
   },
+  plugins: [],
 };
