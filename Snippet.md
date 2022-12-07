@@ -85,7 +85,7 @@
   },
   "Import tailwind-merge": {
     "prefix": "iptwm",
-    "body": ["import { twMerge as tw } from 'tailwind-merge';"],
+    "body": ["import { tw } from '@/utils/tailwindMerge';"],
     "description": "Import tailwind-merge"
   },
   "TypeScript 스토리 생성": {
