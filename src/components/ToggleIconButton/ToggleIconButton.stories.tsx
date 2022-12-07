@@ -23,20 +23,18 @@ export default meta;
 
 const isChecked = true;
 export const Checked: ComponentStory<typeof ToggleIconButton> = (args) => (
-  <ToggleIconButton checked={isChecked}>
+  <ToggleIconButton checked={isChecked} {...args}>
     <ToggleIconButton.Icon
       fill="#A87600"
       icon={isChecked ? CheckCircleIcon : PlusCircleIcon}
-      {...args}
     />
   </ToggleIconButton>
 );
 
 export const Unchecked: ComponentStory<typeof ToggleIconButton> = (args) => (
-  <ToggleIconButton checked={!isChecked}>
+  <ToggleIconButton checked={!isChecked} {...args}>
     <ToggleIconButton.Icon
       icon={!isChecked ? CheckCircleIcon : PlusCircleIcon}
-      {...args}
     />
   </ToggleIconButton>
 );
@@ -45,21 +43,17 @@ export const Unchecked: ComponentStory<typeof ToggleIconButton> = (args) => (
 export const DropdonwChecked: ComponentStory<typeof ToggleIconButton> = (
   args
 ) => (
-  <ToggleIconButton checked={isChecked}>
-    <ToggleIconButton.Icon
-      icon={isChecked ? ChevronDownIcon : ChevronUpIcon}
-      {...args}
-    />
+  <ToggleIconButton checked={isChecked} {...args}>
+    <ToggleIconButton.Icon icon={isChecked ? ChevronDownIcon : ChevronUpIcon} />
   </ToggleIconButton>
 );
 
 export const DropdonwUnchecked: ComponentStory<typeof ToggleIconButton> = (
   args
 ) => (
-  <ToggleIconButton checked={!isChecked}>
+  <ToggleIconButton checked={!isChecked} {...args}>
     <ToggleIconButton.Icon
       icon={!isChecked ? ChevronDownIcon : ChevronUpIcon}
-      {...args}
     />
   </ToggleIconButton>
 );
