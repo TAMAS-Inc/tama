@@ -6,13 +6,18 @@ import {
   useEffect,
   useRef,
   ChangeEventHandler,
+  ComponentProps,
 } from 'react';
 import { tw } from '@/utils/tailwindMerge';
+import { IconButton } from '@/components/IconButton';
+import { Icon } from '@/components/Icon';
 
 interface InputContainerContextValue {
   inputValue: string;
   setInputValue: React.Dispatch<React.SetStateAction<string>>;
 }
+type InputContainerProps<T extends React.ElementType> = Component<T>;
+type InputProps<T extends React.ElementType> = Component<T>;
 
 const InputContainerContext = createContext<InputContainerContextValue | null>(
   null
@@ -22,13 +27,11 @@ const useInputContainerContext = () => {
   const ctx = useContext(InputContainerContext);
 
   if (!ctx) {
-    throw new Error('Test 컴포넌트 안에서만 쓰여야합니다!');
+    throw new Error('InputContainer 컴포넌트 안에서만 쓰여야합니다!');
   }
 
   return ctx;
 };
-
-type InputContainerProps<T extends React.ElementType> = Component<T>;
 
 export function InputContainer({
   children,
@@ -52,8 +55,6 @@ export function InputContainer({
     </InputContainerContext.Provider>
   );
 }
-
-type InputProps<T extends React.ElementType> = Component<T>;
 
 function Input({ className, ...restProps }: InputProps<'input'>) {
   const { inputValue, setInputValue } = useInputContainerContext();
@@ -81,23 +82,10 @@ function Input({ className, ...restProps }: InputProps<'input'>) {
   );
 }
 
-InputContainer.Input = Input;
-
-type IconProps<T extends React.ElementType> = {
-  icon: (
-    props: React.ComponentProps<'svg'> & {
-      title?: string;
-      titleId?: string;
-    }
-  ) => JSX.Element;
-} & Component<T>;
-
-function IconContainer({
-  children,
-  className,
-  icon: Icon,
+function ResetButton({
+  icon,
   ...restProps
-}: IconProps<'svg'>) {
+}: ComponentProps<typeof Icon> & ComponentProps<typeof IconButton>) {
   const { inputValue, setInputValue } = useInputContainerContext();
 
   const handleClick = () => {
@@ -108,8 +96,11 @@ function IconContainer({
   if (inputValue === '') return null;
 
   return (
-    <Icon onClick={handleClick} className={tw('', className)} {...restProps} />
+    <IconButton onClick={handleClick} {...restProps}>
+      <IconButton.Icon icon={icon} />
+    </IconButton>
   );
 }
 
-InputContainer.Icon = IconContainer;
+InputContainer.Input = Input;
+InputContainer.ResetButton = ResetButton;

@@ -30,9 +30,9 @@ export const Search: ComponentStory<typeof InputContainer> = (args) => (
 export const Searching: ComponentStory<typeof InputContainer> = (args) => (
   <InputContainer className="relative" {...args}>
     <InputContainer.Input className="bg-Gray-100" />
-    <InputContainer.Icon
+    <InputContainer.ResetButton
       icon={XCircleIcon}
-      className="absolute top-2 right-2.5 h-4 w-4"
+      className="absolute top-1.5 right-3 bg-Gray-100 "
     />
   </InputContainer>
 );
