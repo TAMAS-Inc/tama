@@ -17,49 +17,30 @@ const meta = {
       url: 'figmaURL',
     },
   },
+  args: { checked: true },
 } as ComponentMeta<typeof ToggleIconButton>;
 
 export default meta;
 
-const isChecked = true;
-export const Checked: ComponentStory<typeof ToggleIconButton> = (args) => (
-  <ToggleIconButton checked={isChecked}>
+export const Checked: ComponentStory<typeof ToggleIconButton> = ({
+  checked,
+  ...args
+}) => (
+  <ToggleIconButton {...args} checked={checked}>
     <ToggleIconButton.Icon
-      fill="#A87600"
-      icon={isChecked ? CheckCircleIcon : PlusCircleIcon}
-      {...args}
-    />
-  </ToggleIconButton>
-);
-
-export const Unchecked: ComponentStory<typeof ToggleIconButton> = (args) => (
-  <ToggleIconButton checked={!isChecked}>
-    <ToggleIconButton.Icon
-      icon={!isChecked ? CheckCircleIcon : PlusCircleIcon}
-      {...args}
+      fill={checked ? '#A87600' : '#878787'}
+      stroke={checked ? 'none' : '#fff'}
+      icon={checked ? CheckCircleIcon : PlusCircleIcon}
     />
   </ToggleIconButton>
 );
 
 // dropdown
-export const DropdonwChecked: ComponentStory<typeof ToggleIconButton> = (
-  args
-) => (
-  <ToggleIconButton checked={isChecked}>
-    <ToggleIconButton.Icon
-      icon={isChecked ? ChevronDownIcon : ChevronUpIcon}
-      {...args}
-    />
-  </ToggleIconButton>
-);
-
-export const DropdonwUnchecked: ComponentStory<typeof ToggleIconButton> = (
-  args
-) => (
-  <ToggleIconButton checked={!isChecked}>
-    <ToggleIconButton.Icon
-      icon={!isChecked ? ChevronDownIcon : ChevronUpIcon}
-      {...args}
-    />
+export const DropdownChecked: ComponentStory<typeof ToggleIconButton> = ({
+  checked,
+  ...args
+}) => (
+  <ToggleIconButton checked={checked} {...args}>
+    <ToggleIconButton.Icon icon={checked ? ChevronDownIcon : ChevronUpIcon} />
   </ToggleIconButton>
 );
