@@ -37,6 +37,9 @@ module.exports = {
       '2xl': '1.875rem',
       '3xl': '2.25rem',
       '4xl': '3rem',
+      Body1: '20px',
+      Body2: '16px',
+      Body3: '12px',
     },
     fontFamily: {
       'line-seed-sans-kr': 'LINE Seed Sans KR',
@@ -48,14 +51,5 @@ module.exports = {
       },
     },
   },
-  plugins: [
-    ({ addUtilities }) => {
-      addUtilities({
-        '.Body1_Bold': {
-          fontSize: '20px',
-          fontWeight: '700',
-        },
-      });
-    },
-  ],
+  plugins: [],
 };
