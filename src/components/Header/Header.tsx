@@ -56,7 +56,7 @@ function Menu({ children, className, ...restProps }: MenuProps<'button'>) {
       className={tw('absolute right-7 h-6 w-6', className)}
       {...restProps}
     >
-      <IconButton.Icon className="" icon={Bars3Icon} />
+      <IconButton.Icon icon={Bars3Icon} />
     </IconButton>
   );
 }
