@@ -15,10 +15,6 @@ const meta = {
 
 export default meta;
 
-const Template: ComponentStory<typeof TextButton> = (args) => (
-  <TextButton {...args} />
-);
-
 export const Default: ComponentStory<typeof TextButton> = (args) => (
   <TextButton {...args}>버튼</TextButton>
 );
