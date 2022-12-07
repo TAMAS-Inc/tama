@@ -1,7 +1,9 @@
 const plugin = require('tailwindcss/plugin');
+
 /** @type {import('tailwindcss').Config} */
+
 module.exports = {
-  content: ['./src/**/*.{html,js,ts,tsx,jsx}'],
+  content: ['./index.html', './src/**/*.{html,js,ts,tsx,jsx}'],
   theme: {
     colors: {
       Black: '#181818',
@@ -37,9 +39,6 @@ module.exports = {
       '2xl': '1.875rem',
       '3xl': '2.25rem',
       '4xl': '3rem',
-      Body1: '20px',
-      Body2: '16px',
-      Body3: '12px',
     },
     fontFamily: {
       'line-seed-sans-kr': 'LINE Seed Sans KR',
@@ -48,6 +47,11 @@ module.exports = {
       backgroundImage: {
         'icon-close': 'url(/public/assets/images/icon-close.svg)',
         'icon-search': 'url(/public/assets/images/icon-search.svg)',
+      },
+      fontSize: {
+        body1: '20px',
+        body2: '16px',
+        body3: '12px',
       },
     },
   },
