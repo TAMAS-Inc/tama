@@ -28,7 +28,7 @@ export const Default: ComponentStory<typeof ToggleIconButton> = ({
   checked,
   ...args
 }) => (
-  <ToggleIconButton {...args} checked={checked}>
+  <ToggleIconButton {...args}>
     <ToggleIconButton.Icon
       className={tw(checked ? 'fill-Primary-700' : 'fill-none')}
       icon={checked ? CheckCircleIcon : PlusCircleIcon}
@@ -41,7 +41,7 @@ export const DropdownChecked: ComponentStory<typeof ToggleIconButton> = ({
   checked,
   ...args
 }) => (
-  <ToggleIconButton checked={checked} {...args}>
+  <ToggleIconButton {...args}>
     <ToggleIconButton.Icon icon={checked ? ChevronDownIcon : ChevronUpIcon} />
   </ToggleIconButton>
 );
@@ -51,7 +51,7 @@ export const Checkbox: ComponentStory<typeof ToggleIconButton> = ({
   checked,
   ...args
 }) => (
-  <ToggleIconButton checked={checked} {...args}>
+  <ToggleIconButton {...args}>
     <ToggleIconButton.Icon
       icon={checked ? CheckCircleIcon : CheckCircleIconOff}
     />
