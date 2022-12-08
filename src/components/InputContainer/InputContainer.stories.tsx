@@ -18,29 +18,27 @@ export default meta;
 export const Default: ComponentStory<typeof InputContainer> = (args) => (
   <InputContainer className="relative" {...args}>
     <InputContainer.Input className="border" />
-    <InputContainer.ResetButton
-      icon={XCircleIcon}
-      className="absolute top-1.5 right-3"
-    />
+    <InputContainer.ResetButton className="absolute top-1.5 right-3" />
   </InputContainer>
 );
 
 export const Search: ComponentStory<typeof InputContainer> = (args) => (
   <InputContainer className="relative" {...args}>
     <InputContainer.Input className="bg-Gray-100" placeholder="정류장 검색" />
-    <InputContainer.ResetButton
-      icon={XCircleIcon}
-      className="absolute top-1.5 right-3"
-    />
+    <InputContainer.ResetButton className="absolute top-1.5 right-3" />
   </InputContainer>
 );
 
 export const Searching: ComponentStory<typeof InputContainer> = (args) => (
   <InputContainer className="relative" {...args}>
     <InputContainer.Input className="bg-Gray-100" />
-    <InputContainer.ResetButton
-      icon={XCircleIcon}
-      className="absolute top-1.5 right-3"
-    />
+    <InputContainer.ResetButton className="absolute top-1.5 right-3" />
+  </InputContainer>
+);
+
+export const Checkbox: ComponentStory<typeof InputContainer> = (args) => (
+  <InputContainer className="relative" {...args}>
+    <InputContainer.Input className="bg-Gray-100" />
+    <InputContainer.ResetButton className="absolute top-1.5 right-3" />
   </InputContainer>
 );
