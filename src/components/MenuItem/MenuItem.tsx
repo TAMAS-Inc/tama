@@ -6,9 +6,10 @@ export function MenuItem({
   children,
   className,
   ...restProps
-}: MenuItemProps<'div'>) {
+}: MenuItemProps<'button'>) {
   return (
-    <div
+    <button
+      type="button"
       className={tw(
         'flex h-14 w-64 flex-col justify-center border-b border-Gray-100 bg-White pl-4',
         className
@@ -16,6 +17,6 @@ export function MenuItem({
       {...restProps}
     >
       {children}
-    </div>
+    </button>
   );
 }
