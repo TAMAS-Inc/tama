@@ -20,7 +20,6 @@ export default meta;
 
 export const Delete: ComponentStory<typeof Modal> = ({ isOpened, ...args }) => (
   <Modal isOpened={isOpened} {...args}>
-    <Modal.DimBackground />
     <Modal.ModalContainer>
       <Modal.Content className="bg-White">
         이 정류장을 삭제하시겠습니까?
@@ -34,6 +33,7 @@ export const Delete: ComponentStory<typeof Modal> = ({ isOpened, ...args }) => (
         </Modal.TextButton>
       </Modal.Buttons>
     </Modal.ModalContainer>
+    <Modal.DimBackground />
   </Modal>
 );
 
@@ -42,7 +42,6 @@ export const Inquiry: ComponentStory<typeof Modal> = ({
   ...args
 }) => (
   <Modal isOpened={isOpened} {...args}>
-    <Modal.DimBackground />
     <Modal.ModalContainer>
       <Modal.Content className="flex flex-col bg-White ">
         <p>정상적으로 처리되었습니다.</p>
@@ -54,5 +53,6 @@ export const Inquiry: ComponentStory<typeof Modal> = ({
         </Modal.TextButton>
       </Modal.Buttons>
     </Modal.ModalContainer>
+    <Modal.DimBackground />
   </Modal>
 );

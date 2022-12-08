@@ -1,13 +1,5 @@
-import { useMemo, createContext } from 'react';
 import { tw } from '@/utils/tailwindMerge';
-import { TextButton } from '../TextButton/TextButton';
-import { DimBackground } from '../DimBackground/DimBackground';
-
-interface ModalContextValue {
-  isOpened: boolean | undefined;
-}
-
-const ModalContext = createContext<ModalContextValue | null>(null);
+import { TextButton } from '../TextButton';
 
 type ModalProps<T extends React.ElementType> = {
   isOpened?: boolean;
@@ -19,31 +11,27 @@ export function Modal({
   isOpened,
   ...restProps
 }: ModalProps<'div'>) {
-  const ctxValue = useMemo((): ModalContextValue => ({ isOpened }), [isOpened]);
-
   return (
-    <ModalContext.Provider value={ctxValue}>
-      <div
-        className={tw(
-          'relative h-[844px] w-[390px]',
-          !isOpened && 'hidden',
-          className
-        )}
-        {...restProps}
-      >
-        {children}
-      </div>
-    </ModalContext.Provider>
+    <div
+      className={tw(
+        'relative h-[844px] w-[390px]',
+        !isOpened && 'hidden',
+        className
+      )}
+      {...restProps}
+    >
+      {children}
+    </div>
   );
 }
 
-type ModlaContainerProps<T extends React.ElementType> = Component<T>;
+type ModalContainerProps<T extends React.ElementType> = Component<T>;
 
-function ModlaContainer({
+function ModalContainer({
   children,
   className,
   ...restProps
-}: ModlaContainerProps<'div'>) {
+}: ModalContainerProps<'div'>) {
   return (
     <div
       className={tw(
@@ -57,7 +45,7 @@ function ModlaContainer({
   );
 }
 
-Modal.ModalContainer = ModlaContainer;
+Modal.ModalContainer = ModalContainer;
 
 type ContentProps<T extends React.ElementType> = Component<T>;
 
@@ -81,6 +69,30 @@ function Buttons({ children, className, ...restProps }: ButtonsProps<'div'>) {
   return (
     <div
       className={tw('w-[278px] text-body3 font-bold', className)}
+      {...restProps}
+    >
+      {children}
+    </div>
+  );
+}
+
+type DimBackgroundProps<T extends React.ElementType> = {
+  isOpened?: boolean;
+} & Component<T>;
+
+function DimBackground({
+  children,
+  className,
+  isOpened,
+  ...restProps
+}: DimBackgroundProps<'div'>) {
+  return (
+    <div
+      className={tw(
+        '-z-10 h-full w-full bg-Gray-700',
+        isOpened && 'hidden',
+        className
+      )}
       {...restProps}
     >
       {children}
