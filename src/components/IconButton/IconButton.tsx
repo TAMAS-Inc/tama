@@ -11,7 +11,7 @@ export function IconButton({
   return (
     <button
       type="button"
-      className={tw('flex items-center justify-center ', className)}
+      className={tw('flex h-5 w-5 items-center justify-center', className)}
       {...restProps}
     >
       {children}

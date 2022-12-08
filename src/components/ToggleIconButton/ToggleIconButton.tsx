@@ -1,4 +1,5 @@
 import { twMerge as tw } from 'tailwind-merge';
+import { Icon } from '../Icon';
 
 type ToggleIconButtonProps<T extends React.ElementType> = {
   checked?: boolean;
@@ -13,10 +14,7 @@ export function ToggleIconButton({
   return (
     <button
       type="button"
-      className={tw(
-        'flex h-7 w-7 items-center justify-center',
-        className
-      )}
+      className={tw('flex h-7 w-7 items-center justify-center', className)}
       {...restProps}
     >
       {children}
@@ -24,22 +22,4 @@ export function ToggleIconButton({
   );
 }
 
-type IconProps<T extends React.ElementType> = {
-  icon: (
-    props: React.ComponentProps<'svg'> & {
-      title?: string;
-      titleId?: string;
-    }
-  ) => JSX.Element;
-} & Component<T>;
-
-function IconContainer({
-  children,
-  className,
-  icon: Icon,
-  ...restProps
-}: IconProps<'svg'>) {
-  return <Icon className={tw('', className)} {...restProps} />;
-}
-
-ToggleIconButton.Icon = IconContainer;
+ToggleIconButton.Icon = Icon;
