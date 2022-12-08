@@ -4,9 +4,11 @@ import {
   ChevronUpIcon,
   ChevronDownIcon,
   PlusCircleIcon,
+  CheckCircleIcon as CheckCircleIconOff,
 } from '@heroicons/react/24/outline';
 
 import { ToggleIconButton } from './ToggleIconButton';
+import { tw } from '@/utils/tailwindMerge';
 
 const meta = {
   component: ToggleIconButton,
@@ -17,43 +19,41 @@ const meta = {
       url: 'figmaURL',
     },
   },
+  args: { checked: true },
 } as ComponentMeta<typeof ToggleIconButton>;
 
 export default meta;
 
-const isChecked = true;
-export const Checked: ComponentStory<typeof ToggleIconButton> = (args) => (
-  <ToggleIconButton checked={isChecked} {...args}>
+export const Default: ComponentStory<typeof ToggleIconButton> = ({
+  checked,
+  ...args
+}) => (
+  <ToggleIconButton {...args} checked={checked}>
     <ToggleIconButton.Icon
-      fill="#A87600"
-      icon={isChecked ? CheckCircleIcon : PlusCircleIcon}
-    />
-  </ToggleIconButton>
-);
-
-export const Unchecked: ComponentStory<typeof ToggleIconButton> = (args) => (
-  <ToggleIconButton checked={!isChecked} {...args}>
-    <ToggleIconButton.Icon
-      icon={!isChecked ? CheckCircleIcon : PlusCircleIcon}
+      className={tw(checked ? 'fill-Primary-700' : 'fill-none')}
+      icon={checked ? CheckCircleIcon : PlusCircleIcon}
     />
   </ToggleIconButton>
 );
 
 // dropdown
-export const DropdonwChecked: ComponentStory<typeof ToggleIconButton> = (
-  args
-) => (
-  <ToggleIconButton checked={isChecked} {...args}>
-    <ToggleIconButton.Icon icon={isChecked ? ChevronDownIcon : ChevronUpIcon} />
+export const DropdownChecked: ComponentStory<typeof ToggleIconButton> = ({
+  checked,
+  ...args
+}) => (
+  <ToggleIconButton checked={checked} {...args}>
+    <ToggleIconButton.Icon icon={checked ? ChevronDownIcon : ChevronUpIcon} />
   </ToggleIconButton>
 );
 
-export const DropdonwUnchecked: ComponentStory<typeof ToggleIconButton> = (
-  args
-) => (
-  <ToggleIconButton checked={!isChecked} {...args}>
+// checkbox
+export const Checkbox: ComponentStory<typeof ToggleIconButton> = ({
+  checked,
+  ...args
+}) => (
+  <ToggleIconButton checked={checked} {...args}>
     <ToggleIconButton.Icon
-      icon={!isChecked ? ChevronDownIcon : ChevronUpIcon}
+      icon={checked ? CheckCircleIcon : CheckCircleIconOff}
     />
   </ToggleIconButton>
 );

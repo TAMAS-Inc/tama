@@ -29,7 +29,8 @@
     "react/require-default-props": "off",
     "react/jsx-props-no-spreading" :"off",
     "react/function-component-definition":"off",
-    "import/extensions":"off"
+    "import/extensions":"off",
+    "react/prop-types":"off"
   },
   "settings": {
     "react": {
