@@ -5,4 +5,5 @@ export { IconButton } from './IconButton';
 export { InputContainer } from './InputContainer';
 export { StatusButton } from './StatusButton';
 export { TextButton } from './TextButton';
+export { ToastContainer } from './ToastContainer';
 export { ToggleIconButton } from './ToggleIconButton';
