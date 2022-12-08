@@ -1,4 +1,6 @@
 export { Dropdown } from './Dropdown';
+export { MainHeader } from './MainHeader';
+export { NavigationHeader } from './NavigationHeader';
 export { Header } from './Header';
 export { Icon } from './Icon';
 export { IconButton } from './IconButton';
