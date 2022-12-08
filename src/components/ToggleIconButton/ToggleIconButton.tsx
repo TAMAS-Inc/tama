@@ -1,4 +1,4 @@
-import { twMerge as tw } from 'tailwind-merge';
+import { tw } from '@/utils/tailwindMerge';
 import { Icon } from '../Icon';
 
 type ToggleIconButtonProps<T extends React.ElementType> = Component<T>;
