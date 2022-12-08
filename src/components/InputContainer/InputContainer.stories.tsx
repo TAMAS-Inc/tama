@@ -44,13 +44,3 @@ export const Searching: ComponentStory<typeof InputContainer> = (args) => (
     />
   </InputContainer>
 );
-
-export const Checkbox: ComponentStory<typeof InputContainer> = (args) => (
-  <InputContainer className="relative" {...args}>
-    <InputContainer.Input className="bg-Gray-100" />
-    <InputContainer.ResetButton
-      icon={XCircleIcon}
-      className="absolute top-1.5 right-3"
-    />
-  </InputContainer>
-);

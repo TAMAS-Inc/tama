@@ -1,14 +1,11 @@
 import { twMerge as tw } from 'tailwind-merge';
 import { Icon } from '../Icon';
 
-type ToggleIconButtonProps<T extends React.ElementType> = {
-  checked?: boolean;
-} & Component<T>;
+type ToggleIconButtonProps<T extends React.ElementType> = Component<T>;
 
 export function ToggleIconButton({
   children,
   className,
-  checked,
   ...restProps
 }: ToggleIconButtonProps<'button'>) {
   return (
