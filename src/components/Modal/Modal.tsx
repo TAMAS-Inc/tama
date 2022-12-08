@@ -18,6 +18,7 @@ export function Modal({
         !isOpened && 'hidden',
         className
       )}
+      aria-modal="true"
       {...restProps}
     >
       {children}
@@ -63,9 +64,13 @@ function Content({ children, className, ...restProps }: ContentProps<'div'>) {
   );
 }
 
-type ButtonsProps<T extends React.ElementType> = Component<T>;
+type ButtonContainerProps<T extends React.ElementType> = Component<T>;
 
-function Buttons({ children, className, ...restProps }: ButtonsProps<'div'>) {
+function ButtonContainer({
+  children,
+  className,
+  ...restProps
+}: ButtonContainerProps<'div'>) {
   return (
     <div
       className={tw('w-[278px] text-body3 font-bold', className)}
@@ -102,5 +107,5 @@ function DimBackground({
 
 Modal.DimBackground = DimBackground;
 Modal.Content = Content;
-Modal.Buttons = Buttons;
+Modal.ButtonContainer = ButtonContainer;
 Modal.TextButton = TextButton;
