@@ -30,7 +30,7 @@ export function StatusButton({
       <button
         type="button"
         className={tw(
-          'relative h-16 w-[358px] rounded bg-Primary-300 text-body1 text-Black',
+          'h-16 w-full rounded bg-Primary-300 text-body1 text-Black',
           className,
           disabled && 'bg-Gray-300 text-White'
         )}
