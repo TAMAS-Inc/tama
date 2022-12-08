@@ -1,5 +1,9 @@
 import { ComponentProps } from 'react';
-import { Bars3Icon, ChevronLeftIcon } from '@heroicons/react/24/outline';
+import {
+  Bars3Icon,
+  ChevronLeftIcon,
+  ClockIcon,
+} from '@heroicons/react/24/outline';
 import { tw } from '@/utils/tailwindMerge';
 import { Dropdown } from '../Dropdown';
 import { IconButton } from '../IconButton';
@@ -61,6 +65,23 @@ function Menu({ children, className, ...restProps }: MenuProps<'button'>) {
   );
 }
 
+type PredictProps<T extends React.ElementType> = Component<T>;
+
+function Predict({
+  children,
+  className,
+  ...restProps
+}: PredictProps<'button'>) {
+  return (
+    <IconButton
+      className={tw('absolute right-7 mr-10 h-6 w-6', className)}
+      {...restProps}
+    >
+      <IconButton.Icon className="stroke-Primary-700" icon={ClockIcon} />
+    </IconButton>
+  );
+}
+
 function HDropdown({
   children,
   className,
@@ -78,5 +99,6 @@ function HDropdown({
 
 Header.BackButton = BackButton;
 Header.Title = Title;
-Header.Menu = Menu;
 Header.Dropdown = HDropdown;
+Header.Predict = Predict;
+Header.Menu = Menu;
