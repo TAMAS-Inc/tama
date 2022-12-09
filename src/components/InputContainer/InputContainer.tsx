@@ -18,6 +18,7 @@ interface InputContainerContextValue {
 }
 type InputContainerProps<T extends React.ElementType> = Component<T>;
 type InputProps<T extends React.ElementType> = Component<T>;
+type LabelProps<T extends React.ElementType> = Component<T>;
 
 const InputContainerContext = createContext<InputContainerContextValue | null>(
   null
@@ -82,8 +83,20 @@ function Input({ className, ...restProps }: InputProps<'input'>) {
   );
 }
 
+function Label({ children, className, ...restProps }: LabelProps<'label'>) {
+  return (
+    <label
+      className={tw('flex h-full w-full items-center', className)}
+      {...restProps}
+    >
+      {children}
+    </label>
+  );
+}
+
 function ResetButton({
   icon,
+  className,
   ...restProps
 }: ComponentProps<typeof Icon> & ComponentProps<typeof IconButton>) {
   const { inputValue, setInputValue } = useInputContainerContext();
@@ -97,10 +110,14 @@ function ResetButton({
 
   return (
     <IconButton onClick={handleClick} {...restProps}>
-      <IconButton.Icon icon={icon} />
+      <IconButton.Icon
+        className={tw('absolute top-1 right-3 h-6 w-6', className)}
+        icon={icon}
+      />
     </IconButton>
   );
 }
 
-InputContainer.Input = Input;
+InputContainer.Label = Label;
 InputContainer.ResetButton = ResetButton;
+Label.Input = Input;
