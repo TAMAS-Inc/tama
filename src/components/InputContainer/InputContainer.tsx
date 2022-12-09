@@ -9,6 +9,7 @@ import {
   ChangeEventHandler,
   ComponentProps,
 } from 'react';
+import { XCircleIcon } from '@heroicons/react/24/solid';
 import { tw } from '@/utils/tailwindMerge';
 import { IconButton } from '@/components/IconButton';
 import { Icon } from '@/components/Icon';
@@ -96,7 +97,7 @@ function Label({ children, className, ...restProps }: LabelProps<'label'>) {
 }
 
 function ResetButton({
-  icon,
+  // icon,
   className,
   ...restProps
 }: ComponentProps<typeof Icon> & ComponentProps<typeof IconButton>) {
@@ -113,7 +114,7 @@ function ResetButton({
     <IconButton onClick={handleClick} {...restProps}>
       <IconButton.Icon
         className={tw('absolute top-1 right-3 h-6 w-6', className)}
-        icon={icon}
+        icon={XCircleIcon}
       />
     </IconButton>
   );
