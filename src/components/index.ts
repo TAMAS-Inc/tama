@@ -1,4 +1,5 @@
 export { Dropdown } from './Dropdown';
+export { SyncButton } from './SyncButton';
 export { AD } from './AD';
 export { MainHeader } from './MainHeader';
 export { NavigationHeader } from './NavigationHeader';
