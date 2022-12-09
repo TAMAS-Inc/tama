@@ -1,8 +1,11 @@
 export { Dropdown } from './Dropdown';
+export { MainHeader } from './MainHeader';
+export { NavigationHeader } from './NavigationHeader';
 export { Header } from './Header';
 export { Icon } from './Icon';
 export { IconButton } from './IconButton';
 export { InputContainer } from './InputContainer';
 export { StatusButton } from './StatusButton';
 export { TextButton } from './TextButton';
+export { ToastContainer } from './ToastContainer';
 export { ToggleIconButton } from './ToggleIconButton';
