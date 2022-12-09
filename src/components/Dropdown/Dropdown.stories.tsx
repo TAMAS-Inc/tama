@@ -4,7 +4,7 @@ import { Dropdown } from './Dropdown';
 
 const meta = {
   component: Dropdown,
-  title: 'Directory/Dropdown',
+  title: 'Components/Dropdown',
   parameters: {
     design: {
       type: 'figma',

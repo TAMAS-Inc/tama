@@ -4,7 +4,7 @@ import { Header } from './Header';
 
 const meta = {
   component: Header,
-  title: 'Directory/Header',
+  title: 'Header/default',
   parameters: {
     design: {
       type: 'figma',

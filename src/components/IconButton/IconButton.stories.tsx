@@ -7,7 +7,7 @@ import { IconButton } from './IconButton';
 
 const meta = {
   component: IconButton,
-  title: 'Directory/IconButton',
+  title: 'Components/Button/IconButton',
   parameters: {
     design: {
       type: 'figma',

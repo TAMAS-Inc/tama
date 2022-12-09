@@ -4,7 +4,7 @@ import { SearchBusStop } from './SearchBusStop';
 
 const meta = {
   component: SearchBusStop,
-  title: 'Directory/Page/SearchBusStop',
+  title: 'Page/SearchBusStop',
   parameters: {
     design: {
       type: 'figma',

@@ -4,7 +4,7 @@ import { TextButton } from './TextButton';
 
 const meta = {
   component: TextButton,
-  title: 'Directory/TextButton',
+  title: 'Components/Button/TextButton',
   parameters: {
     design: {
       type: 'figma',
