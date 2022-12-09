@@ -1,22 +1,22 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import { Agreement } from './Agreement';
+import { Commute } from './Commute';
 
 const meta = {
-  component: Agreement,
-  title: 'Directory/Page/Agreement',
+  component: Commute,
+  title: 'Directory/Page/Commute',
   parameters: {
     design: {
       type: 'figma',
       url: 'figmaURL',
     },
   },
-} as ComponentMeta<typeof Agreement>;
+} as ComponentMeta<typeof Commute>;
 
 export default meta;
 
-const Template: ComponentStory<typeof Agreement> = (args) => (
-  <Agreement {...args} />
+const Template: ComponentStory<typeof Commute> = (args) => (
+  <Commute {...args} />
 );
 
 export const Default = Template.bind({});
