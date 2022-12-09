@@ -12,7 +12,7 @@ import { tw } from '@/utils/tailwindMerge';
 
 const meta = {
   component: ToggleIconButton,
-  title: 'Directory/ToggleIconButton',
+  title: 'Components/Button/ToggleIconButton',
   parameters: {
     design: {
       type: 'figma',

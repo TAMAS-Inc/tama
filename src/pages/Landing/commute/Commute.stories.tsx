@@ -1,22 +1,22 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import { LandingLayout } from './LandingLayout';
+import { Commute } from './Commute';
 
 const meta = {
-  component: LandingLayout,
-  title: 'Page/LandingLayout',
+  component: Commute,
+  title: 'Page/Commute',
   parameters: {
     design: {
       type: 'figma',
       url: 'figmaURL',
     },
   },
-} as ComponentMeta<typeof LandingLayout>;
+} as ComponentMeta<typeof Commute>;
 
 export default meta;
 
-const Template: ComponentStory<typeof LandingLayout> = (args) => (
-  <LandingLayout {...args} />
+const Template: ComponentStory<typeof Commute> = (args) => (
+  <Commute {...args} />
 );
 
 export const Default = Template.bind({});

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import {
   useContext,
   useMemo,
@@ -8,9 +9,9 @@ import {
   ChangeEventHandler,
   ComponentProps,
 } from 'react';
+import { XCircleIcon } from '@heroicons/react/24/solid';
 import { tw } from '@/utils/tailwindMerge';
 import { IconButton } from '@/components/IconButton';
-import { Icon } from '@/components/Icon';
 
 interface InputContainerContextValue {
   inputValue: string;
@@ -18,6 +19,7 @@ interface InputContainerContextValue {
 }
 type InputContainerProps<T extends React.ElementType> = Component<T>;
 type InputProps<T extends React.ElementType> = Component<T>;
+type LabelProps<T extends React.ElementType> = Component<T>;
 
 const InputContainerContext = createContext<InputContainerContextValue | null>(
   null
@@ -82,10 +84,21 @@ function Input({ className, ...restProps }: InputProps<'input'>) {
   );
 }
 
+function Label({ children, className, ...restProps }: LabelProps<'label'>) {
+  return (
+    <label
+      className={tw('flex h-full w-full items-center', className)}
+      {...restProps}
+    >
+      {children}
+    </label>
+  );
+}
+
 function ResetButton({
-  icon,
+  className,
   ...restProps
-}: ComponentProps<typeof Icon> & ComponentProps<typeof IconButton>) {
+}: ComponentProps<typeof IconButton>) {
   const { inputValue, setInputValue } = useInputContainerContext();
 
   const handleClick = () => {
@@ -97,10 +110,14 @@ function ResetButton({
 
   return (
     <IconButton onClick={handleClick} {...restProps}>
-      <IconButton.Icon icon={icon} />
+      <IconButton.Icon
+        className={tw('absolute top-1 right-3 h-6 w-6', className)}
+        icon={XCircleIcon}
+      />
     </IconButton>
   );
 }
 
-InputContainer.Input = Input;
+InputContainer.Label = Label;
 InputContainer.ResetButton = ResetButton;
+Label.Input = Input;
