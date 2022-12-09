@@ -3,7 +3,7 @@ import { AD, Dropdown, NavigationHeader, Notification } from '@/components';
 
 type PredictionProps<T extends React.ElementType> = Component<T>;
 
-export function Prediction({
+export default function Prediction({
   className,
   ...restProps
 }: PredictionProps<'div'>) {

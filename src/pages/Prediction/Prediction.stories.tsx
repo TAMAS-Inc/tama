@@ -1,6 +1,6 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import { Prediction } from './Prediction';
+import Prediction from '.';
 
 const meta = {
   component: Prediction,

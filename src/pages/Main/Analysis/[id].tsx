@@ -3,7 +3,10 @@ import { AD, NavigationHeader, Notification, SyncButton } from '@/components';
 
 type AnalysisProps<T extends React.ElementType> = Component<T>;
 
-export function Analysis({ className, ...restProps }: AnalysisProps<'div'>) {
+export default function Analysis({
+  className,
+  ...restProps
+}: AnalysisProps<'div'>) {
   return (
     <div className={tw('pt-8', className)} {...restProps}>
       <NavigationHeader>실시간 분석</NavigationHeader>

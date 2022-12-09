@@ -1,6 +1,6 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import { Main } from './Main';
+import Main from '.';
 
 const meta = {
   component: Main,
