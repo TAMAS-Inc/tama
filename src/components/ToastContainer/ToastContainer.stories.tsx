@@ -4,7 +4,7 @@ import { ToastContainer } from './ToastContainer';
 
 const meta = {
   component: ToastContainer,
-  title: 'Directory/ToastContainer',
+  title: 'Components/ToastContainer',
   parameters: {
     design: {
       type: 'figma',

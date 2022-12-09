@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import {
   useContext,
   useMemo,
@@ -18,6 +19,7 @@ interface InputContainerContextValue {
 }
 type InputContainerProps<T extends React.ElementType> = Component<T>;
 type InputProps<T extends React.ElementType> = Component<T>;
+type LabelProps<T extends React.ElementType> = Component<T>;
 
 const InputContainerContext = createContext<InputContainerContextValue | null>(
   null
@@ -82,6 +84,17 @@ function Input({ className, ...restProps }: InputProps<'input'>) {
   );
 }
 
+function Label({ children, className, ...restProps }: LabelProps<'label'>) {
+  return (
+    <label
+      className={tw('flex h-full w-full items-center', className)}
+      {...restProps}
+    >
+      {children}
+    </label>
+  );
+}
+
 function ResetButton({
   className,
   ...restProps
@@ -97,10 +110,14 @@ function ResetButton({
 
   return (
     <IconButton onClick={handleClick} {...restProps}>
-      <IconButton.Icon className={tw('', className)} icon={XCircleIcon} />
+      <IconButton.Icon
+        className={tw('absolute top-1 right-3 h-6 w-6', className)}
+        icon={XCircleIcon}
+      />
     </IconButton>
   );
 }
 
-InputContainer.Input = Input;
+InputContainer.Label = Label;
 InputContainer.ResetButton = ResetButton;
+Label.Input = Input;

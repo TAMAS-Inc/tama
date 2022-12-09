@@ -24,10 +24,10 @@ export function Commute({
       <div className="mt-8">
         <h2 className="mb-2 text-body2">내 정류장 별칭 입력</h2>
         <InputContainer className="relative h-12 w-full">
-          <InputContainer.Input className="border border-Gray-300" />
-          <InputContainer.ResetButton
-            className="absolute top-3 right-3 h-6 w-6 fill-Gray-100"
-          />
+          <InputContainer.Label>
+            <InputContainer.Label.Input className="border border-Gray-300" />
+          </InputContainer.Label>
+          <InputContainer.ResetButton className="absolute top-3 right-3 h-6 w-6 fill-Gray-500" />
         </InputContainer>
       </div>
       <div className="mt-8">
@@ -49,7 +49,6 @@ export function Commute({
             className="absolute top-3 right-3 h-6 w-6 text-Gray-400"
             stroke-width="2"
           />
-          {}
         </TextButton>
       </div>
     </LandingLayout>

@@ -4,7 +4,7 @@ import { Commute } from './Commute';
 
 const meta = {
   component: Commute,
-  title: 'Directory/Page/Commute',
+  title: 'Page/Commute',
   parameters: {
     design: {
       type: 'figma',
