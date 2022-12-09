@@ -1,5 +1,4 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
-import { XCircleIcon } from '@heroicons/react/24/outline';
 import { InputContainer } from './InputContainer';
 
 const meta = {
@@ -20,7 +19,7 @@ export const Default: ComponentStory<typeof InputContainer> = (args) => (
     <InputContainer.Label>
       <InputContainer.Label.Input className="border" />
     </InputContainer.Label>
-    <InputContainer.ResetButton icon={XCircleIcon} />
+    <InputContainer.ResetButton />
   </InputContainer>
 );
 
@@ -32,7 +31,7 @@ export const Search: ComponentStory<typeof InputContainer> = (args) => (
         placeholder="정류장 검색"
       />
     </InputContainer.Label>
-    <InputContainer.ResetButton icon={XCircleIcon} />
+    <InputContainer.ResetButton />
   </InputContainer>
 );
 
@@ -41,7 +40,7 @@ export const Searching: ComponentStory<typeof InputContainer> = (args) => (
     <InputContainer.Label>
       <InputContainer.Label.Input className="bg-Gray-100" />
     </InputContainer.Label>
-    <InputContainer.ResetButton icon={XCircleIcon} />
+    <InputContainer.ResetButton />
   </InputContainer>
 );
 

@@ -14,5 +14,4 @@ export const parameters = {
     defaultViewport: 'iphone12',
   },
   layout: 'fullscreen',
-  
 };

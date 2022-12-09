@@ -7,31 +7,23 @@ type AgreementProps<T extends React.ElementType> = ComponentProps<
 > &
   Component<T>;
 
+interface CheckList {
+  name: string;
+  isActive: boolean;
+}
+
 export function Agreement({
   children,
   className,
   ...restProps
 }: AgreementProps<'div'>) {
-  const [checkList, setCheckList] = useState<string[]>([]);
+  const [checkList, setCheckList] = useState<CheckList[]>([]);
   const [isAgree, setIsAgree] = useState<boolean>(false);
 
-  const checkAll = (e: ChangeEvent<HTMLInputElement>) => {
-    e.target.checked ? setCheckList(['location', 'ad']) : setCheckList([]);
-  };
-
   const check = (e: ChangeEvent<HTMLInputElement>) => {
-    e.target.checked
-      ? setCheckList([...checkList, e.target.name])
-      : setCheckList(checkList.filter((choice) => choice !== e.target.name));
+    const { name } = e.target;
+    setCheckList(() => [...checkList, { name, isActive: false }]);
   };
-
-  useEffect(() => {
-    if (checkList.includes('location') || checkList.length === 2) {
-      setIsAgree(true);
-    } else {
-      setIsAgree(false);
-    }
-  });
 
   return (
     // 페이지 코드가 길다 => 좀 더 리액트스럽게 만들어보도록 하자
@@ -45,8 +37,6 @@ export function Agreement({
             name="all"
             type="checkbox"
             className="mx-2 h-6 w-6 bg-Gray-500"
-            onChange={checkAll}
-            checked={checkList.length === 2}
           />
           전체 동의
         </InputContainer.Label>
@@ -58,8 +48,6 @@ export function Agreement({
             name="location"
             type="checkbox"
             className="mx-2 h-6 w-6 bg-Gray-500"
-            onChange={check}
-            checked={checkList.includes('location')}
           />
           위치 기반 서비스 약관 동의 (필수)
         </InputContainer.Label>
@@ -71,8 +59,6 @@ export function Agreement({
             name="ad"
             type="checkbox"
             className="mx-2 h-6 w-6 bg-Gray-500"
-            onChange={check}
-            checked={checkList.includes('ad')}
           />
           마케팅 정보 수신 동의 (선택)
         </InputContainer.Label>
