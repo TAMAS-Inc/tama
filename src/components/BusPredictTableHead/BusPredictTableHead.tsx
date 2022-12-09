@@ -9,7 +9,10 @@ export function BusPredictTableHead({
 }: BusPredictTableHeadProps<'div'>) {
   return (
     <div
-      className={tw('flex h-6 justify-evenly px-4', className)}
+      className={tw(
+        'flex h-6 justify-evenly border-b border-Gray-100 px-4',
+        className
+      )}
       {...restProps}
     >
       {children}
@@ -23,7 +26,7 @@ function Time({ children, className, ...restProps }: TimeProps<'p'>) {
   return (
     <p
       className={tw(
-        'flex w-80 items-center justify-center text-center text-body3',
+        'flex w-20 items-center justify-center text-center text-body3',
         className
       )}
       {...restProps}
@@ -39,7 +42,7 @@ function Seat({ children, className, ...restProps }: SeatProps<'p'>) {
   return (
     <p
       className={tw(
-        'flex w-80 items-center justify-center text-center text-body3',
+        'flex w-20 items-center justify-center text-center text-body3',
         className
       )}
       {...restProps}
@@ -55,7 +58,7 @@ function BusNumber({ children, className, ...restProps }: BusNumberProps<'p'>) {
   return (
     <p
       className={tw(
-        'flex w-80 items-center justify-center text-center text-body3',
+        'flex w-20 items-center justify-center text-center text-body3',
         className
       )}
       {...restProps}
@@ -71,7 +74,7 @@ function Analysis({ children, className, ...restProps }: AnalysisProps<'p'>) {
   return (
     <p
       className={tw(
-        'flex w-80 items-center justify-center text-center text-body3',
+        'flex w-20 items-center justify-center text-center text-body3',
         className
       )}
       {...restProps}
