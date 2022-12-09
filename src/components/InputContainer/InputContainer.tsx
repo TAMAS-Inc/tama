@@ -96,7 +96,6 @@ function Label({ children, className, ...restProps }: LabelProps<'label'>) {
 }
 
 function ResetButton({
-  // icon,
   className,
   ...restProps
 }: ComponentProps<typeof IconButton>) {
