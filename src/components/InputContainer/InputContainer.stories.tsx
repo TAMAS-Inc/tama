@@ -4,7 +4,7 @@ import { InputContainer } from './InputContainer';
 
 const meta = {
   component: InputContainer,
-  title: 'Directory/InputContainer',
+  title: 'Components/InputContainer',
   parameters: {
     design: {
       type: 'figma',

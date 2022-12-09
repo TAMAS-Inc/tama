@@ -5,7 +5,7 @@ import { StatusButton } from './StatusButton';
 
 const meta = {
   component: StatusButton,
-  title: 'Directory/StatusButton',
+  title: 'Components/Button/StatusButton',
   parameters: {
     design: {
       type: 'figma',

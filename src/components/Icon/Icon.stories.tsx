@@ -13,7 +13,7 @@ import { Icon } from './Icon';
 
 const meta = {
   component: Icon,
-  title: 'Directory/Icon',
+  title: 'Components/Icon',
   parameters: {
     design: {
       type: 'figma',

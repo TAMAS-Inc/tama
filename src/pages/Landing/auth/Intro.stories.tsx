@@ -4,7 +4,7 @@ import { Intro } from './Intro';
 
 const meta = {
   component: Intro,
-  title: 'Directory/Page/Intro',
+  title: 'Page/Intro',
   parameters: {
     design: {
       type: 'figma',
