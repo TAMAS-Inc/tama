@@ -14,7 +14,7 @@ export function Modal({
   return (
     <div
       className={tw(
-        'relative h-[844px] w-[390px]',
+        'relative h-screen w-screen',
         !isOpened && 'hidden',
         className
       )}
@@ -36,7 +36,7 @@ function ModalContainer({
   return (
     <div
       className={tw(
-        'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2',
+        'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded',
         className
       )}
       {...restProps}
@@ -54,7 +54,7 @@ function Content({ children, className, ...restProps }: ContentProps<'div'>) {
   return (
     <div
       className={tw(
-        'flex h-[120px] w-[278px] items-center justify-center rounded-tl rounded-tr text-center text-body2',
+        'flex h-[120px] w-[278px] items-center justify-center rounded-tl rounded-tr bg-White text-center text-body2',
         className
       )}
       {...restProps}
@@ -73,11 +73,27 @@ function ButtonContainer({
 }: ButtonContainerProps<'div'>) {
   return (
     <div
-      className={tw('w-[278px] text-body3 font-bold', className)}
+      className={tw(
+        'flex h-10 w-[278px] justify-evenly text-body3 font-bold',
+        className
+      )}
       {...restProps}
     >
       {children}
     </div>
+  );
+}
+
+type ButtonProps<T extends React.ElementType> = Component<T>;
+
+function Button({ children, className, ...restProps }: ButtonProps<'button'>) {
+  return (
+    <Modal.TextButton
+      className="h-full w-full rounded-none bg-Primary-300"
+      {...restProps}
+    >
+      {children}
+    </Modal.TextButton>
   );
 }
 
@@ -109,3 +125,4 @@ Modal.DimBackground = DimBackground;
 Modal.Content = Content;
 Modal.ButtonContainer = ButtonContainer;
 Modal.TextButton = TextButton;
+Modal.Button = Button;
