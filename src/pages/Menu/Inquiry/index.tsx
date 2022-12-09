@@ -1,7 +1,6 @@
 import { tw } from '@/utils/tailwindMerge';
-import { Icon, NavigationHeader } from '@/components';
+import { NavigationHeader } from '@/components';
 import { StatusButton } from '../../../components/StatusButton/StatusButton';
-import { CheckIcon, PlayIcon } from '@heroicons/react/24/solid';
 
 type InquiryProps<T extends React.ElementType> = Component<T>;
 
