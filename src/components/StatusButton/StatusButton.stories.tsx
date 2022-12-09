@@ -32,15 +32,17 @@ export const PrivacyAgreement: ComponentStory<typeof StatusButton> = ({
 }) => (
   <StatusButton
     className={
-      disabled
-        ? 'text-body2 font-bold'
-        : 'relative pl-[102px] text-left text-body2 font-bold'
+      disabled ? 'text-body2 font-bold' : 'relative text-body2 font-bold'
     }
     disabled={disabled}
     {...args}
   >
     <StatusButton.Icon
-      className={disabled ? 'hidden' : 'absolute top-5 left-[70px] h-6 w-6'}
+      className={
+        disabled
+          ? 'hidden'
+          : 'absolute left-[24%] top-5 h-6 w-6 -translate-x-1/2'
+      }
       icon={CheckIcon}
     />
     개인정보 수집 및 이용동의
@@ -52,7 +54,9 @@ export const BusSelection: ComponentStory<typeof StatusButton> = ({
   ...args
 }) => (
   <StatusButton
-    className="h-12 bg-White pl-3 text-left"
+    className={
+      disabled ? 'h-12 pl-3 text-left' : 'h-12 bg-White pl-3 text-left'
+    }
     disabled={disabled}
     {...args}
   >
