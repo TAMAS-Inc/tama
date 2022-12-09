@@ -12,7 +12,6 @@ import {
 import { XCircleIcon } from '@heroicons/react/24/solid';
 import { tw } from '@/utils/tailwindMerge';
 import { IconButton } from '@/components/IconButton';
-import { Icon } from '@/components/Icon';
 
 interface InputContainerContextValue {
   inputValue: string;
@@ -100,7 +99,7 @@ function ResetButton({
   // icon,
   className,
   ...restProps
-}: ComponentProps<typeof Icon> & ComponentProps<typeof IconButton>) {
+}: ComponentProps<typeof IconButton>) {
   const { inputValue, setInputValue } = useInputContainerContext();
 
   const handleClick = () => {
