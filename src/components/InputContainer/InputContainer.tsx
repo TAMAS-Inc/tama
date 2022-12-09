@@ -8,9 +8,9 @@ import {
   ChangeEventHandler,
   ComponentProps,
 } from 'react';
+import { XCircleIcon } from '@heroicons/react/24/solid';
 import { tw } from '@/utils/tailwindMerge';
 import { IconButton } from '@/components/IconButton';
-import { Icon } from '@/components/Icon';
 
 interface InputContainerContextValue {
   inputValue: string;
@@ -83,9 +83,9 @@ function Input({ className, ...restProps }: InputProps<'input'>) {
 }
 
 function ResetButton({
-  icon,
+  className,
   ...restProps
-}: ComponentProps<typeof Icon> & ComponentProps<typeof IconButton>) {
+}: ComponentProps<typeof IconButton>) {
   const { inputValue, setInputValue } = useInputContainerContext();
 
   const handleClick = () => {
@@ -97,7 +97,7 @@ function ResetButton({
 
   return (
     <IconButton onClick={handleClick} {...restProps}>
-      <IconButton.Icon icon={icon} />
+      <IconButton.Icon className={tw('', className)} icon={XCircleIcon} />
     </IconButton>
   );
 }

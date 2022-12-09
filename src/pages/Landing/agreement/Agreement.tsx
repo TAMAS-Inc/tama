@@ -1,4 +1,4 @@
-import { useState, ComponentProps } from 'react';
+import { useState, ComponentProps, useEffect } from 'react';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import { CheckCircleIcon as CheckCircleIconOff } from '@heroicons/react/24/outline';
 import { ToggleIconButton } from '@/components';
@@ -19,7 +19,46 @@ export function Agreement({
   const [adAgree, setAdAgree] = useState(false);
   const [isAgree, setIsAgree] = useState(false);
 
-  // 어떤 조건이 만족했을 때, 동의가 false에서 true로 변경되어야 한다.
+  const EntireEvent = () => {
+    if (!entireAgree) {
+      setEntireAgree(true);
+      setLocationAgree(true);
+      setAdAgree(true);
+    } else {
+      setEntireAgree(false);
+      setLocationAgree(false);
+      setAdAgree(false);
+    }
+  };
+
+  const LocationEvent = () => {
+    if (!locationAgree) {
+      setLocationAgree(true);
+    } else {
+      setLocationAgree(false);
+    }
+  };
+
+  const AdEvent = () => {
+    if (!adAgree) {
+      setAdAgree(true);
+    } else {
+      setAdAgree(false);
+    }
+  };
+
+  useEffect(() => {
+    if (adAgree && locationAgree) {
+      setEntireAgree(true);
+      setIsAgree(true);
+    } else if (locationAgree && !adAgree) {
+      setEntireAgree(false);
+      setIsAgree(true);
+    } else {
+      setEntireAgree(false);
+      setIsAgree(false);
+    }
+  }, [adAgree, locationAgree]);
 
   return (
     <LandingLayout agree={isAgree} className="pl-4 pr-4" {...restProps}>
@@ -28,9 +67,7 @@ export function Agreement({
       </p>
       <div
         className="border-bottom flex border-b border-b-Gray-400 pb-4"
-        onClick={() => {
-          setEntireAgree(!entireAgree);
-        }}
+        onClick={EntireEvent}
         aria-hidden="true"
       >
         <ToggleIconButton className="ml-2 mr-2">
@@ -42,9 +79,7 @@ export function Agreement({
       </div>
       <div
         className="border-bottom mt-4 flex pb-4"
-        onClick={() => {
-          setLocationAgree(!locationAgree);
-        }}
+        onClick={LocationEvent}
         aria-hidden="true"
       >
         <ToggleIconButton className="ml-2 mr-2">
@@ -56,7 +91,7 @@ export function Agreement({
       </div>
       <div
         className="border-bottom flex pb-4"
-        onClick={() => setAdAgree(!adAgree)}
+        onClick={AdEvent}
         aria-hidden="true"
       >
         <ToggleIconButton className="ml-2 mr-2">

@@ -7,6 +7,7 @@ import {
   ClockIcon,
   ChevronLeftIcon,
   Bars3Icon,
+  MagnifyingGlassIcon,
 } from '@heroicons/react/24/outline';
 
 import { Icon } from './Icon';
@@ -53,6 +54,15 @@ export const Info: ComponentStory<typeof Icon> = (args) => (
   <Icon
     {...args}
     icon={InformationCircleIcon}
+    className="h-6 w-6 text-Primary-600"
+    stroke-width="2"
+  />
+);
+
+export const Search: ComponentStory<typeof Icon> = (args) => (
+  <Icon
+    {...args}
+    icon={MagnifyingGlassIcon}
     className="h-6 w-6 text-Primary-600"
     stroke-width="2"
   />
