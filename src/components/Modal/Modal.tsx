@@ -14,7 +14,7 @@ export function Modal({
   return (
     <div
       className={tw(
-        'relative h-screen w-screen',
+        'fixed top-0 left-0 h-screen w-screen',
         !isOpened && 'hidden',
         className
       )}
