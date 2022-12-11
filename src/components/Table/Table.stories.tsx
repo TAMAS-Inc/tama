@@ -1,6 +1,8 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
+import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import { Table } from './Table';
+import { IconButton } from '@/components/IconButton';
 
 const meta = {
   component: Table,
@@ -28,7 +30,11 @@ export const Template: ComponentStory<typeof Table> = (args) => (
       <Table.BodyItem>14</Table.BodyItem>
       <Table.BodyItem>5001</Table.BodyItem>
       <Table.BodyItem>
-        <Table.Icon />
+        <IconButton.Icon
+          icon={InformationCircleIcon}
+          className="h-7 w-7 text-Primary-600"
+          stroke-width="2"
+        />
       </Table.BodyItem>
     </Table.Body>
   </Table>

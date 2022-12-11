@@ -1,6 +1,4 @@
-import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import { tw } from '@/utils/tailwindMerge';
-import { Icon } from '@/components/Icon';
 
 type TableProps<T extends React.ElementType> = Component<T>;
 
@@ -10,7 +8,7 @@ export function Table({
   ...restProps
 }: TableProps<'table'>) {
   return (
-    <table className={tw('', className)} {...restProps}>
+    <table className={tw('w-full', className)} {...restProps}>
       {children}
     </table>
   );
@@ -60,7 +58,7 @@ function HeaderItem({
   return (
     <th
       className={tw(
-        'flex w-20 items-center justify-center text-center text-body3',
+        'flex w-1/4 items-center justify-center text-center text-body3',
         className
       )}
       {...restProps}
@@ -76,7 +74,7 @@ function BodyItem({ children, className, ...restProps }: BodyItemProps<'td'>) {
   return (
     <td
       className={tw(
-        'flex w-20 items-center justify-center text-center text-body2',
+        'flex w-1/4 items-center justify-center text-center text-body2',
         className
       )}
       {...restProps}
@@ -86,25 +84,7 @@ function BodyItem({ children, className, ...restProps }: BodyItemProps<'td'>) {
   );
 }
 
-type AnalysisIconProps<T extends React.ElementType> = Component<T>;
-
-function AnalysisIcon({ className }: AnalysisIconProps<'button'>) {
-  return (
-    <button
-      type="button"
-      className="flex h-full w-full items-center justify-center"
-    >
-      <Icon
-        icon={InformationCircleIcon}
-        className={tw('h-6 w-6 text-Primary-600', className)}
-        stroke-width="2"
-      />
-    </button>
-  );
-}
-
 Table.Header = Header;
 Table.Body = Body;
 Table.HeaderItem = HeaderItem;
 Table.BodyItem = BodyItem;
-Table.Icon = AnalysisIcon;
