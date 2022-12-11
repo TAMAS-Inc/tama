@@ -4,7 +4,7 @@ import { BusCard } from '../BusCard';
 
 const meta = {
   component: List,
-  title: 'Directory/List',
+  title: 'Components/List',
   parameters: {
     design: {
       type: 'figma',
