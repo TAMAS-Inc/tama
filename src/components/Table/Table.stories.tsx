@@ -32,8 +32,7 @@ export const Template: ComponentStory<typeof Table> = (args) => (
       <Table.BodyItem>
         <IconButton.Icon
           icon={InformationCircleIcon}
-          className="h-7 w-7 text-Primary-600"
-          stroke-width="2"
+          className="h-7 w-7 stroke-2 text-Primary-600"
         />
       </Table.BodyItem>
     </Table.Body>
