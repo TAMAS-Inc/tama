@@ -5,6 +5,8 @@ import { Icon } from '@/components/Icon';
 type ListProps<T extends React.ElementType> = {
   subtitle: string;
   routeName: string | number;
+  stationName: string;
+  direction: string;
   isChecked: boolean;
 } & Component<T>;
 
