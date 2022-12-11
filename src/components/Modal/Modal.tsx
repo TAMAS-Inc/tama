@@ -14,7 +14,7 @@ export function Modal({
   return (
     <div
       className={tw(
-        'relative h-screen w-screen',
+        'fixed top-0 left-0 h-screen w-screen',
         !isOpened && 'hidden',
         className
       )}
@@ -36,7 +36,7 @@ function ModalContainer({
   return (
     <div
       className={tw(
-        'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded',
+        'absolute top-1/2 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded',
         className
       )}
       {...restProps}
@@ -45,8 +45,6 @@ function ModalContainer({
     </div>
   );
 }
-
-Modal.ModalContainer = ModalContainer;
 
 type ContentProps<T extends React.ElementType> = Component<T>;
 
@@ -110,7 +108,7 @@ function DimBackground({
   return (
     <div
       className={tw(
-        '-z-10 h-full w-full bg-Gray-700',
+        '-z-10 h-full w-full bg-Gray-700 opacity-80',
         isOpened && 'hidden',
         className
       )}
@@ -121,6 +119,7 @@ function DimBackground({
   );
 }
 
+Modal.ModalContainer = ModalContainer;
 Modal.DimBackground = DimBackground;
 Modal.Content = Content;
 Modal.ButtonContainer = ButtonContainer;
