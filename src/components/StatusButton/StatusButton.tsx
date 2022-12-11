@@ -12,6 +12,7 @@ export function StatusButton({
   return (
     <button
       type="button"
+      disabled={disabled}
       className={tw(
         'h-16 w-full rounded bg-Primary-300 text-body1 text-Black',
         disabled ? 'bg-Gray-300 text-White' : '',
