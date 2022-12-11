@@ -28,7 +28,7 @@ export const Template: ComponentStory<typeof Table> = (args) => (
       <Table.BodyItem>14</Table.BodyItem>
       <Table.BodyItem>5001</Table.BodyItem>
       <Table.BodyItem>
-        <Table.AnalysisIcon />
+        <Table.Icon />
       </Table.BodyItem>
     </Table.Body>
   </Table>

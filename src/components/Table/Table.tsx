@@ -94,7 +94,7 @@ function AnalysisIcon({ className }: AnalysisIconProps<'button'>) {
       type="button"
       className="flex h-full w-full items-center justify-center"
     >
-      <Table.Icon
+      <Icon
         icon={InformationCircleIcon}
         className={tw('h-6 w-6 text-Primary-600', className)}
         stroke-width="2"
@@ -107,5 +107,4 @@ Table.Header = Header;
 Table.Body = Body;
 Table.HeaderItem = HeaderItem;
 Table.BodyItem = BodyItem;
-Table.AnalysisIcon = AnalysisIcon;
-Table.Icon = Icon;
+Table.Icon = AnalysisIcon;
