@@ -49,3 +49,17 @@ export const BusStop: ComponentStory<typeof BusCard> = ({ ...args }) => (
     </BusCard.Info>
   </BusCard>
 );
+
+export const MyBusStop: ComponentStory<typeof BusCard> = ({ ...args }) => (
+  <BusCard className="flex flex-col items-start justify-center" {...args}>
+    <BusCard.Info className="static left-0 flex translate-x-0 flex-row">
+      <BusCard.Content className="w-28 text-body1">춘시기네</BusCard.Content>
+      <BusCard.StationName className="mb-0 flex items-center justify-center">
+        {args.stationName}
+      </BusCard.StationName>
+    </BusCard.Info>
+    <BusCard.Content className="text-Gray-400">
+      {args.direction} 방면
+    </BusCard.Content>
+  </BusCard>
+);
