@@ -3,7 +3,7 @@ import { List } from './List';
 
 const meta = {
   component: List,
-  title: 'Directory/List',
+  title: 'Components/List',
   parameters: {
     design: {
       type: 'figma',
