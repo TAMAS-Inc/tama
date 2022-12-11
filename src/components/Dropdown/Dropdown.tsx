@@ -62,7 +62,10 @@ function Button({ children, className, ...restProps }: ButtonProps<'button'>) {
       className={tw('h-4 w-4', className)}
       {...restProps}
     >
-      <ToggleIconButton.Icon icon={isOpen ? ChevronUpIcon : ChevronDownIcon} />
+      <ToggleIconButton.Icon
+        className="stroke-Gray-300"
+        icon={isOpen ? ChevronUpIcon : ChevronDownIcon}
+      />
     </ToggleIconButton>
   );
 }

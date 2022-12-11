@@ -4,7 +4,7 @@ import { Modal } from './Modal';
 
 const meta = {
   component: Modal,
-  title: 'Directory/Modal',
+  title: 'Components/Modal',
   parameters: {
     design: {
       type: 'figma',

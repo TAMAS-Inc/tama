@@ -4,7 +4,7 @@ import { LandingLayout } from './LandingLayout';
 
 const meta = {
   component: LandingLayout,
-  title: 'Directory/Page/LandingLayout',
+  title: 'Page/LandingLayout',
   parameters: {
     design: {
       type: 'figma',

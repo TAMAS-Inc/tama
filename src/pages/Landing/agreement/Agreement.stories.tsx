@@ -4,7 +4,7 @@ import { Agreement } from './Agreement';
 
 const meta = {
   component: Agreement,
-  title: 'Directory/Agreement',
+  title: 'Page/Agreement',
   parameters: {
     design: {
       type: 'figma',
