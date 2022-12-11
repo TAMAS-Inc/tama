@@ -9,6 +9,8 @@ import { ToggleIconButton } from '../ToggleIconButton';
 
 type BusCardProps<T extends React.ElementType> = {
   routeName: string | number;
+  stationName: string;
+  direction: string;
   isChecked: boolean;
 } & Component<T>;
 
@@ -38,6 +40,20 @@ function RouteName({ children, className, ...restProps }: RouteNameProps<'p'>) {
       className={tw('pl-2 text-body1 text-Primary-700', className)}
       {...restProps}
     >
+      {children}
+    </p>
+  );
+}
+
+type StationNameProps<T extends React.ElementType> = Component<T>;
+
+function StationName({
+  children,
+  className,
+  ...restProps
+}: StationNameProps<'p'>) {
+  return (
+    <p className={tw('mb-1 text-body2', className)} {...restProps}>
       {children}
     </p>
   );
@@ -104,6 +120,7 @@ function CheckIcon({ className, isChecked }: CheckIconProps<'button'>) {
 }
 
 BusCard.RouteName = RouteName;
+BusCard.StationName = StationName;
 BusCard.Info = Info;
 BusCard.Content = Content;
 BusCard.InfoIcon = InfoIcon;

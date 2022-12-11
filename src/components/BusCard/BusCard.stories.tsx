@@ -10,7 +10,12 @@ const meta = {
       url: 'figmaURL',
     },
   },
-  args: { routeName: 5001, isChecked: true },
+  args: {
+    routeName: 5001,
+    isChecked: true,
+    stationName: '기흥여객차고지',
+    direction: '롯데캐슬스카이, 이안두드림, 백남준아트센터',
+  },
 } as ComponentMeta<typeof BusCard>;
 
 export default meta;
@@ -30,5 +35,17 @@ export const Selection: ComponentStory<typeof BusCard> = ({ ...args }) => (
   <BusCard {...args}>
     <BusCard.RouteName>5003</BusCard.RouteName>
     <BusCard.CheckIcon isChecked={args.isChecked} />
+  </BusCard>
+);
+
+export const BusStop: ComponentStory<typeof BusCard> = ({ ...args }) => (
+  <BusCard className="flex flex-col items-start justify-center" {...args}>
+    <BusCard.StationName>{args.stationName}</BusCard.StationName>
+    <BusCard.Info className="text-bold static left-0 flex translate-x-0 flex-row text-Gray-400">
+      <BusCard.Content className="w-[50px]">50095</BusCard.Content>
+      <BusCard.Content className="border-l border-Gray-200 pl-2">
+        {args.direction} 방면
+      </BusCard.Content>
+    </BusCard.Info>
   </BusCard>
 );
