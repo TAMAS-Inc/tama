@@ -71,7 +71,7 @@ const Input = forwardRef(
     useEffect(() => {
       if (inputValue === '') {
         const $input = outerRef?.current as unknown as HTMLInputElement;
-        $input.value = '';
+        if ($input) $input.value = '';
       }
     }, [inputValue, outerRef]);
 
@@ -117,11 +117,12 @@ function ResetButton({
   if (inputValue === '') return null;
 
   return (
-    <IconButton onClick={handleClick} {...restProps}>
-      <IconButton.Icon
-        className={tw('absolute top-1 right-3 h-6 w-6', className)}
-        icon={XCircleIcon}
-      />
+    <IconButton
+      className={tw('', className)}
+      onClick={handleClick}
+      {...restProps}
+    >
+      <IconButton.Icon className="fill-Gray-500" icon={XCircleIcon} />
     </IconButton>
   );
 }
