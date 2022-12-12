@@ -1,18 +1,43 @@
 import { useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Header, InputContainer } from '@/components';
+import { Link, useLocation } from 'react-router-dom';
+import { ChevronDownIcon } from '@heroicons/react/24/solid';
+import { Header, InputContainer, List, ToggleIconButton } from '@/components';
 import { tw } from '@/utils/tailwindMerge';
-import { Modal } from '@/components/Modal';
+import { BaseModal } from '@/components/BaseModal';
 
 type SearchBusStopProps<T extends React.ElementType> = Component<T>;
+
+const stations = [
+  { title: '기흥여객차고지', subtitle: 500095 },
+  { title: '기흥역', subtitle: 511095 },
+  { title: '기흥차고지', subtitle: 52295 },
+];
+const buses = [
+  {
+    title: '5001',
+    subtitle: '롯데캐슬스카이.이안두드림.백남준아트센터 방면',
+  },
+  { title: '5002A', subtitle: '롯데월드, 강남역 방면' },
+];
 
 export default function SearchBusStop({
   className,
   ...restProps
 }: SearchBusStopProps<'div'>) {
+  const location = useLocation();
+  const { station } = location.state;
+
+  const [selectedStation, setSelectedStation] = useState<string>('');
+  const [selectedStationInfo, setSelectedStationInfo] = useState<string>('');
   const [showTip, setShowTip] = useState<boolean>(true);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean | null>(null);
+
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleClick = (e) => {
+    setIsOpen(true);
+    setSelectedStation(e.target.value);
+  };
 
   const handleChange = () => {
     setShowTip(inputRef.current?.value === '');
@@ -55,45 +80,48 @@ export default function SearchBusStop({
           <p className="ml-4 text-Gray-400">예) 14324</p>
         </div>
       ) : (
-        <div
-          className="mt-9 ml-4"
-          aria-hidden="true"
-          onClick={() => setIsOpen(true)}
-        >
-          <div className="mb-2">
-            <p className="ml-2">기흥여객차고지</p>
-            <p className="ml-2 text-Gray-400">50095 | 종점방면</p>
-          </div>
-          <div className="mb-2">
-            <p className="ml-2">2번째 정류장</p>
-            <p className="ml-2 text-Gray-400">55555 | 종점방면</p>
-          </div>
-          <div className="mb-2">
-            <p className="ml-2">3번째 정류장</p>
-            <p className="ml-2 text-Gray-400">66666 | 종점방면</p>
-          </div>
-        </div>
+        <List className="mt-9 ml-4">
+          {stations.map(({ title, subtitle }) => (
+            <List.Item
+              onClick={(e) => {
+                setIsOpen(true);
+                setSelectedStationInfo(
+                  e.target.closest('button').lastElementChild.textContent
+                );
+                setSelectedStation(
+                  e.target.closest('button').firstElementChild.textContent
+                );
+              }}
+              className="pl-2"
+            >
+              <List.Title>{title}</List.Title>
+              <List.Subtitle>{subtitle} | 종점방면</List.Subtitle>
+            </List.Item>
+          ))}
+        </List>
       )}
-      <Modal isOpened={isOpen} className="absolute top-0">
-        <Modal.ModalContainer>
-          <Modal.Content className="flex w-full flex-col">
-            <div className="">
-              <p className="ml-2">기흥여객차고지</p>
-              <p className="ml-2 text-Gray-400">50095 | 종점방면</p>
-            </div>
-            <div className="">
-              <p className="ml-2">기흥여객차고지</p>
-              <p className="ml-2 text-Gray-400">50095 | 종점방면</p>
-            </div>
-          </Modal.Content>
-          <Modal.ButtonContainer>
-            <Link to="/commute" className="w-full" state={{}}>
-              <Modal.Button onClick={() => setIsOpen(false)}>확인</Modal.Button>
-            </Link>
-          </Modal.ButtonContainer>
-        </Modal.ModalContainer>
-        <Modal.DimBackground />
-      </Modal>
+      {isOpen && (
+        <BaseModal>
+          <BaseModal.Content className="top-56 h-full w-full rounded-t-2xl bg-White">
+            <List>
+              <List.Item>
+                <List.Title>{selectedStation}</List.Title>
+                <List.Subtitle>{selectedStationInfo}</List.Subtitle>
+                <List.Icon icon={ChevronDownIcon} />
+              </List.Item>
+
+              {buses.map(({ title, subtitle }) => (
+                <List.Item key={title} className="pl-2">
+                  <List.Title>{title}</List.Title>
+                  <List.Subtitle>{subtitle} | 종점방면</List.Subtitle>
+                  <ToggleIconButton />
+                </List.Item>
+              ))}
+            </List>
+          </BaseModal.Content>
+          <BaseModal.DimBg onClick={() => setIsOpen(false)} />
+        </BaseModal>
+      )}
     </div>
   );
 }
