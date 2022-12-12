@@ -8,7 +8,7 @@ export default function App({
   ...restProps
 }: AppProps<'div'>) {
   return (
-    <div className={tw('pt-8', className)} {...restProps}>
+    <div className={tw('', className)} {...restProps}>
       {children}
     </div>
   );
