@@ -1,6 +1,6 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import { Intro } from './Intro';
+import Intro from './index';
 
 const meta = {
   component: Intro,
@@ -15,7 +15,9 @@ const meta = {
 
 export default meta;
 
-const Template: ComponentStory<typeof Intro> = (args) => <Intro {...args} />;
+const Template: ComponentStory<typeof Intro> = (args) => (
+    <Intro {...args} />
+);
 
 export const Default = Template.bind({});
 

@@ -1,22 +1,22 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import Agreement from './index';
+import { MainMenu } from './MainMenu';
 
 const meta = {
-  component: Agreement,
-  title: 'Page/Agreement',
+  component: MainMenu,
+  title: 'Components/MainMenu',
   parameters: {
     design: {
       type: 'figma',
       url: 'figmaURL',
     },
   },
-} as ComponentMeta<typeof Agreement>;
+} as ComponentMeta<typeof MainMenu>;
 
 export default meta;
 
-const Template: ComponentStory<typeof Agreement> = (args) => (
-    <Agreement {...args} />
+const Template: ComponentStory<typeof MainMenu> = (args) => (
+  <MainMenu {...args} />
 );
 
 export const Default = Template.bind({});

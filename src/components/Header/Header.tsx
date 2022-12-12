@@ -1,3 +1,4 @@
+import { Link, useNavigate } from 'react-router-dom';
 import { ComponentProps } from 'react';
 import {
   Bars3Icon,
@@ -32,8 +33,13 @@ function BackButton({
   className,
   ...restProps
 }: BackButtonProps<'button'>) {
+  const navigate = useNavigate();
   return (
-    <IconButton className={tw('mr-3 h-6 w-6', className)} {...restProps}>
+    <IconButton
+      className={tw('mr-3 h-6 w-6', className)}
+      onClick={() => navigate(-1)}
+      {...restProps}
+    >
       <IconButton.Icon icon={ChevronLeftIcon} />
     </IconButton>
   );
@@ -67,18 +73,17 @@ function Menu({ children, className, ...restProps }: MenuProps<'button'>) {
 
 type PredictProps<T extends React.ElementType> = Component<T>;
 
-function Predict({
-  children,
-  className,
-  ...restProps
-}: PredictProps<'button'>) {
+function Predict({ children, className, ...restProps }: PredictProps<'a'>) {
   return (
-    <IconButton
-      className={tw('absolute right-7 mr-10 h-6 w-6', className)}
+    <Link
+      to="/prediction"
+      className={tw('absolute right-7 mr-10', className)}
       {...restProps}
     >
-      <IconButton.Icon className="stroke-Primary-700" icon={ClockIcon} />
-    </IconButton>
+      <IconButton className="h-6 w-6">
+        <IconButton.Icon className="stroke-Primary-700" icon={ClockIcon} />
+      </IconButton>
+    </Link>
   );
 }
 

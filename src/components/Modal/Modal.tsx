@@ -14,7 +14,7 @@ export function Modal({
   return (
     <div
       className={tw(
-        'fixed top-0 left-0 h-screen w-screen',
+        'fixed top-0 left-0 z-[100] h-screen w-screen',
         !isOpened && 'hidden',
         className
       )}
@@ -108,7 +108,7 @@ function DimBackground({
   return (
     <div
       className={tw(
-        '-z-10 h-full w-full bg-Gray-700 opacity-80',
+        'fixed left-0 top-0 h-full w-full bg-Gray-700 opacity-80',
         isOpened && 'hidden',
         className
       )}
