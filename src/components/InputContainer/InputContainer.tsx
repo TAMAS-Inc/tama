@@ -70,8 +70,8 @@ const Input = forwardRef(
 
     useEffect(() => {
       if (inputValue === '') {
-        const $input = outerRef?.current as unknown as HTMLInputElement;
-        if ($input) $input.value = '';
+        const { current } = outerRef as { current: HTMLInputElement };
+        if (current) current.value = '';
       }
     }, [inputValue, outerRef]);
 
