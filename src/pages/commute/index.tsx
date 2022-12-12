@@ -35,7 +35,7 @@ export default function Commute({
       </div>
       <div className="mt-8">
         <h2 className="mb-2 text-body2">정류장 이름</h2>
-        <Link to="/searchBusStop">
+        <Link to="/searchStation">
           <TextButton className="relative h-12 w-full rounded-lg border border-Gray-300 bg-White text-left text-body2 text-Gray-400">
             <Icon
               icon={MagnifyingGlassIcon}
@@ -57,9 +57,7 @@ export default function Commute({
         </TextButton>
       </div>
       <Link to="/commute">
-        <StatusButton
-          className="fixed bottom-8 w-[calc(100%-32px)]"
-        >
+        <StatusButton className="fixed bottom-8 w-[calc(100%-32px)]">
           확인
         </StatusButton>
       </Link>

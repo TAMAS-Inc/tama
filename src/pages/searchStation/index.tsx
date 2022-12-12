@@ -60,8 +60,18 @@ export default function SearchBusStop({
           aria-hidden="true"
           onClick={() => setIsOpen(true)}
         >
-          <p className="ml-2">기흥여객차고지</p>
-          <p className="ml-2 text-Gray-400">50095 | 종점방면</p>
+          <div className="mb-2">
+            <p className="ml-2">기흥여객차고지</p>
+            <p className="ml-2 text-Gray-400">50095 | 종점방면</p>
+          </div>
+          <div className="mb-2">
+            <p className="ml-2">2번째 정류장</p>
+            <p className="ml-2 text-Gray-400">55555 | 종점방면</p>
+          </div>
+          <div className="mb-2">
+            <p className="ml-2">3번째 정류장</p>
+            <p className="ml-2 text-Gray-400">66666 | 종점방면</p>
+          </div>
         </div>
       )}
       <Modal isOpened={isOpen} className="absolute top-0">
@@ -77,7 +87,7 @@ export default function SearchBusStop({
             </div>
           </Modal.Content>
           <Modal.ButtonContainer>
-            <Link to="/commute" className="w-full">
+            <Link to="/commute" className="w-full" state={{}}>
               <Modal.Button onClick={() => setIsOpen(false)}>확인</Modal.Button>
             </Link>
           </Modal.ButtonContainer>

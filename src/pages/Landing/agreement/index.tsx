@@ -6,7 +6,7 @@ import { tw } from '@/utils/tailwindMerge';
 type AgreementProps<T extends React.ElementType> = Component<T>;
 
 interface CheckboxProps {
-  handler: ChangeEventHandler;
+  onChange: ChangeEventHandler;
   name: string;
   state: boolean;
   children: React.ReactNode;
@@ -14,7 +14,7 @@ interface CheckboxProps {
 }
 
 function Checkbox({
-  handler,
+  onChange,
   state,
   name,
   children,
@@ -27,7 +27,7 @@ function Checkbox({
           name={name}
           type="checkbox"
           className="mx-2 h-6 w-6 bg-Gray-500"
-          onChange={handler}
+          onChange={onChange}
           checked={state}
         />
         {children}
@@ -68,7 +68,7 @@ export default function Agreement({
 
       <Checkbox
         name="all"
-        handler={checkAll}
+        onChange={checkAll}
         state={checkList.length === 2}
         className="border-bottom flex w-full rounded-none border-b border-b-Gray-400 pb-4"
       >
@@ -77,13 +77,13 @@ export default function Agreement({
 
       <Checkbox
         name="location"
-        handler={check}
+        onChange={check}
         state={checkList.includes('location')}
       >
         위치 기반 서비스 약관 동의 (필수)
       </Checkbox>
 
-      <Checkbox name="ad" handler={check} state={checkList.includes('ad')}>
+      <Checkbox name="ad" onChange={check} state={checkList.includes('ad')}>
         마케팅 정보 수신 동의 (선택)
       </Checkbox>
 
