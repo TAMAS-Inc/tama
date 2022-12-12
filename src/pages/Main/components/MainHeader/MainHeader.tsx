@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { tw } from '@/utils/tailwindMerge';
 import { Header } from '@/components/Header';
 import { MainMenu } from '../MainMenu';
-import { MainDropdown } from '../MainDropdown';
+// import { MainDropdown } from '../MainDropdown';
 
 type MainHeaderProps<T extends React.ElementType> = Component<T>;
 
@@ -19,11 +19,7 @@ export function MainHeader({
       <Header.Dropdown onClick={() => setIsDropdownOpen(true)}>
         {children}
       </Header.Dropdown>
-      {isDropdownOpen ? (
-        <MainDropdown handleDropdown={setIsDropdownOpen} />
-      ) : (
-        ''
-      )}
+      {isDropdownOpen ? '드롭다운 제작 중' : ''}
       <Header.Predict />
       <Header.Menu onClick={() => setIsMenuOpen(true)} />
       {isMenuOpen ? <MainMenu handleMenu={setIsMenuOpen} /> : ''}
