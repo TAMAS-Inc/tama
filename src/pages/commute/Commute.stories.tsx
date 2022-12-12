@@ -1,6 +1,6 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import { Commute } from './Commute';
+import Commute from './index';
 
 const meta = {
   component: Commute,

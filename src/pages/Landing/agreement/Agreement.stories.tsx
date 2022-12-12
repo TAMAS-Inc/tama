@@ -1,6 +1,6 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import { Agreement } from './Agreement';
+import Agreement from './index';
 
 const meta = {
   component: Agreement,
@@ -16,7 +16,7 @@ const meta = {
 export default meta;
 
 const Template: ComponentStory<typeof Agreement> = (args) => (
-  <Agreement {...args} />
+    <Agreement {...args} />
 );
 
 export const Default = Template.bind({});

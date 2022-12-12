@@ -1,17 +1,19 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import {
-  useContext,
-  useMemo,
-  createContext,
-  useState,
-  useEffect,
-  useRef,
   ChangeEventHandler,
   ComponentProps,
+  createContext,
+  forwardRef,
+  MouseEventHandler,
+  useContext,
+  Ref,
+  useEffect,
+  useMemo,
+  useState,
 } from 'react';
 import { XCircleIcon } from '@heroicons/react/24/solid';
-import { tw } from '@/utils/tailwindMerge';
 import { IconButton } from '@/components/IconButton';
+import { tw } from '@/utils/tailwindMerge';
 
 interface InputContainerContextValue {
   inputValue: string;
@@ -41,6 +43,7 @@ export function InputContainer({
   ...restProps
 }: InputContainerProps<'div'>) {
   const [inputValue, setInputValue] = useState('');
+
   const ctxValue = useMemo(
     (): InputContainerContextValue => ({ inputValue, setInputValue }),
     [inputValue]
@@ -58,31 +61,35 @@ export function InputContainer({
   );
 }
 
-function Input({ className, ...restProps }: InputProps<'input'>) {
-  const { inputValue, setInputValue } = useInputContainerContext();
-  const inputRef = useRef(null);
+const Input = forwardRef(
+  (
+    { className, onChange, ...restProps }: InputProps<'input'>,
+    outerRef: Ref<HTMLInputElement> = null
+  ) => {
+    const { inputValue, setInputValue } = useInputContainerContext();
 
-  useEffect(() => {
-    if (inputValue === '') {
-      const $input = inputRef.current as unknown as HTMLInputElement;
-      $input.value = '';
-    }
-  }, [inputValue]);
+    useEffect(() => {
+      if (inputValue === '') {
+        const $input = outerRef?.current as unknown as HTMLInputElement;
+        if ($input) $input.value = '';
+      }
+    }, [inputValue, outerRef]);
 
-  const handleChange: ChangeEventHandler = (e) => {
-    const $input = e.target as HTMLInputElement;
-    setInputValue($input.value);
-  };
+    const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+      setInputValue(e.target.value);
+      if (onChange) onChange(e);
+    };
 
-  return (
-    <input
-      ref={inputRef}
-      className={tw('h-full w-full rounded-lg pl-3 outline-none', className)}
-      onChange={handleChange}
-      {...restProps}
-    />
-  );
-}
+    return (
+      <input
+        ref={outerRef}
+        className={tw('h-full w-full rounded-lg pl-3 outline-none', className)}
+        onChange={handleChange}
+        {...restProps}
+      />
+    );
+  }
+);
 
 function Label({ children, className, ...restProps }: LabelProps<'label'>) {
   return (
@@ -97,23 +104,25 @@ function Label({ children, className, ...restProps }: LabelProps<'label'>) {
 
 function ResetButton({
   className,
+  onClick,
   ...restProps
 }: ComponentProps<typeof IconButton>) {
   const { inputValue, setInputValue } = useInputContainerContext();
 
-  const handleClick = () => {
-    if (!inputValue) return;
+  const handleClick: MouseEventHandler<HTMLButtonElement> = (e) => {
     setInputValue('');
+    if (onClick) onClick(e);
   };
 
   if (inputValue === '') return null;
 
   return (
-    <IconButton onClick={handleClick} {...restProps}>
-      <IconButton.Icon
-        className={tw('absolute top-1 right-3 h-6 w-6', className)}
-        icon={XCircleIcon}
-      />
+    <IconButton
+      className={tw('', className)}
+      onClick={handleClick}
+      {...restProps}
+    >
+      <IconButton.Icon className="fill-Gray-500" icon={XCircleIcon} />
     </IconButton>
   );
 }
