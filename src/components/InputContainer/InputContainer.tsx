@@ -64,7 +64,7 @@ export function InputContainer({
 const Input = forwardRef(
   (
     { className, onChange, ...restProps }: InputProps<'input'>,
-    outerRef: Ref<HTMLInputElement> = null
+    outerRef: Ref<HTMLInputElement> = { current: null }
   ) => {
     const { inputValue, setInputValue } = useInputContainerContext();
 
