@@ -64,12 +64,12 @@ export function InputContainer({
 const Input = forwardRef(
   (
     { className, onChange, ...restProps }: InputProps<'input'>,
-    outerRef: Ref<HTMLInputElement> = { current: null }
+    outerRef: Ref<HTMLInputElement>
   ) => {
     const { inputValue, setInputValue } = useInputContainerContext();
 
     useEffect(() => {
-      if (inputValue === '') {
+      if (inputValue === '' && outerRef) {
         const { current } = outerRef as { current: HTMLInputElement };
         if (current) current.value = '';
       }
