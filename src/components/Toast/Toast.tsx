@@ -2,13 +2,13 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 import { tw } from '@/utils/tailwindMerge';
 import { IconButton } from '../IconButton';
 
-type ToastContainerProps<T extends React.ElementType> = Component<T>;
+type ToastProps<T extends React.ElementType> = Component<T>;
 
-export function ToastContainer({
+export function Toast({
   children,
   className,
   ...restProps
-}: ToastContainerProps<'div'>) {
+}: ToastProps<'div'>) {
   return (
     <div
       className={tw(
@@ -22,9 +22,9 @@ export function ToastContainer({
   );
 }
 
-type ToastProps<T extends React.ElementType> = Component<T>;
+type ContentProps<T extends React.ElementType> = Component<T>;
 
-function Toast({ children, className, ...restProps }: ToastProps<'div'>) {
+function Content({ children, className, ...restProps }: ContentProps<'div'>) {
   return (
     <div className={tw('text-White', className)} {...restProps}>
       {children}
@@ -49,5 +49,5 @@ function CloseButton({
   );
 }
 
-ToastContainer.Toast = Toast;
-ToastContainer.CloseButton = CloseButton;
+Toast.Content = Content;
+Toast.CloseButton = CloseButton;

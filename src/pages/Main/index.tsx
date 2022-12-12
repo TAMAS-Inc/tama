@@ -1,5 +1,6 @@
 import { tw } from '@/utils/tailwindMerge';
-import { MainHeader, AD, Notification, SyncButton } from '@/components';
+import { AD, Notification, SyncButton } from '@/components';
+import { MainHeader } from './components';
 
 type MainProps<T extends React.ElementType> = Component<T>;
 
