@@ -64,14 +64,14 @@ export function InputContainer({
 const Input = forwardRef(
   (
     { className, onChange, ...restProps }: InputProps<'input'>,
-    outerRef: Ref<HTMLInputElement> = null
+    outerRef: Ref<HTMLInputElement>
   ) => {
     const { inputValue, setInputValue } = useInputContainerContext();
 
     useEffect(() => {
-      if (inputValue === '') {
-        const $input = outerRef?.current as unknown as HTMLInputElement;
-        if ($input) $input.value = '';
+      if (inputValue === '' && outerRef) {
+        const { current } = outerRef as { current: HTMLInputElement };
+        if (current) current.value = '';
       }
     }, [inputValue, outerRef]);
 

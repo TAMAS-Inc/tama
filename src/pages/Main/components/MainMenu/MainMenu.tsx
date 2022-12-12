@@ -35,7 +35,8 @@ export function MainMenu({
           <List.Item className="h-25 mt-9 pl-4 pb-6">
             <List.Title className="text-left">
               <strong>타까마까님!</strong>
-              <p>오늘도 산뜻한 출근길 되세요!</p>
+              <br />
+              <span>오늘도 산뜻한 출근길 되세요!</span>
             </List.Title>
           </List.Item>
           {Object.entries(data).map(([content, path]) => (

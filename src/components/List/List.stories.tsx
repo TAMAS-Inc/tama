@@ -1,3 +1,6 @@
+/* eslint-disable */
+// @ts-nocheck
+
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { List } from './List';
 import { BusCard } from '../BusCard';
