@@ -2,9 +2,7 @@ import { ChevronRightIcon } from '@heroicons/react/24/solid';
 import { tw } from '@/utils/tailwindMerge';
 import { Icon } from '@/components/Icon';
 
-type ListProps<T extends React.ElementType> = {
-  isChecked?: boolean;
-} & Component<T>;
+type ListProps<T extends React.ElementType> = Component<T>;
 
 export function List({ children, className, ...restProps }: ListProps<'div'>) {
   return (

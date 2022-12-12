@@ -7,9 +7,7 @@ import { tw } from '@/utils/tailwindMerge';
 import { Icon } from '@/components/Icon';
 import { ToggleIconButton } from '../ToggleIconButton';
 
-type BusCardProps<T extends React.ElementType> = {
-  isChecked?: boolean;
-} & Component<T>;
+type BusCardProps<T extends React.ElementType> = Component<T>;
 
 export function BusCard({
   children,
