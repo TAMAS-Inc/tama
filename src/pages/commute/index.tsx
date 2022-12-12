@@ -1,5 +1,5 @@
-import { useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { useRef, useEffect, useState, ChangeEventHandler } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import {
   NavigationHeader,
@@ -16,7 +16,23 @@ export default function Commute({
   className,
   ...restProps
 }: CommuteProps<'div'>) {
+  const location = useLocation();
+  const { station } = location.state;
+
+  const [userStationName, setUserStationName] = useState<string>('');
+
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (inputRef?.current) {
+      inputRef.current.value = station ?? '춘식이네';
+      setUserStationName(inputRef.current.value);
+    }
+  }, []);
+
+  const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    setUserStationName(e.target.value);
+  };
 
   return (
     <div className="pl-4 pr-4" {...restProps}>
@@ -28,6 +44,7 @@ export default function Commute({
             <InputContainer.Label.Input
               ref={inputRef}
               className="border border-Gray-300"
+              onChange={handleChange}
             />
           </InputContainer.Label>
           <InputContainer.ResetButton className="absolute top-3 right-3 h-6 w-6 fill-Gray-500" />
@@ -35,7 +52,7 @@ export default function Commute({
       </div>
       <div className="mt-8">
         <h2 className="mb-2 text-body2">정류장 이름</h2>
-        <Link to="/searchStation">
+        <Link to="/searchStation" state={{ station: userStationName }}>
           <TextButton className="relative h-12 w-full rounded-lg border border-Gray-300 bg-White text-left text-body2 text-Gray-400">
             <Icon
               icon={MagnifyingGlassIcon}
