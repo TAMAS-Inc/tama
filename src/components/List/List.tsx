@@ -3,11 +3,7 @@ import { tw } from '@/utils/tailwindMerge';
 import { Icon } from '@/components/Icon';
 
 type ListProps<T extends React.ElementType> = {
-  subtitle: string;
-  routeName: string | number;
-  stationName: string;
-  direction: string;
-  isChecked: boolean;
+  isChecked?: boolean;
 } & Component<T>;
 
 export function List({ children, className, ...restProps }: ListProps<'div'>) {

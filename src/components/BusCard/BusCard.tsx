@@ -8,10 +8,7 @@ import { Icon } from '@/components/Icon';
 import { ToggleIconButton } from '../ToggleIconButton';
 
 type BusCardProps<T extends React.ElementType> = {
-  routeName: string | number;
-  stationName: string;
-  direction: string;
-  isChecked: boolean;
+  isChecked?: boolean;
 } & Component<T>;
 
 export function BusCard({
