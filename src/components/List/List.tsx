@@ -1,3 +1,4 @@
+import { ComponentProps } from 'react';
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
 import { tw } from '@/utils/tailwindMerge';
 import { Icon } from '@/components/Icon';
@@ -52,12 +53,14 @@ function Subtitle({ children, className, ...restProps }: SubtitleProps<'p'>) {
   );
 }
 
-type LIconProps<T extends React.ElementType> = Component<T>;
+type LIconProps<T extends React.ElementType> = {
+  icon?: (props: React.ComponentProps<'svg'>) => JSX.Element;
+} & Component<T>;
 
-function LIcon({ className }: LIconProps<'div'>) {
+function LIcon({ className, icon = ChevronRightIcon }: LIconProps<'div'>) {
   return (
     <Icon
-      icon={ChevronRightIcon}
+      icon={icon}
       className={tw('absolute right-6 h-6 w-6 fill-Gray-400', className)}
     />
   );

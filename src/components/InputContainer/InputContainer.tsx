@@ -69,8 +69,15 @@ const Input = forwardRef(
     const { inputValue, setInputValue } = useInputContainerContext();
 
     useEffect(() => {
-      if (inputValue === '' && outerRef) {
-        const { current } = outerRef as { current: HTMLInputElement };
+      if (outerRef && 'current' in outerRef) {
+        const { current } = outerRef;
+        if (current) setInputValue(current.value);
+      }
+    }, []);
+
+    useEffect(() => {
+      if (inputValue === '' && outerRef && 'current' in outerRef) {
+        const { current } = outerRef;
         if (current) current.value = '';
       }
     }, [inputValue, outerRef]);

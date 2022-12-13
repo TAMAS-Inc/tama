@@ -1,31 +1,77 @@
 import { useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Header, InputContainer } from '@/components';
+import { Link, useLocation } from 'react-router-dom';
+import { ChevronDownIcon, CheckCircleIcon } from '@heroicons/react/24/solid';
+import { PlusCircleIcon } from '@heroicons/react/24/outline';
+import { Header, InputContainer, List, StatusButton } from '@/components';
 import { tw } from '@/utils/tailwindMerge';
-import { Modal } from '@/components/Modal';
+import { BaseModal } from '@/components/BaseModal';
 
 type SearchBusStopProps<T extends React.ElementType> = Component<T>;
+type SelectedStation = { title: string; subtitle: string };
+type Location = {
+  hash: string;
+  key: string;
+  pathname: string;
+  search: string;
+  state: { userStation: string };
+};
+
+const stations = [
+  { title: '기흥여객차고지', subtitle: '500095' },
+  { title: '기흥역', subtitle: '511095' },
+  { title: '기흥차고지', subtitle: '52295' },
+];
+const buses = [
+  {
+    title: '5001',
+    subtitle: '롯데캐슬스카이.이안두드림.백남준아트센터 방면',
+  },
+  { title: '5002A', subtitle: '롯데월드, 강남역 방면' },
+];
 
 export default function SearchBusStop({
   className,
   ...restProps
 }: SearchBusStopProps<'div'>) {
+  const location: Location = useLocation();
+  const { userStation } = location.state;
+
+  const [selectedBus, setSelectedBus] = useState<SelectedStation['title'][]>(
+    []
+  );
+  const [selectedStation, setSelectedStation] =
+    useState<SelectedStation | null>(null);
+
   const [showTip, setShowTip] = useState<boolean>(true);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean | null>(null);
+
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleChange = () => {
-    setShowTip(inputRef.current?.value === '');
+  const handleCloseClick = () => setIsOpen(false);
+  const handleResetClick = () => setShowTip(true);
+  const handleClick = ({ title, subtitle }: SelectedStation) => {
+    setIsOpen(true);
+    setSelectedStation((prevStation) => ({
+      ...prevStation,
+      title,
+      subtitle,
+    }));
   };
 
-  const handleResetClick = () => {
-    setShowTip(true);
-  };
+  const handleChange = () => setShowTip(inputRef.current?.value === '');
+  const handleChangeCheckbox = (title: SelectedStation['title']) =>
+    !selectedBus.includes(title)
+      ? setSelectedBus((prevBus) => [...prevBus, title])
+      : setSelectedBus((prevBus) => [
+          ...prevBus.filter((busTitle) => busTitle !== title),
+        ]);
 
   return (
     <div className={tw('mt-8 w-full', className)} {...restProps}>
       <Header>
-        <Header.BackButton />
+        <Link to="/commute" state={{ userStation }}>
+          <Header.BackButton />
+        </Link>
         <Header.Title className="grow">
           <InputContainer className="relative w-full pl-3 ">
             <InputContainer.Label>
@@ -55,45 +101,78 @@ export default function SearchBusStop({
           <p className="ml-4 text-Gray-400">예) 14324</p>
         </div>
       ) : (
-        <div
-          className="mt-9 ml-4"
-          aria-hidden="true"
-          onClick={() => setIsOpen(true)}
-        >
-          <div className="mb-2">
-            <p className="ml-2">기흥여객차고지</p>
-            <p className="ml-2 text-Gray-400">50095 | 종점방면</p>
-          </div>
-          <div className="mb-2">
-            <p className="ml-2">2번째 정류장</p>
-            <p className="ml-2 text-Gray-400">55555 | 종점방면</p>
-          </div>
-          <div className="mb-2">
-            <p className="ml-2">3번째 정류장</p>
-            <p className="ml-2 text-Gray-400">66666 | 종점방면</p>
-          </div>
-        </div>
+        <List className="mt-9 ml-4">
+          {stations.map(({ title, subtitle }) => (
+            <List.Item
+              key={title}
+              onClick={() => handleClick({ title, subtitle })}
+              className="pl-2"
+            >
+              <List.Title>{title}</List.Title>
+              <List.Subtitle>{subtitle} | 종점방면</List.Subtitle>
+            </List.Item>
+          ))}
+        </List>
       )}
-      <Modal isOpened={isOpen} className="absolute top-0">
-        <Modal.ModalContainer>
-          <Modal.Content className="flex w-full flex-col">
-            <div className="">
-              <p className="ml-2">기흥여객차고지</p>
-              <p className="ml-2 text-Gray-400">50095 | 종점방면</p>
-            </div>
-            <div className="">
-              <p className="ml-2">기흥여객차고지</p>
-              <p className="ml-2 text-Gray-400">50095 | 종점방면</p>
-            </div>
-          </Modal.Content>
-          <Modal.ButtonContainer>
-            <Link to="/commute" className="w-full" state={{}}>
-              <Modal.Button onClick={() => setIsOpen(false)}>확인</Modal.Button>
+      {isOpen && (
+        <BaseModal>
+          <BaseModal.Content className="top-56 h-full w-full rounded-t-2xl bg-White">
+            <List>
+              <List.Item className="pl-6">
+                <List.Title>{selectedStation?.title}</List.Title>
+                <List.Subtitle>{selectedStation?.subtitle}</List.Subtitle>
+                <List.Icon icon={ChevronDownIcon} />
+              </List.Item>
+
+              {buses.map(({ title }) => (
+                <List.Item key={title} className="relative pl-4">
+                  <List.Title className="pl-2 text-body1 text-Primary-700">
+                    {title}
+                  </List.Title>
+                  <InputContainer className="absolute top-6 right-6 h-6 w-6">
+                    <InputContainer.Label>
+                      <List.Icon
+                        className={tw(
+                          'absolute top-0 right-0 h-7 w-7',
+                          !selectedBus.includes(title)
+                            ? 'bg-White fill-White stroke-Gray-300'
+                            : 'bg-White fill-Primary-700'
+                        )}
+                        icon={
+                          !selectedBus.includes(title)
+                            ? PlusCircleIcon
+                            : CheckCircleIcon
+                        }
+                      />
+                      <InputContainer.Label.Input
+                        onChange={() => handleChangeCheckbox(title)}
+                        type="checkbox"
+                        className="bg-Gray-500"
+                      />
+                    </InputContainer.Label>
+                  </InputContainer>
+                </List.Item>
+              ))}
+            </List>
+            <Link
+              to="/commute"
+              state={{
+                userStation,
+                stationName: selectedStation?.title,
+                bus: selectedBus,
+              }}
+            >
+              <StatusButton
+                disabled={!selectedBus.length}
+                className="fixed left-4 bottom-8 w-[calc(100%-32px)]"
+              >
+                확인
+              </StatusButton>
             </Link>
-          </Modal.ButtonContainer>
-        </Modal.ModalContainer>
-        <Modal.DimBackground />
-      </Modal>
+          </BaseModal.Content>
+          <BaseModal.DimBg onClick={handleCloseClick} />
+        </BaseModal>
+      )}
     </div>
   );
 }
