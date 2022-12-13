@@ -1,11 +1,9 @@
 import { useRef, useEffect, useState, ChangeEventHandler } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import {
   NavigationHeader,
   InputContainer,
   TextButton,
-  Icon,
   StatusButton,
 } from '@/components';
 
@@ -46,7 +44,7 @@ export default function Commute({
 
   useEffect(() => {
     if (buttonStationRef?.current) {
-      buttonStationRef.current.textContent = stationName ?? '정류장 선택';
+      buttonStationRef.current.textContent = stationName || '정류장 선택';
     }
     if (buttonBusRef?.current) {
       if (stationName) {
@@ -92,11 +90,6 @@ export default function Commute({
             ref={buttonStationRef}
             className="relative h-12 w-full rounded-lg border border-Gray-300 bg-White text-left text-body2 text-Gray-400"
           >
-            <Icon
-              icon={MagnifyingGlassIcon}
-              className="absolute top-3 right-3 h-6 w-6 text-Gray-400"
-              strokeWidth="2"
-            />
             정류장 검색
           </TextButton>
         </Link>

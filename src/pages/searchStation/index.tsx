@@ -148,7 +148,10 @@ export default function SearchBusStop({
                 bus: selectedBus,
               }}
             >
-              <StatusButton className="fixed left-4 bottom-8 w-[calc(100%-32px)]">
+              <StatusButton
+                disabled={!selectedBus.length}
+                className="fixed left-4 bottom-8 w-[calc(100%-32px)]"
+              >
                 확인
               </StatusButton>
             </Link>
