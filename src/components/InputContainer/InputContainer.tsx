@@ -73,7 +73,7 @@ const Input = forwardRef(
         const { current } = outerRef;
         if (current) setInputValue(current.value);
       }
-    }, []);
+    }, [outerRef, setInputValue]);
 
     useEffect(() => {
       if (inputValue === '' && outerRef && 'current' in outerRef) {
