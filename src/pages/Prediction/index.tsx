@@ -1,5 +1,12 @@
+import { useState, useEffect } from 'react';
 import { tw } from '@/utils/tailwindMerge';
-import { AD, Dropdown, NavigationHeader, Notification } from '@/components';
+import {
+  AD,
+  Dropdown,
+  DropdownModal,
+  NavigationHeader,
+  Notification,
+} from '@/components';
 
 type PredictionProps<T extends React.ElementType> = Component<T>;
 
@@ -7,6 +14,17 @@ export default function Prediction({
   className,
   ...restProps
 }: PredictionProps<'div'>) {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [current, setCurrent] = useState('춘시기네');
+
+  const handleDropdown: React.MouseEventHandler<HTMLDivElement> = () => {
+    setIsDropdownOpen(true);
+  };
+
+  useEffect(() => {
+    setIsDropdownOpen(false);
+  }, [current]);
+
   return (
     <div className={tw('pt-8', className)} {...restProps}>
       <NavigationHeader>예측</NavigationHeader>
@@ -19,12 +37,18 @@ export default function Prediction({
         </div>
         <div>
           <div className="mr-2 inline-block">
-            <Dropdown>
+            <Dropdown onClick={handleDropdown}>
               <Dropdown.Content className="text-Primary-600">
-                춘시기네
+                {current}
               </Dropdown.Content>
               <Dropdown.Button className="stroke-Gray-300" />
             </Dropdown>
+            {isDropdownOpen && (
+              <DropdownModal
+                handleCurrent={setCurrent}
+                handleDropdown={setIsDropdownOpen}
+              />
+            )}
           </div>
           에서
         </div>

@@ -1,21 +1,23 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import { Form } from './Form';
+import { DropdownModal } from './DropdownModal';
 
 const meta = {
-  component: Form,
-  title: 'Components/Form',
+  component: DropdownModal,
+  title: 'Components/DropdownModal',
   parameters: {
     design: {
       type: 'figma',
       url: 'figmaURL',
     },
   },
-} as ComponentMeta<typeof Form>;
+} as ComponentMeta<typeof DropdownModal>;
 
 export default meta;
 
-const Template: ComponentStory<typeof Form> = (args) => <Form {...args} />;
+const Template: ComponentStory<typeof DropdownModal> = (args) => (
+  <DropdownModal {...args} />
+);
 
 export const Default = Template.bind({});
 

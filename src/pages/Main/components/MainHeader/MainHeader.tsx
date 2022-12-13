@@ -1,8 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { tw } from '@/utils/tailwindMerge';
-import { Header } from '@/components/Header';
+import { Header, DropdownModal } from '@/components';
 import { MainMenu } from '../MainMenu';
-// import { MainDropdown } from '../MainDropdown';
 
 type MainHeaderProps<T extends React.ElementType> = Component<T>;
 
@@ -13,16 +12,32 @@ export function MainHeader({
 }: MainHeaderProps<'div'>) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [current, setCurrent] = useState('춘시기네');
+
+  const handleDropdown: React.MouseEventHandler<HTMLDivElement> = () => {
+    setIsDropdownOpen(true);
+  };
+
+  const handleMenu: React.MouseEventHandler<HTMLButtonElement> = () => {
+    setIsMenuOpen(true);
+  };
+
+  useEffect(() => {
+    setIsDropdownOpen(false);
+  }, [current]);
 
   return (
     <Header className={tw('pt-8', className)} {...restProps}>
-      <Header.Dropdown onClick={() => setIsDropdownOpen(true)}>
-        {children}
-      </Header.Dropdown>
-      {isDropdownOpen ? '드롭다운 제작 중' : ''}
+      <Header.Dropdown onClick={handleDropdown}>{current}</Header.Dropdown>
+      {isDropdownOpen && (
+        <DropdownModal
+          handleCurrent={setCurrent}
+          handleDropdown={setIsDropdownOpen}
+        />
+      )}
       <Header.Predict />
-      <Header.Menu onClick={() => setIsMenuOpen(true)} />
-      {isMenuOpen ? <MainMenu handleMenu={setIsMenuOpen} /> : ''}
+      <Header.Menu onClick={handleMenu} />
+      {isMenuOpen && <MainMenu handleMenu={setIsMenuOpen} />}
     </Header>
   );
 }
