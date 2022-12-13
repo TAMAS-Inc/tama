@@ -5,7 +5,7 @@ type TermsProps<T extends React.ElementType> = Component<T>;
 
 export default function Terms({ className, ...restProps }: TermsProps<'div'>) {
   return (
-    <div className={tw('pt-8', className)} {...restProps}>
+    <div className={tw('', className)} {...restProps}>
       <NavigationHeader>이용약관</NavigationHeader>
       <div className="mt-8 mr-4 ml-4">
         <h2 className="text-body2 font-bold">제 1조 (목적)</h2>

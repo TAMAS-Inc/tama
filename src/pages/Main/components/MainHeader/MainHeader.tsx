@@ -27,7 +27,7 @@ export function MainHeader({
   }, [current]);
 
   return (
-    <Header className={tw('pt-8', className)} {...restProps}>
+    <Header className={tw('pt-4', className)} {...restProps}>
       <Header.Dropdown onClick={handleDropdown}>{current}</Header.Dropdown>
       {isDropdownOpen && (
         <DropdownModal

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { tw } from '@/utils/tailwindMerge';
-import { BaseModal, BusCard, List, TextButton } from '@/components';
+import { BaseModal, BusCard } from '@/components';
 // import { MyStationCard } from '../MyStationCard';
 
 type DropdownModalProps<T extends React.ElementType> = {
@@ -49,56 +49,48 @@ export function DropdownModal({
   };
 
   return (
-    <BaseModal className={tw('pl-0 ', className)} {...restProps}>
+    <BaseModal className={tw('rounded-lg', className)} {...restProps}>
       <BaseModal.Content className="bottom-0 h-[620px] w-full bg-White">
-        <List className="relative">
-          <Link to="/">
-            <TextButton className="absolute top-3 right-8 z-10 bg-White text-body2">
-              편집
-            </TextButton>
-          </Link>
-          <div className="pt-3">
-            <List.Title className="text-center text-body1 font-bold">
-              내 정류장 설정
-            </List.Title>
-          </div>
-          <Link to="/" className="block text-center">
-            <TextButton className="mt-3.5 mb-8 h-8 w-[320px] text-left text-body2 text-Gray-500">
-              정류장 검색
-            </TextButton>
-          </Link>
+        <div className="flex flex-row justify-between pt-8 pl-6 pr-8 pb-8">
+          <div className="text-body1 font-bold">내 정류장 설정</div>
+          <ul className="flex gap-2 text-body2">
+            <li>
+              <Link to="/commute">추가</Link>
+            </li>
+            <li>
+              <Link to="/commute/edit">편집</Link>
+            </li>
+          </ul>
+        </div>
 
-          {data.map(({ routeId, routeName, stationName, dest }) => (
-            // <MyStationCard
-            //   key={routeName}
-            //   routeName={routeName}
-            //   stationName={stationName}
-            //   dest={dest}
-            //   id={`${i}`}
-            //   handleSelect={handleSelect}
-            //   selected={+i === selected}
-            // />
-            <BusCard
-              key={routeId}
-              id={routeName}
-              className="flex flex-col items-start justify-center"
-              onClick={handleSelect}
-            >
-              <BusCard.Info className="static left-0 flex translate-x-0 flex-row">
-                <BusCard.Content className="w-28 text-body1">
-                  {routeName}
-                </BusCard.Content>
-                <BusCard.StationName className="mb-0 flex items-center justify-center">
-                  {stationName}
-                </BusCard.StationName>
-              </BusCard.Info>
-              <BusCard.Content className="text-Gray-400">
-                {dest}
+        {data.map(({ routeId, routeName, stationName, dest }) => (
+          // <MyStationCard
+          //   key={routeName}
+          //   routeName={routeName}
+          //   stationName={stationName}
+          //   dest={dest}
+          //   id={`${i}`}
+          //   handleSelect={handleSelect}
+          //   selected={+i === selected}
+          // />
+          <BusCard
+            key={routeId}
+            id={routeName}
+            className="flex flex-col items-start justify-center"
+            onClick={handleSelect}
+          >
+            <BusCard.Info className="static left-0 flex translate-x-0 flex-row">
+              <BusCard.Content className="w-28 text-body1">
+                {routeName}
               </BusCard.Content>
-              {routeName === selected && <BusCard.CheckIcon isChecked />}
-            </BusCard>
-          ))}
-        </List>
+              <BusCard.StationName className="mb-0 flex items-center justify-center">
+                {stationName}
+              </BusCard.StationName>
+            </BusCard.Info>
+            <BusCard.Content className="text-Gray-400">{dest}</BusCard.Content>
+            {routeName === selected && <BusCard.CheckIcon isChecked />}
+          </BusCard>
+        ))}
       </BaseModal.Content>
       <BaseModal.DimBg onClick={handleClickDimmed} />
     </BaseModal>

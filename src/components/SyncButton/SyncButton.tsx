@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { tw } from '@/utils/tailwindMerge';
 import { IconButton } from '@/components';
@@ -9,17 +10,30 @@ export function SyncButton({
   className,
   ...restProps
 }: SyncButtonProps<'button'>) {
+  const [isSyncing, setIsSyncing] = useState(false);
+
+  const handleSyncClick = () => {
+    setIsSyncing(true);
+    setTimeout(() => {
+      setIsSyncing(false);
+    }, 1000);
+  };
+
   return (
     <IconButton
       className={tw(
         'fixed bottom-16 right-4 mb-3 h-12 w-12 rounded-full bg-Primary-600',
         className
       )}
+      onClick={handleSyncClick}
       {...restProps}
     >
       <IconButton.Icon
         icon={ArrowPathIcon}
-        className="h-6 w-6 stroke-Primary-100"
+        className={tw(
+          isSyncing ? 'animate-spin' : '',
+          'h-6 w-6 stroke-Primary-100'
+        )}
       />
     </IconButton>
   );

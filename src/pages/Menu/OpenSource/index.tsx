@@ -19,7 +19,7 @@ export default function OpenSource({
     },
   ];
   return (
-    <div className={tw('pt-8', className)} {...restProps}>
+    <div className={tw('', className)} {...restProps}>
       <NavigationHeader>오픈소스 이용</NavigationHeader>
       <List>
         {data.map(({ id, title }) => (

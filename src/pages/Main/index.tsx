@@ -13,7 +13,7 @@ export default function Main({ className, ...restProps }: MainProps<'div'>) {
       routeName: '5001A',
       remainSeatCnt: '34',
       remainStationCnt: '3',
-      predictReaminTime: '12분 34초',
+      predictRemainTime: '12분 34초',
       predictRemainSeatCnt: '12',
     },
     {
@@ -21,35 +21,35 @@ export default function Main({ className, ...restProps }: MainProps<'div'>) {
       routeName: '5001B',
       remainSeatCnt: '34',
       remainStationCnt: '4',
-      predictReaminTime: '12분 34초',
+      predictRemainTime: '12분 34초',
       predictRemainSeatCnt: '12',
     },
   ];
 
   return (
-    <div className={tw('pt-8', className)} {...restProps}>
+    <div className={tw('', className)} {...restProps}>
       <MainHeader>춘시기넹</MainHeader>
-      <Notification />
+      <Notification className="mb-2" />
       {data.map(
         ({
           routeId,
           routeName,
           remainSeatCnt,
           remainStationCnt,
-          predictReaminTime,
+          predictRemainTime,
           predictRemainSeatCnt,
         }) => (
           <BusCard
             key={routeId}
             onClick={(e) => {
               if ((e.target as HTMLElement).closest('svg'))
-                navigate(`main/analysis/${routeName}`);
-              else navigate(`main/busRoute/${routeName}`);
+                navigate(`analysis/${routeName}`);
+              else navigate(`busRoute/${routeName}`);
             }}
           >
             <BusCard.RouteName>{routeName}</BusCard.RouteName>
             <BusCard.Info>
-              <BusCard.Content>{predictReaminTime}</BusCard.Content>
+              <BusCard.Content>{predictRemainTime}</BusCard.Content>
               <BusCard.Content>
                 {remainStationCnt}번째 전 (실시간 {remainSeatCnt}석, 예측{' '}
                 {predictRemainSeatCnt}석)

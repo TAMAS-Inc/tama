@@ -11,7 +11,7 @@ export default function Notice({
   const { id } = useParams();
 
   return (
-    <div className={tw('pt-8', className)} {...restProps}>
+    <div className={tw('', className)} {...restProps}>
       <NavigationHeader>{id}번 공지사항</NavigationHeader>
       <div className="mt-8 mr-4 ml-4">
         Lorem ipsum dolor, sit amet consectetur adipisicing elit. Explicabo

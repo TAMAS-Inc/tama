@@ -26,7 +26,7 @@ export default function Prediction({
   }, [current]);
 
   return (
-    <div className={tw('pt-8', className)} {...restProps}>
+    <div className={tw('', className)} {...restProps}>
       <NavigationHeader>예측</NavigationHeader>
       <Notification />
       <div className="flex flex-col gap-4 pt-8 pl-7 text-body1 font-bold">
