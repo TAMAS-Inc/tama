@@ -1,22 +1,22 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import { InputItem } from './InputItem';
+import { MyStationCard } from './MyStationCard';
 
 const meta = {
-  component: InputItem,
-  title: 'Components/InputItem',
+  component: MyStationCard,
+  title: 'Components/MyStationCard',
   parameters: {
     design: {
       type: 'figma',
       url: 'figmaURL',
     },
   },
-} as ComponentMeta<typeof InputItem>;
+} as ComponentMeta<typeof MyStationCard>;
 
 export default meta;
 
-const Template: ComponentStory<typeof InputItem> = (args) => (
-  <InputItem {...args} />
+const Template: ComponentStory<typeof MyStationCard> = (args) => (
+  <MyStationCard {...args} />
 );
 
 export const Default = Template.bind({});

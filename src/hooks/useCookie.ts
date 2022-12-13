@@ -14,7 +14,7 @@ const getItem = (key: string) =>
     return key === storedKey ? decodeURIComponent(storedValue) : total;
   }, '');
 
-const setItem = (key: string, value: string | boolean, expired: number) => {
+const setItem = (key: string, value: string, expired: number) => {
   const now = new Date();
   now.setTime(now.getTime() + expired * 60 * 60 * 24 * 1000);
   document.cookie = `${key}=${value}; expires=${now.toUTCString()}; path=/`;
@@ -27,8 +27,9 @@ export const useCookie = (
   const [cookie, setCookie] = useState(getItem(key) || defaultValue);
 
   const updateCookie = (value: string | boolean, expired: number) => {
-    setCookie(value);
-    setItem(key, value, expired);
+    const newValue = JSON.stringify(value);
+    setCookie(newValue);
+    setItem(key, newValue, expired);
   };
 
   return [cookie, updateCookie];

@@ -11,16 +11,17 @@ export function Notification({
 }: NotificationProps<'div'>) {
   const [isClosed, setIsClosed] = useCookie('isNotificationClosed', false);
 
-  return isClosed ? null : (
+  const handleClick: React.MouseEventHandler<HTMLButtonElement> = () => {
+    setIsClosed(true, 1);
+  };
+  if (isClosed) return null;
+
+  return (
     <Toast className={tw('h-9 pl-4 pr-4 font-bold', className)} {...restProps}>
       <Toast.Content className="pl-2">
         🎉 타까마까가 출시되었습니다!
       </Toast.Content>
-      <Toast.CloseButton
-        onClick={() => {
-          setIsClosed(true, 1);
-        }}
-      />
+      <Toast.CloseButton onClick={handleClick} />
     </Toast>
   );
 }

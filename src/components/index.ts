@@ -1,5 +1,7 @@
+export { BusCard } from './BusCard';
+export { DropdownModal } from './DropdownModal';
+export { BaseModal } from './BaseModal';
 export { List } from './List';
-export { Modal } from './Modal';
 export { Dropdown } from './Dropdown';
 export { SyncButton } from './SyncButton';
 export { AD } from './AD';

@@ -1,5 +1,6 @@
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
+import { tw } from '@/utils/tailwindMerge';
 import { IconButton, List } from '@/components';
 import { BaseModal } from '../../../../components/BaseModal/BaseModal';
 
@@ -19,12 +20,21 @@ export function MainMenu({
     이용약관: 'terms',
     '오픈소스 이용': 'opensource',
   };
+
+  const handleClose = () => {
+    handleMenu(false);
+  };
+
+  const handleDimmedClick: React.MouseEventHandler<HTMLDivElement> = (e) => {
+    if (e.target === e.currentTarget) handleMenu(false);
+  };
+
   return (
-    <BaseModal {...restProps}>
+    <BaseModal className={tw('', className)} {...restProps}>
       <BaseModal.Content className="right-0 h-full w-[300px] bg-White">
         <List>
           <IconButton
-            onClick={() => handleMenu(false)}
+            onClick={handleClose}
             className="relative right-1 mt-[20px] h-14 w-full text-right"
           >
             <IconButton.Icon
@@ -48,11 +58,7 @@ export function MainMenu({
           ))}
         </List>
       </BaseModal.Content>
-      <BaseModal.DimBg
-        onClick={(e) => {
-          if (e.target === e.currentTarget) handleMenu(false);
-        }}
-      />
+      <BaseModal.DimBg onClick={handleDimmedClick} />
     </BaseModal>
   );
 }

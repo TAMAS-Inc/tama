@@ -32,7 +32,7 @@ type RouteNameProps<T extends React.ElementType> = Component<T>;
 function RouteName({ children, className, ...restProps }: RouteNameProps<'p'>) {
   return (
     <p
-      className={tw('pl-2 text-body1 text-Primary-700', className)}
+      className={tw('w-32 pl-2 text-body1 text-Primary-700', className)}
       {...restProps}
     >
       {children}
@@ -58,13 +58,7 @@ type InfoProps<T extends React.ElementType> = Component<T>;
 
 function Info({ children, className, ...restProps }: InfoProps<'div'>) {
   return (
-    <div
-      className={tw(
-        'absolute left-1/2 flex -translate-x-1/2 flex-col text-left',
-        className
-      )}
-      {...restProps}
-    >
+    <div className={tw('  flex-col text-left', className)} {...restProps}>
       {children}
     </div>
   );
@@ -90,8 +84,7 @@ function InfoIcon({ className }: InfoIconProps<'button'>) {
     >
       <Icon
         icon={InformationCircleIcon}
-        className={tw('h-7 w-7 text-Primary-600', className)}
-        stroke-width="2"
+        className={tw('h-7 w-7 stroke-2 text-Primary-600', className)}
       />
     </button>
   );

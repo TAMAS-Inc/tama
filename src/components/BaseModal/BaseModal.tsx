@@ -1,8 +1,6 @@
 import { tw } from '@/utils/tailwindMerge';
 
-type BaseModalProps<T extends React.ElementType> = {
-  isOpened?: boolean;
-} & Component<T>;
+type BaseModalProps<T extends React.ElementType> = Component<T>;
 
 export function BaseModal({
   children,

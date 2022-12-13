@@ -4,7 +4,7 @@ import { Notification } from './Notification';
 
 const meta = {
   component: Notification,
-  title: 'Toast/Notification',
+  title: 'Pages/Notification',
   parameters: {
     design: {
       type: 'figma',
