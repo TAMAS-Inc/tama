@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ChevronDownIcon } from '@heroicons/react/24/solid';
+import { ChevronDownIcon, CheckCircleIcon } from '@heroicons/react/24/solid';
+import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import { Header, InputContainer, List, StatusButton } from '@/components';
 import { tw } from '@/utils/tailwindMerge';
 import { BaseModal } from '@/components/BaseModal';
@@ -130,6 +131,19 @@ export default function SearchBusStop({
                   </List.Title>
                   <InputContainer className="absolute top-6 right-6 h-6 w-6">
                     <InputContainer.Label>
+                      <List.Icon
+                        className={tw(
+                          'absolute top-0 right-0 h-7 w-7',
+                          !selectedBus.includes(title)
+                            ? 'bg-White fill-White stroke-Gray-300'
+                            : 'bg-White fill-Primary-700'
+                        )}
+                        icon={
+                          !selectedBus.includes(title)
+                            ? PlusCircleIcon
+                            : CheckCircleIcon
+                        }
+                      />
                       <InputContainer.Label.Input
                         onChange={() => handleChangeCheckbox(title)}
                         type="checkbox"
