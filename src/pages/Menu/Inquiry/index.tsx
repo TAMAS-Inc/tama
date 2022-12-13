@@ -29,6 +29,7 @@ export default function Inquiry({
   });
 
   const onSubmit: SubmitHandler<FormValue> = (data) => {
+    // eslint-disable-next-line no-console
     console.log('이메일 전송', data);
   };
 
