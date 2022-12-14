@@ -1,4 +1,5 @@
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 import { tw } from '@/utils/tailwindMerge';
 import { AD, BusCard, Notification, SyncButton } from '@/components';
 import { MainHeader } from './components';
@@ -19,7 +20,13 @@ type Location = {
 export default function Main({ className, ...restProps }: MainProps<'div'>) {
   const navigate = useNavigate();
   const location: Location = useLocation();
-  const { userStation } = location.state;
+
+  useEffect(() => {
+    if (!location.state?.userStation) {
+      navigate('/landing');
+    }
+  }, [location.state, navigate]);
+
   const data = [
     {
       routeId: '228000176',
@@ -41,7 +48,7 @@ export default function Main({ className, ...restProps }: MainProps<'div'>) {
 
   return (
     <div className={tw('', className)} {...restProps}>
-      <MainHeader>{userStation}</MainHeader>
+      <MainHeader>{location.state?.userStation ?? '춘시기넹'}</MainHeader>
       <Notification />
       {data.map(
         ({

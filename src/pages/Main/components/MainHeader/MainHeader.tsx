@@ -37,7 +37,6 @@ export function MainHeader({
           handleDropdown={setIsDropdownOpen}
         />
       )}
-      <Header.Predict />
       <Header.Menu onClick={handleMenu} />
       {isMenuOpen && <MainMenu handleMenu={setIsMenuOpen} />}
     </Header>

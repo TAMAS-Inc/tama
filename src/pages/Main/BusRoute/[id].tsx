@@ -33,10 +33,13 @@ export default function BusRoute({
           <BusCard.Content>05:30 ~ 23:00 ∙ 배차간격 12-15분</BusCard.Content>
           <BusCard.Content>9대 운행중</BusCard.Content>
         </BusCard.Info>
-        <Icon icon={TruckIcon} className="absolute top-[18px] -ml-24 h-6 w-6" />
+        <Icon
+          icon={TruckIcon}
+          className="absolute top-[18px] -ml-24 h-6 w-6 fill-[#e94545] "
+        />
       </BusCard>
       {stations.map(({ title, subtitle, isThere }) => (
-        <BusCard className="flex h-full flex-col items-start">
+        <BusCard key={title} className="flex h-full flex-col items-start">
           <div className="relative ml-14 h-20 border-l-2 border-l-Primary-500 pl-4">
             <BusCard.StationName className="mt-4">{title}</BusCard.StationName>
             <BusCard.Info className="text-Gray-400">
@@ -53,7 +56,7 @@ export default function BusRoute({
               icon={isThere ? TruckIcon : ArrowDownCircleIcon}
               className={tw(
                 'absolute top-8 -left-[9px] h-4 w-4 fill-White stroke-Gray-400',
-                isThere ? 'fill-Gray-700' : ''
+                isThere ? 'fill-[#e94545] stroke-none' : ''
               )}
             />
           </div>
