@@ -18,7 +18,10 @@ export function Header({
 }: HeaderProps<'header'>) {
   return (
     <header
-      className={tw('relative flex h-12 w-full items-center p-4', className)}
+      className={tw(
+        'relative flex h-12 w-full items-center border-b-2 border-Gray-100 p-4 pb-2',
+        className
+      )}
       {...restProps}
     >
       {children}

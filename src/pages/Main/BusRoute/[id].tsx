@@ -8,7 +8,7 @@ export default function BusRoute({
   ...restProps
 }: BusRouteProps<'div'>) {
   return (
-    <div className={tw('pt-8', className)} {...restProps}>
+    <div className={tw('', className)} {...restProps}>
       <NavigationHeader>5001번</NavigationHeader>
       <Notification />
       <AD />
