@@ -25,15 +25,21 @@ export default function BusRoute({
     <div className={tw('pt-8', className)} {...restProps}>
       <NavigationHeader className="mb-2">5001번</NavigationHeader>
       <Notification />
+      <BusCard className="relative flex h-full flex-col py-4">
+        <BusCard.StationName className="text-body1">5001번</BusCard.StationName>
+        <BusCard.Info className="flex items-center text-Gray-400">
+          <BusCard.Content>용인 | 명지대</BusCard.Content>
+          <BusCard.Content>05:30 ~ 23:00 ∙ 배차간격 12-15분</BusCard.Content>
+          <BusCard.Content>9대 운행중</BusCard.Content>
+        </BusCard.Info>
+        <Icon icon={TruckIcon} className="absolute top-[18px] -ml-24 h-6 w-6" />
+      </BusCard>
       {stations.map(({ title, subtitle, isThere }) => (
         <BusCard className="flex h-full flex-col items-start">
           <div className="relative ml-14 h-20 border-l-2 border-l-Primary-500 pl-4">
             <BusCard.StationName className="mt-4">{title}</BusCard.StationName>
-            <BusCard.Info className="text-bold static left-0 flex translate-x-0 flex-row text-Gray-400">
-              <BusCard.Content className="w-[50px]">{subtitle}</BusCard.Content>
-              <BusCard.Content className="border-l border-Gray-200 pl-2">
-                방면
-              </BusCard.Content>
+            <BusCard.Info className="text-Gray-400">
+              <BusCard.Content>{subtitle}</BusCard.Content>
             </BusCard.Info>
             {isThere ? (
               <p className="absolute top-8 -left-[78px] rounded-sm border border-Gray-200 px-1 text-body3">
