@@ -22,7 +22,9 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "7.40.0",
     "react-router-dom": "6.4.5",
-    "tailwind-merge": "^1.8.0"
+    "recoil": "^0.7.6",
+    "tailwind-merge": "^1.8.0",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.5",
