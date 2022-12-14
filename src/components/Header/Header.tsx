@@ -1,9 +1,5 @@
-import {
-  Bars3Icon,
-  ChevronLeftIcon,
-  ClockIcon,
-} from '@heroicons/react/24/outline';
-import { Link, useNavigate } from 'react-router-dom';
+import { Bars3Icon, ChevronLeftIcon } from '@heroicons/react/24/outline';
+import { useNavigate } from 'react-router-dom';
 import { ComponentProps } from 'react';
 import { tw } from '@/utils/tailwindMerge';
 import { Dropdown } from '../Dropdown';
@@ -77,22 +73,6 @@ function Menu({ children, className, ...restProps }: MenuProps<'button'>) {
   );
 }
 
-type PredictProps<T extends React.ElementType> = Component<T>;
-
-function Predict({ children, className, ...restProps }: PredictProps<'a'>) {
-  return (
-    <Link
-      to="/prediction"
-      className={tw('absolute right-7 mr-10', className)}
-      {...restProps}
-    >
-      <IconButton className="h-6 w-6">
-        <IconButton.Icon className="stroke-Primary-700" icon={ClockIcon} />
-      </IconButton>
-    </Link>
-  );
-}
-
 function HDropdown({
   children,
   className,
@@ -111,5 +91,4 @@ function HDropdown({
 Header.BackButton = BackButton;
 Header.Title = Title;
 Header.Dropdown = HDropdown;
-Header.Predict = Predict;
 Header.Menu = Menu;

@@ -1,3 +1,4 @@
+import { v4 as uuid } from 'uuid';
 import { useRef, useEffect, useState, ChangeEventHandler } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ChevronDownIcon, CheckCircleIcon } from '@heroicons/react/24/solid';
@@ -100,13 +101,18 @@ export default function Commute({
         ]);
 
   const handleSetLocal = () => {
-    const commuteInfo = {
-      userStation,
-      stationName,
-      routeName: bus.join(','),
-    };
+    const commuteInfo = [
+      {
+        userStation,
+        stationName,
+        routeName: bus.join(','),
+      },
+    ];
+
+    const current = { id: uuid(), userStation };
+
     localStorage.setItem('commuteInfo', JSON.stringify(commuteInfo));
-    localStorage.setItem('current', JSON.stringify({id,userStation}));
+    localStorage.setItem('current', JSON.stringify(current));
   };
 
   return (

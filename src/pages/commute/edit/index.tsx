@@ -15,19 +15,19 @@ export default function Edit({
       routeId: '1',
       routeName: '춘시기네',
       stationName: '기흥역',
-      dest: '롯데캐슬스카이, 이안두드림, 백남준아트센터 방면',
+      routeList: '5001, 5002',
     },
     {
       routeId: '2',
       routeName: '라이언네',
       stationName: '보정역',
-      dest: '롯데캐슬스카이, 이안두드림, 백남준아트센터 방면',
+      routeList: '5001, 5002',
     },
     {
       routeId: '3',
       routeName: '이주네',
       stationName: '미금역',
-      dest: '롯데캐슬스카이, 이안두드림, 백남준아트센터 방면',
+      routeList: '5001, 5002',
     },
   ];
 
@@ -46,7 +46,7 @@ export default function Edit({
   return (
     <div className={tw('', className)} {...restProps}>
       <NavigationHeader>내 출근길 관리</NavigationHeader>
-      {data.map(({ routeId, routeName, stationName, dest }) => (
+      {data.map(({ routeId, routeName, stationName, routeList }) => (
         <BusCard
           key={routeId}
           id={routeName}
@@ -62,7 +62,9 @@ export default function Edit({
                 {stationName}
               </BusCard.StationName>
             </BusCard.Info>
-            <BusCard.Content className="text-Gray-400">{dest}</BusCard.Content>
+            <BusCard.Content className="text-Gray-400">
+              {routeList}
+            </BusCard.Content>
           </div>
           {routeName === selected && (
             <BusCard.CheckIcon className="bottom-2" isChecked />
