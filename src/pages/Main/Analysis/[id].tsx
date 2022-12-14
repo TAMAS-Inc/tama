@@ -8,7 +8,7 @@ export default function Analysis({
   ...restProps
 }: AnalysisProps<'div'>) {
   return (
-    <div className={tw('pt-8', className)} {...restProps}>
+    <div className={tw('', className)} {...restProps}>
       <NavigationHeader>실시간 분석</NavigationHeader>
       <Notification />
 

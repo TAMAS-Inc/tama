@@ -22,7 +22,7 @@ export default function Notice({
   ];
 
   return (
-    <div className={tw('pt-8', className)} {...restProps}>
+    <div className={tw('', className)} {...restProps}>
       <NavigationHeader>공지사항</NavigationHeader>
       <List>
         {data.map(({ id, title, date }) => (

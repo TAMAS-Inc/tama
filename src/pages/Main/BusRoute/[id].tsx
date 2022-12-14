@@ -23,8 +23,8 @@ export default function BusRoute({
   ...restProps
 }: BusRouteProps<'div'>) {
   return (
-    <div className={tw('pt-8', className)} {...restProps}>
-      <NavigationHeader className="mb-2">5001번</NavigationHeader>
+    <div className={tw('', className)} {...restProps}>
+      <NavigationHeader>5001번</NavigationHeader>
       <Notification />
       <BusCard className="relative flex h-full flex-col py-4">
         <BusCard.StationName className="text-body1">5001번</BusCard.StationName>
