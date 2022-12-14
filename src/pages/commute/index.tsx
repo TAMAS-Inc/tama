@@ -3,7 +3,9 @@ import { useRef, useEffect, useState, ChangeEventHandler } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ChevronDownIcon, CheckCircleIcon } from '@heroicons/react/24/solid';
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
+import { useSetRecoilState } from 'recoil';
 import { tw } from '@/utils/tailwindMerge';
+import { currentStationState, userStationsState } from '../../state/atom';
 import {
   NavigationHeader,
   InputContainer,
@@ -61,6 +63,9 @@ export default function Commute({
     bus: [],
   };
 
+  const setUserStations = useSetRecoilState(userStationsState);
+  const setCurrentStation = useSetRecoilState(currentStationState);
+
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedBus, setSelectedBus] = useState<string[]>([]);
   const [userStationName, setUserStationName] = useState<string>('');
@@ -68,6 +73,14 @@ export default function Commute({
   const inputRef = useRef<HTMLInputElement>(null);
   const buttonStationRef = useRef<HTMLButtonElement>(null);
   const buttonBusRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (inputRef?.current) {
+      inputRef.current.value = userStation ?? '춘식이네';
+      setUserStationName(inputRef.current.value);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (buttonStationRef?.current) {
@@ -81,11 +94,7 @@ export default function Commute({
             : selectedBus.join(',');
       }
     }
-    if (inputRef?.current) {
-      inputRef.current.value = userStation ?? '춘식이네';
-      setUserStationName(inputRef.current.value);
-    }
-  }, [stationName, bus, userStation, selectedBus]);
+  }, [stationName, bus, selectedBus]);
 
   const handleOpenClick = () => setIsOpen(true);
   const handleCloseClick = () => setIsOpen(false);
@@ -101,18 +110,17 @@ export default function Commute({
         ]);
 
   const handleSetLocal = () => {
-    const commuteInfo = [
+    const current = { id: uuid(), currentStation: userStation };
+    setCurrentStation(current);
+    setUserStations((stations) => [
+      ...stations,
       {
-        userStation,
+        id: current.id,
+        userStationName,
         stationName,
-        routeName: bus.join(','),
+        routeList: bus.join(','),
       },
-    ];
-
-    const current = { id: uuid(), userStation };
-
-    localStorage.setItem('commuteInfo', JSON.stringify(commuteInfo));
-    localStorage.setItem('current', JSON.stringify(current));
+    ]);
   };
 
   return (

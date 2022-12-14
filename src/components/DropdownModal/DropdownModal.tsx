@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useRecoilValue, useRecoilState } from 'recoil';
 import { tw } from '@/utils/tailwindMerge';
 import { BaseModal, BusCard } from '@/components';
-// import { MyStationCard } from '../MyStationCard';
+import { userStationsState, currentStationState } from '@/state/atom';
 
 type DropdownModalProps<T extends React.ElementType> = {
   handleDropdown: (arg: boolean) => void;
-  handleCurrent: React.Dispatch<React.SetStateAction<string>>;
+  handleCurrent?: React.Dispatch<React.SetStateAction<string>>;
 } & Component<T>;
 
 export function DropdownModal({
@@ -16,32 +16,21 @@ export function DropdownModal({
   handleCurrent,
   ...restProps
 }: DropdownModalProps<'div'>) {
-  const data = [
-    {
-      routeId: '1',
-      routeName: '춘시기네',
-      stationName: '기흥역',
-      routeList: '5001A',
-    },
-    {
-      routeId: '2',
-      routeName: '라이언네',
-      stationName: '보정역',
-      routeList: '5001B, 5003',
-    },
-    {
-      routeId: '3',
-      routeName: '이주네',
-      stationName: '미금역',
-      routeList: '8000, 9000',
-    },
-  ];
-
-  const [selected, setSelected] = useState('춘시기네');
+  const userStations = useRecoilValue(userStationsState);
+  const [currentStation, setCurrentStation] =
+    useRecoilState(currentStationState);
 
   const handleSelect: React.MouseEventHandler<HTMLDivElement> = (e) => {
-    setSelected(e.currentTarget.id);
-    handleCurrent(e.currentTarget.id);
+    const target = (e.target as HTMLElement).closest('.truncate');
+    if (target) {
+      const currentSt = userStations.find(
+        (station) => station.id === target?.id
+      );
+      setCurrentStation({
+        id: target?.id,
+        currentStation: currentSt?.userStationName,
+      });
+    }
   };
 
   const handleClickDimmed: React.MouseEventHandler<HTMLDivElement> = (e) => {
@@ -63,25 +52,16 @@ export function DropdownModal({
           </ul>
         </div>
 
-        {data.map(({ routeId, routeName, stationName, routeList }) => (
-          // <MyStationCard
-          //   key={routeName}
-          //   routeName={routeName}
-          //   stationName={stationName}
-          //   routeList={routeList}
-          //   id={`${i}`}
-          //   handleSelect={handleSelect}
-          //   selected={+i === selected}
-          // />
+        {userStations.map(({ id, userStationName, stationName, routeList }) => (
           <BusCard
-            key={routeId}
-            id={routeName}
-            className="flex flex-col items-start justify-center"
+            key={userStationName}
+            id={id}
+            className="flex flex-col items-start justify-center truncate"
             onClick={handleSelect}
           >
             <BusCard.Info className="static left-0 flex translate-x-0 flex-row">
               <BusCard.Content className="w-28 text-body1">
-                {routeName}
+                {userStationName}
               </BusCard.Content>
               <BusCard.StationName className="mb-0 flex items-center justify-center">
                 {stationName}
@@ -90,7 +70,9 @@ export function DropdownModal({
             <BusCard.Content className="text-Gray-400">
               {routeList}
             </BusCard.Content>
-            {routeName === selected && <BusCard.CheckIcon isChecked />}
+            {userStationName === currentStation?.currentStation && (
+              <BusCard.CheckIcon isChecked />
+            )}
           </BusCard>
         ))}
       </BaseModal.Content>
