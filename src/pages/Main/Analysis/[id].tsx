@@ -105,7 +105,7 @@ export default function Analysis({
   const chartData = getChartData(updatedData);
 
   return (
-    <div className={tw('pt-8', className)} {...restProps}>
+    <div className={tw('', className)} {...restProps}>
       <NavigationHeader>실시간 분석</NavigationHeader>
       <Notification />
       <div className="flex flex-col gap-4 pt-8 pl-7 pr-7 text-body1 font-bold">

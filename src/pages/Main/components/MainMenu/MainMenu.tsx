@@ -50,7 +50,7 @@ export function MainMenu({
             </List.Title>
           </List.Item>
           {Object.entries(data).map(([content, path]) => (
-            <Link key={content} to={`menu/${path}`}>
+            <Link key={content} to={`/menu/${path}`}>
               <List.Item className="h-14 pl-4">
                 <List.Title>{content}</List.Title>
               </List.Item>

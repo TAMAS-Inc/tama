@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { tw } from '@/utils/tailwindMerge';
-import { BaseModal, BusCard, List, TextButton } from '@/components';
+import { BaseModal, BusCard } from '@/components';
 // import { MyStationCard } from '../MyStationCard';
 
 type DropdownModalProps<T extends React.ElementType> = {
