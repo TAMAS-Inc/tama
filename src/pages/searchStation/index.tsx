@@ -69,7 +69,14 @@ export default function SearchBusStop({
   return (
     <div className={tw('mt-8 w-full', className)} {...restProps}>
       <Header>
-        <Link to="/commute" state={{ userStation }}>
+        <Link
+          to="/commute"
+          state={{
+            userStation,
+            stationName: selectedStation?.title,
+            bus: selectedBus,
+          }}
+        >
           <Header.BackButton />
         </Link>
         <Header.Title className="grow">
@@ -91,7 +98,7 @@ export default function SearchBusStop({
       </Header>
 
       {showTip ? (
-        <div className="mt-9 ml-4">
+        <div className="mt-4 ml-4">
           <h2 className="mb-2 text-body1 font-bold">
             출근하는 정류장을 검색해보세요
           </h2>
@@ -101,7 +108,7 @@ export default function SearchBusStop({
           <p className="ml-4 text-Gray-400">예) 14324</p>
         </div>
       ) : (
-        <List className="mt-9 ml-4">
+        <List className="mt-4 ml-4">
           {stations.map(({ title, subtitle }) => (
             <List.Item
               key={title}
@@ -117,8 +124,14 @@ export default function SearchBusStop({
       {isOpen && (
         <BaseModal>
           <BaseModal.Content className="top-56 h-full w-full rounded-t-2xl bg-White">
-            <List>
-              <List.Item className="pl-6">
+            <List className="rounded-t-2xl">
+              <List.Item
+                onClick={(e) => {
+                  if (!(e.target as HTMLElement).closest('svg')) return;
+                  handleCloseClick();
+                }}
+                className="rounded-t-2xl pl-6"
+              >
                 <List.Title>{selectedStation?.title}</List.Title>
                 <List.Subtitle>{selectedStation?.subtitle}</List.Subtitle>
                 <List.Icon icon={ChevronDownIcon} />

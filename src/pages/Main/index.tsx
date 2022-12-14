@@ -1,12 +1,25 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { tw } from '@/utils/tailwindMerge';
 import { AD, BusCard, Notification, SyncButton } from '@/components';
 import { MainHeader } from './components';
 
 type MainProps<T extends React.ElementType> = Component<T>;
+type Location = {
+  hash: string;
+  key: string;
+  pathname: string;
+  search: string;
+  state: {
+    bus: string[];
+    stationName: string;
+    userStation: string;
+  };
+};
 
 export default function Main({ className, ...restProps }: MainProps<'div'>) {
   const navigate = useNavigate();
+  const location: Location = useLocation();
+  const { userStation } = location.state;
   const data = [
     {
       routeId: '228000176',
@@ -28,8 +41,8 @@ export default function Main({ className, ...restProps }: MainProps<'div'>) {
 
   return (
     <div className={tw('', className)} {...restProps}>
-      <MainHeader>춘시기넹</MainHeader>
-      <Notification className="mb-2" />
+      <MainHeader>{userStation}</MainHeader>
+      <Notification />
       {data.map(
         ({
           routeId,
