@@ -1,10 +1,10 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { ComponentProps } from 'react';
 import {
   Bars3Icon,
   ChevronLeftIcon,
   ClockIcon,
 } from '@heroicons/react/24/outline';
+import { Link, useNavigate } from 'react-router-dom';
+import { ComponentProps } from 'react';
 import { tw } from '@/utils/tailwindMerge';
 import { Dropdown } from '../Dropdown';
 import { IconButton } from '../IconButton';
@@ -69,7 +69,10 @@ function Menu({ children, className, ...restProps }: MenuProps<'button'>) {
       className={tw('absolute right-7 h-6 w-6', className)}
       {...restProps}
     >
-      <IconButton.Icon icon={Bars3Icon} />
+      <IconButton.Icon
+        icon={Bars3Icon}
+        className={tw('h-6 w-6 stroke-Black')}
+      />
     </IconButton>
   );
 }

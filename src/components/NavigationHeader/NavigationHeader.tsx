@@ -10,7 +10,7 @@ export function NavigationHeader({
   ...restProps
 }: NavigationHeaderProps<'div'>) {
   return (
-    <Header className={tw('mb-2 pt-4', className)} {...restProps}>
+    <Header className={tw('pt-4', className)} {...restProps}>
       <Header.BackButton />
       <Header.Title>{children}</Header.Title>
     </Header>

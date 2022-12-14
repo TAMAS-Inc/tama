@@ -18,7 +18,10 @@ export function Notification({
   if (isClosed) return null;
 
   return (
-    <Toast className={tw('h-9 pl-4 pr-4 font-bold', className)} {...restProps}>
+    <Toast
+      className={tw('mb-2 h-9 pl-4 pr-4 font-bold', className)}
+      {...restProps}
+    >
       <Link to="/menu/notice/1">
         <Toast.Content className="pl-2">
           🎉 타까마까가 출시되었습니다!

@@ -21,19 +21,19 @@ export function DropdownModal({
       routeId: '1',
       routeName: '춘시기네',
       stationName: '기흥역',
-      dest: '롯데캐슬스카이, 이안두드림, 백남준아트센터 방면',
+      routeList: '5001A',
     },
     {
       routeId: '2',
       routeName: '라이언네',
       stationName: '보정역',
-      dest: '롯데캐슬스카이, 이안두드림, 백남준아트센터 방면',
+      routeList: '5001B, 5003',
     },
     {
       routeId: '3',
       routeName: '이주네',
       stationName: '미금역',
-      dest: '롯데캐슬스카이, 이안두드림, 백남준아트센터 방면',
+      routeList: '8000, 9000',
     },
   ];
 
@@ -49,8 +49,8 @@ export function DropdownModal({
   };
 
   return (
-    <BaseModal className={tw('rounded-lg', className)} {...restProps}>
-      <BaseModal.Content className="bottom-0 h-[620px] w-full bg-White">
+    <BaseModal className={tw('', className)} {...restProps}>
+      <BaseModal.Content className="bottom-0 h-[620px] w-full overflow-hidden rounded-lg bg-White">
         <div className="flex flex-row justify-between pt-8 pl-6 pr-8 pb-8">
           <div className="text-body1 font-bold">내 정류장 설정</div>
           <ul className="flex gap-2 text-body2">
@@ -63,12 +63,12 @@ export function DropdownModal({
           </ul>
         </div>
 
-        {data.map(({ routeId, routeName, stationName, dest }) => (
+        {data.map(({ routeId, routeName, stationName, routeList }) => (
           // <MyStationCard
           //   key={routeName}
           //   routeName={routeName}
           //   stationName={stationName}
-          //   dest={dest}
+          //   routeList={routeList}
           //   id={`${i}`}
           //   handleSelect={handleSelect}
           //   selected={+i === selected}
@@ -87,7 +87,9 @@ export function DropdownModal({
                 {stationName}
               </BusCard.StationName>
             </BusCard.Info>
-            <BusCard.Content className="text-Gray-400">{dest}</BusCard.Content>
+            <BusCard.Content className="text-Gray-400">
+              {routeList}
+            </BusCard.Content>
             {routeName === selected && <BusCard.CheckIcon isChecked />}
           </BusCard>
         ))}
