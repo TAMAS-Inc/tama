@@ -27,10 +27,21 @@ type Location = {
 
 const buses = [
   {
-    title: '5001',
-    subtitle: '롯데캐슬스카이.이안두드림.백남준아트센터 방면',
+    routeId: '228000176',
+    routeName: '5001A',
+    remainSeatCnt: '34',
+    remainStationCnt: '3',
+    predictReaminTime: '12분 34초',
+    predictRemainSeatCnt: '12',
   },
-  { title: '5002A', subtitle: '롯데월드, 강남역 방면' },
+  {
+    routeId: '228000177',
+    routeName: '5001B',
+    remainSeatCnt: '34',
+    remainStationCnt: '4',
+    predictReaminTime: '12분 34초',
+    predictRemainSeatCnt: '12',
+  },
 ];
 
 export default function Commute({
@@ -89,9 +100,13 @@ export default function Commute({
         ]);
 
   const handleSetLocal = () => {
-    localStorage.setItem('userStation', userStation);
-    localStorage.setItem('stationName', stationName);
-    localStorage.setItem('busName', bus.join(','));
+    const commuteInfo = {
+      userStation,
+      stationName,
+      routeName: bus.join(','),
+    };
+    localStorage.setItem('commuteInfo', JSON.stringify(commuteInfo));
+    localStorage.setItem('current', JSON.stringify({id,userStation}));
   };
 
   return (
@@ -131,7 +146,14 @@ export default function Commute({
           버스 선택
         </TextButton>
       </div>
-      <Link to="/main">
+      <Link
+        to="/main"
+        state={{
+          userStation,
+          stationName,
+          bus: selectedBus,
+        }}
+      >
         <StatusButton
           disabled={!location.state}
           onClick={handleSetLocal}
@@ -155,28 +177,28 @@ export default function Commute({
                 <List.Icon icon={ChevronDownIcon} />
               </List.Item>
 
-              {buses.map(({ title }) => (
-                <List.Item key={title} className="relative pl-4">
+              {buses.map(({ routeName }) => (
+                <List.Item key={routeName} className="relative pl-4">
                   <List.Title className="pl-2 text-body1 text-Primary-700">
-                    {title}
+                    {routeName}
                   </List.Title>
                   <InputContainer className="absolute top-6 right-6 h-6 w-6">
                     <InputContainer.Label>
                       <List.Icon
                         className={tw(
                           'absolute top-0 right-0 h-7 w-7',
-                          !selectedBus.includes(title)
+                          !selectedBus.includes(routeName)
                             ? 'bg-White fill-White stroke-Gray-300'
                             : 'bg-White fill-Primary-700'
                         )}
                         icon={
-                          !selectedBus.includes(title)
+                          !selectedBus.includes(routeName)
                             ? PlusCircleIcon
                             : CheckCircleIcon
                         }
                       />
                       <InputContainer.Label.Input
-                        onChange={() => handleChangeCheckbox(title)}
+                        onChange={() => handleChangeCheckbox(routeName)}
                         type="checkbox"
                         className="bg-Gray-500"
                       />

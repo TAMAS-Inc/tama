@@ -7,6 +7,7 @@ import {
   Notification,
   BusCard,
   Icon,
+  SyncButton,
 } from '@/components';
 
 type BusRouteProps<T extends React.ElementType> = Component<T>;
@@ -58,6 +59,7 @@ export default function BusRoute({
           </div>
         </BusCard>
       ))}
+      <SyncButton />
       <AD />
     </div>
   );
