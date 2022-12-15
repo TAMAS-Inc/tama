@@ -1,35 +1,26 @@
-import { useNavigate, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
+import { useNavigate } from 'react-router-dom';
 
 import { AD, BusCard, Notification, SyncButton } from '@/components';
-import { MainHeader } from './components';
+import { getCurrentDate } from '@/utils/date';
 import NotFound from '../404';
+import { MainHeader } from './components';
 import {
   RealtimeInfo,
   RealtimeReqParams,
   useRealtime,
 } from './hooks/useRealtime';
-import { getCurrentDate } from '@/utils/date';
-
-type Location = {
-  hash: string;
-  key: string;
-  pathname: string;
-  search: string;
-  state: {
-    bus: string[];
-    stationName: string;
-    userStation: string;
-  };
-};
+import { currentCommuteState, isUserValidState } from '@/state/atom';
 
 export default function Main() {
   const navigate = useNavigate();
-  const location: Location = useLocation();
+  const currentCommute = useRecoilValue(currentCommuteState);
+  const isUserValid = useRecoilValue(isUserValidState);
 
   const testParams: RealtimeReqParams = {
-    stationId: '228000682',
-    routeIds: ['228000176', '228000389'],
+    stationId: currentCommute.station.stationId,
+    routeIds: currentCommute.routes.flatMap((r) => r.routeId),
     predictDate: getCurrentDate(),
   };
 
@@ -45,18 +36,18 @@ export default function Main() {
   }, []);
 
   useEffect(() => {
-    if (!location.state?.userStation) navigate('/landing');
-  }, [location.state?.userStation, navigate]);
-
-  if (isError) return <NotFound />;
+    if (!isUserValid) navigate('/landing');
+  }, [isUserValid, navigate]);
 
   const handleSyncButtonClick = () => {
     mutation.mutate({ ...testParams, predictDate: getCurrentDate() });
   };
 
+  if (isError) return <NotFound />;
+
   return (
     <>
-      <MainHeader>{location.state?.userStation ?? '춘시기넹'}</MainHeader>
+      <MainHeader />
       <Notification />
       {isLoading || mutation.isLoading ? (
         <span>Loading...</span>

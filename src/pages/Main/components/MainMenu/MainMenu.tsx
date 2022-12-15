@@ -5,13 +5,15 @@ import { IconButton, List } from '@/components';
 import { BaseModal } from '../../../../components/BaseModal/BaseModal';
 
 type MainMenuProps<T extends React.ElementType> = {
-  handleMenu: (isMenuOpen: boolean) => void;
+  onDimBgClick: React.MouseEventHandler<HTMLDivElement>;
+  onCloseButtonClick: React.MouseEventHandler<HTMLButtonElement>;
 } & Component<T>;
 
 export function MainMenu({
   children,
   className,
-  handleMenu,
+  onDimBgClick: handleDimBgClick,
+  onCloseButtonClick: handleCloseButtonClick,
   ...restProps
 }: MainMenuProps<'div'>) {
   const data = {
@@ -21,20 +23,12 @@ export function MainMenu({
     '오픈소스 이용': 'opensource',
   };
 
-  const handleClose = () => {
-    handleMenu(false);
-  };
-
-  const handleDimmedClick: React.MouseEventHandler<HTMLDivElement> = (e) => {
-    if (e.target === e.currentTarget) handleMenu(false);
-  };
-
   return (
     <BaseModal className={tw('', className)} {...restProps}>
       <BaseModal.Content className="right-0 h-full w-[300px] bg-White">
         <List>
           <IconButton
-            onClick={handleClose}
+            onClick={handleCloseButtonClick}
             className="relative right-1 mt-[20px] h-14 w-full text-right"
           >
             <IconButton.Icon
@@ -58,7 +52,7 @@ export function MainMenu({
           ))}
         </List>
       </BaseModal.Content>
-      <BaseModal.DimBg onClick={handleDimmedClick} />
+      <BaseModal.DimBg onClick={handleDimBgClick} />
     </BaseModal>
   );
 }
