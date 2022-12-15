@@ -8,15 +8,17 @@ type SyncButtonProps<T extends React.ElementType> = Component<T>;
 export function SyncButton({
   children,
   className,
+  onClick: handleClick,
   ...restProps
 }: SyncButtonProps<'button'>) {
   const [isSyncing, setIsSyncing] = useState(false);
 
-  const handleSyncClick = () => {
+  const handleSyncClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     setIsSyncing(true);
     setTimeout(() => {
       setIsSyncing(false);
     }, 1000);
+    if (handleClick) handleClick(e);
   };
 
   return (
