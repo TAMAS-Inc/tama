@@ -51,7 +51,7 @@ export default function Main() {
   if (isError) return <NotFound />;
 
   const handleSyncButtonClick = () => {
-    mutation.mutate(testParams);
+    mutation.mutate({ ...testParams, predictDate: getCurrentDate() });
   };
 
   return (
