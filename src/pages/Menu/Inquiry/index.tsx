@@ -47,7 +47,7 @@ export default function Inquiry({
   };
 
   interface Scheme {
-    key: keyof FormValue;
+    key: keyof Inquiry;
     type: 'text' | 'textarea' | 'checkbox';
     label: string;
     placeholder?: string;
