@@ -44,10 +44,8 @@ export default function Main() {
   });
 
   useEffect(() => {
-    if (!location.state?.userStation) {
-      // navigate('/landing/agreement');
-    }
-  }, [location.state, navigate]);
+    if (!location.state?.userStation) navigate('/landing');
+  }, [location.state?.userStation, navigate]);
 
   if (isError) return <NotFound />;
 

@@ -1,5 +1,6 @@
 import { Fragment } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { RecoilRoot } from 'recoil';
 
 interface Module {
   [modulePath: string]: { default: string };
@@ -35,13 +36,15 @@ export const Router = () => {
   const NotFound = preserved?.['404'] || Fragment;
 
   return (
-    <App>
-      <Routes>
-        {routes.map(({ path, component: Component = Fragment }) => (
-          <Route key={path} path={path} element={<Component />} />
-        ))}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </App>
+    <RecoilRoot>
+      <App>
+        <Routes>
+          {routes.map(({ path, component: Component = Fragment }) => (
+            <Route key={path} path={path} element={<Component />} />
+          ))}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </App>
+    </RecoilRoot>
   );
 };
