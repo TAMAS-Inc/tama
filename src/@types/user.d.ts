@@ -1,8 +1,8 @@
 interface User {
   userId: string | null;
-  commutes: UserCommute[];
+  commutes: Commute[];
   agreement: UserAgreement;
-  currentComId: UserCommute['comId'];
+  currentComId: Commute['comId'];
 }
 
 interface UserAgreement {
@@ -20,7 +20,7 @@ interface Station {
   stationName: string;
 }
 
-interface UserCommute {
+interface Commute {
   comId: string;
   comName: string;
   station: Station;
