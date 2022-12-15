@@ -18,6 +18,7 @@ export default function Main() {
   const currentCommute = useRecoilValue(currentCommuteState);
   const isUserValid = useRecoilValue(isUserValidState);
 
+
   const testParams: RealtimeReqParams = {
     stationId: currentCommute.station.stationId,
     routeIds: currentCommute.routes.flatMap((r) => r.routeId),
@@ -27,6 +28,7 @@ export default function Main() {
   const { isError, isLoading, data, mutation } = useRealtime(testParams);
 
   useEffect(() => {
+    if (!isUserValid) navigate('/landing');
     const refreshDataInterval = setInterval(() => {
       mutation.mutate({ ...testParams, predictDate: getCurrentDate() });
     }, 15000);
@@ -42,7 +44,7 @@ export default function Main() {
   const handleSyncButtonClick = () => {
     mutation.mutate({ ...testParams, predictDate: getCurrentDate() });
   };
-
+  
   if (isError) return <NotFound />;
 
   return (

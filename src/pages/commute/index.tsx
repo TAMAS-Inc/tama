@@ -3,9 +3,9 @@ import { useRef, useEffect, useState, ChangeEventHandler } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ChevronDownIcon, CheckCircleIcon } from '@heroicons/react/24/solid';
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
-import { useSetRecoilState } from 'recoil';
+import { useSetRecoilState, useRecoilState } from 'recoil';
 import { tw } from '@/utils/tailwindMerge';
-import { currentStationState, userStationsState } from '../../state/atom';
+import { currentStationState, newCommuteState, userStationsState } from '../../state/atom';
 import {
   NavigationHeader,
   InputContainer,
@@ -14,6 +14,7 @@ import {
   BaseModal,
   List,
 } from '@/components';
+import { useCommutes } from '@/hooks/useCommutes';
 
 type CommuteProps<T extends React.ElementType> = Component<T>;
 type Location = {
@@ -22,9 +23,7 @@ type Location = {
   pathname: string;
   search: string;
   state: {
-    bus: string[];
-    stationName: string;
-    userStation: string;
+    comId?: string;
   };
 };
 
@@ -53,55 +52,47 @@ export default function Commute({
   ...restProps
 }: CommuteProps<'div'>) {
   const location: Location = useLocation();
-  const {
-    userStation = '춘식이네',
-    stationName,
-    bus,
-  }: Location['state'] = location.state ?? {
-    userStation: '춘식이네',
-    stationName: '',
-    bus: [],
-  };
+  
 
-  const setUserStations = useSetRecoilState(userStationsState);
-  const setCurrentStation = useSetRecoilState(currentStationState);
+  const { commutes, addCommute } = useCommutes();
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [selectedRoutes, setSelectedRoutes] = useState<string[]>([]);
-  const [userStationName, setUserStationName] = useState<string>('');
+  const [newCommute, setNewCommute] = useRecoilState(newCommuteState);
 
+  const [selectedRoutes, setSelectedRoutes] = useState<string[]>([])
   const inputRef = useRef<HTMLInputElement>(null);
   const buttonStationRef = useRef<HTMLButtonElement>(null);
   const buttonBusRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (inputRef?.current) {
-      inputRef.current.value = userStation ?? '춘식이네';
-      setUserStationName(inputRef.current.value);
+      inputRef.current.value = newCommute.comName;
+      setNewCommute(prev => ({...prev, comName: inputRef.current.value }));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (buttonStationRef?.current) {
-      buttonStationRef.current.textContent = stationName || '정류장 선택';
+      buttonStationRef.current.textContent = newCommute.station.stationName ;
     }
-    if (buttonBusRef?.current) {
-      if (stationName) {
-        buttonBusRef.current.textContent =
-          selectedRoutes.length === 0
-            ? bus.join(', ') ?? '버스 선택'
-            : selectedRoutes.join(',');
-      }
-    }
-  }, [stationName, bus, selectedRoutes]);
+    // if (buttonBusRef?.current) {
+    //   if (stationName) {
+    //     buttonBusRef.current.textContent =
+    //       selectedRoutes.length === 0
+    //         ? bus.join(', ') ?? '버스 선택'
+    //         : selectedRoutes.join(',');
+    //   }
+    // }
+  }, [newCommute]);
 
   const handleOpenClick = () => setIsOpen(true);
   const handleCloseClick = () => setIsOpen(false);
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setUserStationName(e.target.value);
+    setNewCommute(prev=>( {...prev, comName: e.target.value}));
   };
+
   const handleChangeCheckbox = (title: string) =>
     !selectedRoutes.includes(title)
       ? setSelectedRoutes((prevBus) => [...prevBus, title])
@@ -109,19 +100,9 @@ export default function Commute({
           ...prevBus.filter((busTitle) => busTitle !== title),
         ]);
 
-  const handleSetLocal = () => {
-    const current = { id: uuid(), currentStation: userStation };
-    setCurrentStation(current);
-    setUserStations((stations) => [
-      ...stations,
-      {
-        id: current.id,
-        userStationName,
-        stationName,
-        routeList: bus.join(','),
-      },
-    ]);
-  };
+  const handleConfirmClick = () => {
+    // addCommute()
+  }
 
   return (
     <div className="pl-4 pr-4" {...restProps}>
@@ -162,15 +143,10 @@ export default function Commute({
       </div>
       <Link
         to="/main"
-        state={{
-          userStation,
-          stationName,
-          bus: selectedRoutes,
-        }}
       >
         <StatusButton
           disabled={!location.state}
-          onClick={handleSetLocal}
+          onClick={handleConfirmClick}
           className="fixed bottom-8 w-[calc(100%-32px)]"
         >
           확인

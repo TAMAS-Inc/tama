@@ -1,5 +1,7 @@
+
 import { atom, DefaultValue, selector } from 'recoil';
 import { recoilPersist } from 'recoil-persist';
+import { v4 as uuid } from 'uuid';
 
 const dummyRoutes: Route[] = [
   {
@@ -64,11 +66,46 @@ export const userStationsState = atom<UserStations[] | never[]>({
   default: [],
   effects_UNSTABLE: [persistAtom],
 });
+export const newCommuteState = atom<Commute>({
+  key: 'userState',
+  default: {
+      comId: uuid(),
+      comName: '춘식이네',
+      station: {
+        stationId: '',
+        stationName: '정류장 선택',
+      },
+      routes: []
+    }
+});
 
 export const userState = atom<User>({
   key: 'userState',
-  default: dummyUser,
+  default: {
+    userId: null,
+    commutes: [],
+    agreement: { allowLocation: false, allowMarketing: false },
+    currentComId: '',
+  },
   effects_UNSTABLE: [persistAtom],
+});
+
+export const commutesState = selector({
+  key: 'commutesState',
+  get: ({ get }) => {
+    const user = get(userState);
+    return user.commutes;
+  },
+  set: ({ set, reset }, newValue) => {
+    if (newValue instanceof DefaultValue) {
+      reset(userState);
+    } else {
+      set(userState, (user) => ({
+        ...user,
+        commutes: newValue,
+      }));
+    }
+  },
 });
 
 export const currentComIdState = selector({
@@ -84,6 +121,24 @@ export const currentComIdState = selector({
       set(userState, (user) => ({
         ...user,
         currentComId: newValue,
+      }));
+    }
+  },
+});
+
+export const agreementState = selector({
+  key: 'agreementState',
+  get: ({ get }) => {
+    const user = get(userState);
+    return user.agreement;
+  },
+  set: ({ set, reset }, newValue) => {
+    if (newValue instanceof DefaultValue) {
+      reset(userState);
+    } else {
+      set(userState, (user) => ({
+        ...user,
+        agreement: newValue,
       }));
     }
   },
