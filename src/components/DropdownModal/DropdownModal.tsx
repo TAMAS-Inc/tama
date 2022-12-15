@@ -58,11 +58,11 @@ export function DropdownModal({
           <BusCard
             key={userStationName}
             id={id}
-            className="flex flex-col items-start justify-center truncate"
+            className="flex cursor-pointer flex-col items-start justify-center truncate"
             onClick={handleBusCardClick}
           >
             <BusCard.Info className="static left-0 flex translate-x-0 flex-row">
-              <BusCard.Content className="w-28 text-body1">
+              <BusCard.Content className="mr-4 w-28 text-ellipsis text-body1 line-clamp-1">
                 {userStationName}
               </BusCard.Content>
               <BusCard.StationName className="mb-0 flex items-center justify-center">

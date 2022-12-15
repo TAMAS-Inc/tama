@@ -76,7 +76,10 @@ type ContentProps<T extends React.ElementType> = Component<T>;
 
 function Content({ children, className, ...restProps }: ContentProps<'p'>) {
   return (
-    <p className={tw('text-Body1 font-bold', className)} {...restProps}>
+    <p
+      className={tw('text-Body1 font-bold line-clamp-1', className)}
+      {...restProps}
+    >
       {children}
     </p>
   );
