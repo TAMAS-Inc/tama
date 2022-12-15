@@ -9,6 +9,7 @@ import {
   RealtimeReqParams,
   useRealtime,
 } from './hooks/useRealtime';
+import { getCurrentDate } from '@/utils/date';
 
 type Location = {
   hash: string;
@@ -29,10 +30,19 @@ export default function Main() {
   const testParams: RealtimeReqParams = {
     stationId: '228000682',
     routeIds: ['228000176', '228000389'],
-    predictDate: '2022-12-25T06:25',
+    predictDate: getCurrentDate(),
   };
 
   const { isError, isLoading, data, mutation } = useRealtime(testParams);
+
+  useEffect(() => {
+    const refreshDataInterval = setInterval(() => {
+      mutation.mutate({ ...testParams, predictDate: getCurrentDate() });
+    }, 15000);
+
+    return () => clearInterval(refreshDataInterval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (!location.state?.userStation) navigate('/landing');
