@@ -16,7 +16,7 @@ export function MainHeader({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const currentStation = useRecoilValue(currentStationState);
 
-  const handleDropdown: React.MouseEventHandler<HTMLDivElement> = () => {
+  const handleDropdownClick: React.MouseEventHandler<HTMLDivElement> = () => {
     setIsDropdownOpen(true);
   };
 
@@ -30,7 +30,7 @@ export function MainHeader({
 
   return (
     <Header className={tw('pt-4', className)} {...restProps}>
-      <Header.Dropdown onClick={handleDropdown}>
+      <Header.Dropdown onClick={handleDropdownClick}>
         {currentStation?.currentStation ?? children}
       </Header.Dropdown>
       {isDropdownOpen && <DropdownModal handleDropdown={setIsDropdownOpen} />}

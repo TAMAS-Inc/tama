@@ -20,20 +20,22 @@ export function DropdownModal({
   const [currentStation, setCurrentStation] =
     useRecoilState(currentStationState);
 
-  const handleSelect: React.MouseEventHandler<HTMLDivElement> = (e) => {
+  const handleBusCardClick: React.MouseEventHandler<HTMLDivElement> = (e) => {
     const target = (e.target as HTMLElement).closest('.truncate');
     if (target) {
-      const currentSt = userStations.find(
+      const selectedStation = userStations.find(
         (station) => station.id === target?.id
       );
-      setCurrentStation({
-        id: target?.id,
-        currentStation: currentSt?.userStationName,
-      });
+      if (selectedStation) {
+        setCurrentStation({
+          id: target?.id,
+          currentStation: selectedStation?.userStationName,
+        });
+      }
     }
   };
 
-  const handleClickDimmed: React.MouseEventHandler<HTMLDivElement> = (e) => {
+  const handleDimBgClick: React.MouseEventHandler<HTMLDivElement> = (e) => {
     if (e.target === e.currentTarget) handleDropdown(false);
   };
 
@@ -57,7 +59,7 @@ export function DropdownModal({
             key={userStationName}
             id={id}
             className="flex flex-col items-start justify-center truncate"
-            onClick={handleSelect}
+            onClick={handleBusCardClick}
           >
             <BusCard.Info className="static left-0 flex translate-x-0 flex-row">
               <BusCard.Content className="w-28 text-body1">
@@ -76,7 +78,7 @@ export function DropdownModal({
           </BusCard>
         ))}
       </BaseModal.Content>
-      <BaseModal.DimBg onClick={handleClickDimmed} />
+      <BaseModal.DimBg onClick={handleDimBgClick} />
     </BaseModal>
   );
 }

@@ -67,7 +67,7 @@ export default function Commute({
   const setCurrentStation = useSetRecoilState(currentStationState);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [selectedBus, setSelectedBus] = useState<string[]>([]);
+  const [selectedRoutes, setSelectedRoutes] = useState<string[]>([]);
   const [userStationName, setUserStationName] = useState<string>('');
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -89,12 +89,12 @@ export default function Commute({
     if (buttonBusRef?.current) {
       if (stationName) {
         buttonBusRef.current.textContent =
-          selectedBus.length === 0
+          selectedRoutes.length === 0
             ? bus.join(', ') ?? '버스 선택'
-            : selectedBus.join(',');
+            : selectedRoutes.join(',');
       }
     }
-  }, [stationName, bus, selectedBus]);
+  }, [stationName, bus, selectedRoutes]);
 
   const handleOpenClick = () => setIsOpen(true);
   const handleCloseClick = () => setIsOpen(false);
@@ -103,9 +103,9 @@ export default function Commute({
     setUserStationName(e.target.value);
   };
   const handleChangeCheckbox = (title: string) =>
-    !selectedBus.includes(title)
-      ? setSelectedBus((prevBus) => [...prevBus, title])
-      : setSelectedBus((prevBus) => [
+    !selectedRoutes.includes(title)
+      ? setSelectedRoutes((prevBus) => [...prevBus, title])
+      : setSelectedRoutes((prevBus) => [
           ...prevBus.filter((busTitle) => busTitle !== title),
         ]);
 
@@ -165,7 +165,7 @@ export default function Commute({
         state={{
           userStation,
           stationName,
-          bus: selectedBus,
+          bus: selectedRoutes,
         }}
       >
         <StatusButton
@@ -201,12 +201,12 @@ export default function Commute({
                       <List.Icon
                         className={tw(
                           'absolute top-0 right-0 h-7 w-7',
-                          !selectedBus.includes(routeName)
+                          !selectedRoutes.includes(routeName)
                             ? 'bg-White fill-White stroke-Gray-300'
                             : 'bg-White fill-Primary-700'
                         )}
                         icon={
-                          !selectedBus.includes(routeName)
+                          !selectedRoutes.includes(routeName)
                             ? PlusCircleIcon
                             : CheckCircleIcon
                         }
@@ -223,7 +223,7 @@ export default function Commute({
             </List>
             <StatusButton
               onClick={handleCloseClick}
-              disabled={!selectedBus.length}
+              disabled={!selectedRoutes.length}
               className="fixed left-4 bottom-8 w-[calc(100%-32px)]"
             >
               확인
