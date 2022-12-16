@@ -1,6 +1,7 @@
 import { Fragment } from 'react';
-import { Routes, Route } from 'react-router-dom';
-import { RecoilRoot } from 'recoil';
+import { useRecoilValue } from 'recoil';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import { isUserValidState } from '@/state/atom';
 
 interface Module {
   [modulePath: string]: { default: string };
@@ -34,17 +35,25 @@ export const Router = () => {
   // eslint-disable-next-line @typescript-eslint/dot-notation
   const App = preserved?.['_app'] || Fragment;
   const NotFound = preserved?.['404'] || Fragment;
-
+  const isUserValid = useRecoilValue(isUserValidState);
   return (
-    <RecoilRoot>
-      <App>
-        <Routes>
-          {routes.map(({ path, component: Component = Fragment }) => (
-            <Route key={path} path={path} element={<Component />} />
-          ))}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </App>
-    </RecoilRoot>
+    <App>
+      <Routes>
+        {routes.map(({ path, component: Component = Fragment }) => (
+          <Route
+            key={path}
+            path={path}
+            element={
+              path === '/Main/' && !isUserValid ? (
+                <Navigate to="/landing/agreement" />
+              ) : (
+                <Component />
+              )
+            }
+          />
+        ))}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </App>
   );
 };
