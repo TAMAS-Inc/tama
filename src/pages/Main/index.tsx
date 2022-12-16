@@ -1,78 +1,53 @@
-import { useNavigate, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { AD, BusCard, Notification, SyncButton } from '@/components';
-import { MainHeader } from './components';
-import NotFound from '../404';
+import { useRecoilValue } from 'recoil';
+import { useNavigate } from 'react-router-dom';
 
-type Location = {
-  hash: string;
-  key: string;
-  pathname: string;
-  search: string;
-  state: {
-    bus: string[];
-    stationName: string;
-    userStation: string;
-  };
-};
+import { AD, BusCard, Notification, SyncButton } from '@/components';
+import { getCurrentDate } from '@/utils/date';
+import NotFound from '../404';
+import { MainHeader } from './components';
+import {
+  RealtimeInfo,
+  RealtimeReqParams,
+  useRealtime,
+} from './hooks/useRealtime';
+import { currentCommuteState, isUserValidState } from '@/state/atom';
 
 export default function Main() {
   const navigate = useNavigate();
-  const location: Location = useLocation();
-  const queryClient = useQueryClient();
+  const currentCommute = useRecoilValue(currentCommuteState);
+  const isUserValid = useRecoilValue(isUserValidState);
 
-  const TEST_URL =
-    'https://raw.githubusercontent.com/TAMAS-Inc/MockAPI/main/realtime/228000191.routeIds.228000176.228000182.json';
-  const testData = {
-    stationId: '228000191',
-    predictDate: '2022-12-25T07:25',
-    routeIds: [228000176, 228000182],
+  const testParams: RealtimeReqParams = {
+    stationId: currentCommute.station.stationId,
+    routeIds: currentCommute.routes.flatMap((r) => r.routeId),
+    predictDate: getCurrentDate(),
   };
 
-  const fetcher = () => fetch(TEST_URL).then((res) => res.json());
-
-  const { isLoading, isError, data } = useQuery<RealtimeInfo[]>(
-    ['realtime', testData],
-    () => fetcher()
-  );
-
-  const mutation = useMutation(() => fetcher(), {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries(['realtime']);
-    },
-  });
+  const { isError, isLoading, data, mutation } = useRealtime(testParams);
 
   useEffect(() => {
-    if (!location.state?.userStation) navigate('/landing');
-  }, [location.state?.userStation, navigate]);
+    const refreshDataInterval = setInterval(() => {
+      mutation.mutate({ ...testParams, predictDate: getCurrentDate() });
+    }, 15000);
+
+    return () => clearInterval(refreshDataInterval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (!isUserValid) navigate('/landing');
+  }, [isUserValid, navigate]);
+
+  const handleSyncButtonClick = () => {
+    mutation.mutate({ ...testParams, predictDate: getCurrentDate() });
+  };
 
   if (isError) return <NotFound />;
 
-  interface RealtimeInfo {
-    /** 실시간 정보 존재 여부 */
-    exist: boolean;
-    /** 노선명 */
-    routeName: string;
-    /** 노선 ID */
-    routeId: string;
-    /** 현재 남은 좌석 수 */
-    remainSeatCnt: number;
-    /** 현재 남은 정거장 수 */
-    remainStationCnt: number;
-    /** 도착까지 남은 시간(분) */
-    predictRemainTime: number;
-    /** 예측한 도착 시 남을 좌석 */
-    predictRemainSeatCnt: number;
-  }
-
-  const handleSyncButtonClick = () => {
-    mutation.mutate();
-  };
-
   return (
     <>
-      <MainHeader>{location.state?.userStation ?? '춘시기넹'}</MainHeader>
+      <MainHeader />
       <Notification />
       {isLoading || mutation.isLoading ? (
         <span>Loading...</span>
