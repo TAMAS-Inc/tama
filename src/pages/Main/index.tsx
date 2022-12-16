@@ -61,7 +61,9 @@ export default function Main() {
               key={routeId}
               onClick={(e) => {
                 if ((e.target as HTMLElement).closest('svg'))
-                  navigate(`analysis/${routeName}`);
+                  navigate(
+                    `analysis/routeId=${routeId}&stationId=${stationId}`
+                  );
                 else navigate(`busRoute/${routeName}`);
               }}
             >
