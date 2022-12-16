@@ -17,6 +17,7 @@ export default function Main() {
   const navigate = useNavigate();
   const currentCommute = useRecoilValue(currentCommuteState);
   const isUserValid = useRecoilValue(isUserValidState);
+  const stationId = '228000191';
 
   const testParams: RealtimeReqParams = {
     stationId: currentCommute.station.stationId,
@@ -66,7 +67,9 @@ export default function Main() {
               key={routeId}
               onClick={(e) => {
                 if ((e.target as HTMLElement).closest('svg'))
-                  navigate(`analysis/${routeName}`);
+                  navigate(
+                    `analysis/routeId=${routeId}&stationId=${stationId}`
+                  );
                 else navigate(`busRoute/${routeName}`);
               }}
             >
