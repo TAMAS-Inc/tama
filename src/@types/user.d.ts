@@ -32,4 +32,5 @@ interface Inquiry {
   email: string;
   title: string;
   content: string;
+  agreement: string
 }

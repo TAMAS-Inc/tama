@@ -15,3 +15,4 @@ export { TextButton } from './TextButton';
 export { Toast } from './Toast';
 export { ToggleIconButton } from './ToggleIconButton';
 export { Notification } from './Notification';
+export { Modal } from './Modal';
