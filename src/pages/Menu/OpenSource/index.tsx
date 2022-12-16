@@ -11,7 +11,7 @@ export default function OpenSource({
   const data = [
     {
       id: 1,
-      title: 'AWSCore',
+      title: 'React',
     },
     {
       id: 2,
@@ -23,7 +23,7 @@ export default function OpenSource({
       <NavigationHeader>오픈소스 이용</NavigationHeader>
       <List>
         {data.map(({ id, title }) => (
-          <Link key={id} to={`/menu/opensource/${id}`}>
+          <Link key={id} to={`/menu/opensource/${title}`}>
             <List.Item>
               <List.Title>{title}</List.Title>
               <List.Icon />
