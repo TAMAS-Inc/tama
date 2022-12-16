@@ -1,11 +1,10 @@
 import { ChangeEventHandler } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
-import { v4 as uuid } from 'uuid';
 import { InputContainer, StatusButton } from '@/components';
-import { agreementState, userState } from '@/state/atom';
-import { tw } from '@/utils/tailwindMerge';
 import { useCommutes } from '@/hooks/useCommutes';
+import { agreementState } from '@/state/atom';
+import { tw } from '@/utils/tailwindMerge';
 
 type AgreementProps<T extends React.ElementType> = Component<T>;
 

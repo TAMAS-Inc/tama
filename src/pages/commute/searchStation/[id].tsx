@@ -41,11 +41,11 @@ export default function SearchBusStop({
   const { id: comId } = useParams();
   const { commutes, editCommute } = useCommutes();
 
-  const commute = commutes.find((c) => c.comId === comId)!;
+  const commute = commutes.find((c) => c.comId === comId) as Commute;
 
   const [showTip, setShowTip] = useState<boolean>(true);
   const [selectedStation, setSelectedStation] = useState<Station>(
-    commute.station!
+    commute.station as Station
   );
   const [isModalOpen, setIsModalOpen] = useState<boolean | null>(null);
 

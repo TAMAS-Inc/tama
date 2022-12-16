@@ -1,24 +1,25 @@
 import { useEffect } from 'react';
-import { useRecoilValue } from 'recoil';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 
 import { AD, BusCard, Notification, SyncButton } from '@/components';
+import { currentCommuteState } from '@/state/atom';
 import { getCurrentDate } from '@/utils/date';
 import NotFound from '../404';
 import { MainHeader } from './components';
 import {
   RealtimeInfo,
   RealtimeReqParams,
-  useRealtime,
+  useRealtime
 } from './hooks/useRealtime';
-import { currentCommuteState, isUserValidState } from '@/state/atom';
 
 export default function Main() {
   const navigate = useNavigate();
+
   const currentCommute = useRecoilValue(currentCommuteState);
 
   const testParams: RealtimeReqParams = {
-    stationId: currentCommute.station.stationId,
+    stationId: currentCommute.station?.stationId as string,
     routeIds: currentCommute.routes.flatMap((r) => r.routeId),
     predictDate: getCurrentDate(),
   };
