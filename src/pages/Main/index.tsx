@@ -16,8 +16,6 @@ import { currentCommuteState, isUserValidState } from '@/state/atom';
 export default function Main() {
   const navigate = useNavigate();
   const currentCommute = useRecoilValue(currentCommuteState);
-  const isUserValid = useRecoilValue(isUserValidState);
-
 
   const testParams: RealtimeReqParams = {
     stationId: currentCommute.station.stationId,
@@ -28,7 +26,6 @@ export default function Main() {
   const { isError, isLoading, data, mutation } = useRealtime(testParams);
 
   useEffect(() => {
-    if (!isUserValid) navigate('/landing');
     const refreshDataInterval = setInterval(() => {
       mutation.mutate({ ...testParams, predictDate: getCurrentDate() });
     }, 15000);
@@ -37,14 +34,10 @@ export default function Main() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    if (!isUserValid) navigate('/landing');
-  }, [isUserValid, navigate]);
-
   const handleSyncButtonClick = () => {
     mutation.mutate({ ...testParams, predictDate: getCurrentDate() });
   };
-  
+
   if (isError) return <NotFound />;
 
   return (

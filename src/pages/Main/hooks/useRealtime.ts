@@ -31,8 +31,7 @@ const fetchRealtime: FetchRealtime = async ({
   predictDate,
 }) => {
   try {
-    const END_POINT =
-      'http://ec2-35-174-107-39.compute-1.amazonaws.com/realtime';
+    const END_POINT = 'http://localhost:3000/realtime';
 
     const REAL_URL = `${END_POINT}/${stationId}?predictDate=${predictDate}&${routeIds
       .map((id) => `routeIds=${id}`)

@@ -23,7 +23,7 @@ interface Station {
 interface Commute {
   comId: string;
   comName: string;
-  station: Station;
+  station: Station | null;
   routes: Route[];
 }
 

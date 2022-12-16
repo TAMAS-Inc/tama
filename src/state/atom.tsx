@@ -1,4 +1,3 @@
-
 import { atom, DefaultValue, selector } from 'recoil';
 import { recoilPersist } from 'recoil-persist';
 import { v4 as uuid } from 'uuid';
@@ -41,48 +40,12 @@ export const dummyUser: User = {
   currentComId: 'bd8d8bce-40a3-44ed-b830-21e67cce7ebb',
 };
 
-type CurrentStation = {
-  id: string;
-  currentStation?: string;
-};
-
-type UserStations = {
-  id: string;
-  userStationName: string;
-  stationName: string;
-  routeList: string;
-};
-
 const { persistAtom } = recoilPersist({ key: 'current' });
-
-export const currentStationState = atom<CurrentStation | null>({
-  key: `currentStationState`,
-  default: null,
-  effects_UNSTABLE: [persistAtom],
-});
-
-export const userStationsState = atom<UserStations[] | never[]>({
-  key: `userStationState`,
-  default: [],
-  effects_UNSTABLE: [persistAtom],
-});
-export const newCommuteState = atom<Commute>({
-  key: 'userState',
-  default: {
-      comId: uuid(),
-      comName: '춘식이네',
-      station: {
-        stationId: '',
-        stationName: '정류장 선택',
-      },
-      routes: []
-    }
-});
 
 export const userState = atom<User>({
   key: 'userState',
   default: {
-    userId: null,
+    userId: uuid(),
     commutes: [],
     agreement: { allowLocation: false, allowMarketing: false },
     currentComId: '',

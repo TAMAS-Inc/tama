@@ -1,9 +1,11 @@
 import { ChangeEventHandler } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
+import { v4 as uuid } from 'uuid';
 import { InputContainer, StatusButton } from '@/components';
-import { agreementState } from '@/state/atom';
+import { agreementState, userState } from '@/state/atom';
 import { tw } from '@/utils/tailwindMerge';
+import { useCommutes } from '@/hooks/useCommutes';
 
 type AgreementProps<T extends React.ElementType> = Component<T>;
 
@@ -43,15 +45,22 @@ export default function Agreement({
   className,
   ...restProps
 }: AgreementProps<'div'>) {
+  const navigate = useNavigate();
+  const { createNewCommute } = useCommutes();
   const [agreement, setAgreement] = useRecoilState(agreementState);
-  
+
   const isAllAgreed = Object.values(agreement).every((value) => value);
 
   const handleCheckAllChange = () => {
-    if (isAllAgreed) setAgreement({ allowLocation: false, allowMarketing: false })
-    else setAgreement({ allowLocation: true, allowMarketing: true })
-  }
+    if (isAllAgreed)
+      setAgreement({ allowLocation: false, allowMarketing: false });
+    else setAgreement({ allowLocation: true, allowMarketing: true });
+  };
 
+  const handleConfirmButtonClick = () => {
+    const comId = createNewCommute();
+    navigate(`/commute/edit/${comId}`);
+  };
 
   return (
     <div className="pl-4 pr-4" {...restProps}>
@@ -72,31 +81,31 @@ export default function Agreement({
         name="location"
         onChange={(e) => {
           const { checked } = e.target as HTMLInputElement;
-          setAgreement(prev => ({...prev, allowLocation: checked})) 
+          setAgreement((prev) => ({ ...prev, allowLocation: checked }));
         }}
         state={agreement.allowLocation}
       >
         위치 기반 서비스 약관 동의 (필수)
       </Checkbox>
 
-      <Checkbox 
+      <Checkbox
         name="ad"
         onChange={(e) => {
           const { checked } = e.target as HTMLInputElement;
-          setAgreement(prev => ({...prev, allowMarketing: checked})) 
-        }} 
-        state={agreement.allowMarketing}>
+          setAgreement((prev) => ({ ...prev, allowMarketing: checked }));
+        }}
+        state={agreement.allowMarketing}
+      >
         마케팅 정보 수신 동의 (선택)
       </Checkbox>
 
-      <Link to="/commute">
-        <StatusButton
-          disabled={!agreement.allowLocation}
-          className="fixed bottom-8 w-[calc(100%-32px)]"
-        >
-          확인
-        </StatusButton>
-      </Link>
+      <StatusButton
+        disabled={!agreement.allowLocation}
+        className="fixed bottom-8 w-[calc(100%-32px)]"
+        onClick={handleConfirmButtonClick}
+      >
+        확인
+      </StatusButton>
     </div>
   );
 }

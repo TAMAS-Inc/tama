@@ -1,57 +1,72 @@
-import { ChangeEventHandler, useEffect, useRef, useState } from 'react';
-import { Link, Navigate, useParams, useNavigate } from 'react-router-dom';
-import { CheckCircleIcon } from '@heroicons/react/24/solid';
-import { ChevronDownIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
+import { useRef, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { CheckCircleIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
+import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import {
   BaseModal,
+  Header,
   InputContainer,
   List,
-  NavigationHeader,
   StatusButton,
-  TextButton,
 } from '@/components';
-
-import { useCommutes } from '@/hooks/useCommutes';
-import { dummyRoutes } from '../searchStation/[id]';
 import { tw } from '@/utils/tailwindMerge';
-import { useSetRecoilState } from 'recoil';
-import { currentComIdState } from '@/state/atom';
+import { useCommutes } from '@/hooks/useCommutes';
 
-type CommuteProps<T extends React.ElementType> = Component<T>;
+type SearchBusStopProps<T extends React.ElementType> = Component<T>;
+type SelectedStation = Station;
 
-export default function Commute({
-  children,
+export const dummyRoutes: Route[] = [
+  {
+    routeId: '228000176',
+    routeName: '5001',
+  },
+  {
+    routeId: '228000389',
+    routeName: '5003A',
+  },
+];
+
+const stations = [
+  {
+    stationId: '228000682',
+    stationName: '기흥역',
+  },
+];
+
+export default function SearchBusStop({
   className,
   ...restProps
-}: CommuteProps<'div'>) {
+}: SearchBusStopProps<'div'>) {
   const navigate = useNavigate();
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const setCurrentComId = useSetRecoilState(currentComIdState);
-  const { commutes, editCommute } = useCommutes();
-
   const { id: comId } = useParams();
+  const { commutes, editCommute } = useCommutes();
 
   const commute = commutes.find((c) => c.comId === comId)!;
 
+  const [showTip, setShowTip] = useState<boolean>(true);
+  const [selectedStation, setSelectedStation] = useState<Station>(
+    commute.station!
+  );
+  const [isModalOpen, setIsModalOpen] = useState<boolean | null>(null);
+
   const inputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    if (inputRef?.current) {
-      inputRef.current.value = commute.comName;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
   if (!comId) return null;
 
-  const handleOpenClick = () => setIsModalOpen(true);
   const handleCloseClick = () => setIsModalOpen(false);
+  const handleResetClick = () => setShowTip(true);
 
-  const handleComNameChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+  const handleStationClick = (station: SelectedStation) => {
+    setSelectedStation(station);
     editCommute(comId, {
       ...commute,
-      comName: e.target.value,
+      station,
+      routes: [],
     });
+    setIsModalOpen(true);
   };
+
+  const handleChange = () => setShowTip(inputRef.current?.value === '');
 
   const handleRouteCheckChange = (route: Route, checked: boolean) => {
     if (checked) {
@@ -67,58 +82,47 @@ export default function Commute({
     }
   };
   const handleRoutesConfirmClick = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleConfirmClick = () => {
-    setCurrentComId(commute.comId);
-    navigate('/main');
+    navigate(-1);
   };
 
   return (
-    <div className="pl-4 pr-4" {...restProps}>
-      <NavigationHeader className="-ml-4">출근길 관리</NavigationHeader>
-      <div className="mt-8">
-        <h2 className="mb-2 text-body2">내 정류장 별칭 입력</h2>
-        <InputContainer className="relative h-12 w-full">
-          <InputContainer.Label>
-            <InputContainer.Label.Input
-              ref={inputRef}
-              className="border border-Gray-300"
-              onChange={handleComNameChange}
+    <div className={tw('mt-4 w-full', className)} {...restProps}>
+      <Header>
+        <Header.BackButton />
+        <Header.Title className="grow">
+          <InputContainer className="relative w-full pl-3 ">
+            <InputContainer.Label>
+              <InputContainer.Label.Input
+                ref={inputRef}
+                onChange={handleChange}
+                className="bg-Gray-100"
+                placeholder="정류장 검색"
+              />
+            </InputContainer.Label>
+            <InputContainer.ResetButton
+              onClick={handleResetClick}
+              className="absolute top-1 right-3 h-6 w-6"
             />
-          </InputContainer.Label>
-          <InputContainer.ResetButton className="absolute top-3 right-3 h-6 w-6 fill-Gray-500" />
-        </InputContainer>
-      </div>
-      <div className="mt-8">
-        <h2 className="mb-2 text-body2">정류장 이름</h2>
-        <Link to={`/commute/searchStation/${comId}`}>
-          <TextButton
-            // ref={buttonStationRef}
-            className="relative h-12 w-full rounded-lg border border-Gray-300 bg-White text-left text-body2 text-Gray-400"
-          >
-            {commute.station?.stationName ?? '정류장 선택'}
-          </TextButton>
-        </Link>
-      </div>
-      <div className="mt-8">
-        <h2 className="mb-2 text-body2">버스 번호</h2>
-        <TextButton
-          disabled={!commute.station}
-          onClick={handleOpenClick}
-          className="relative h-12 w-full rounded-lg border border-Gray-300 bg-White text-left text-body2 text-Gray-400"
-        >
-          {commute.routes.map((r) => r.routeName).join(', ') ?? '버스 선택'}
-        </TextButton>
-      </div>
-      <StatusButton
-        disabled={!commute.routes.length}
-        className="fixed bottom-8 w-[calc(100%-32px)]"
-        onClick={handleConfirmClick}
-      >
-        확인
-      </StatusButton>
+          </InputContainer>
+        </Header.Title>
+      </Header>
+
+      {showTip ? (
+        <div className="mt-4 pl-4">정류장 리스트</div>
+      ) : (
+        <List className="mt-4 pl-4">
+          {stations.map((station) => (
+            <List.Item
+              key={station.stationId}
+              onClick={() => handleStationClick(station)}
+              className="pl-2"
+            >
+              <List.Title>{station.stationName}</List.Title>
+              {/* <List.Subtitle>{subtitle} | 종점방면</List.Subtitle> */}
+            </List.Item>
+          ))}
+        </List>
+      )}
       {isModalOpen && (
         <BaseModal>
           <BaseModal.Content className="top-56 h-full w-full rounded-t-2xl bg-White">
@@ -130,7 +134,7 @@ export default function Commute({
                 }}
                 className="rounded-t-2xl pl-6"
               >
-                <List.Title>{commute.station?.stationName}</List.Title>
+                <List.Title>{selectedStation.stationName}</List.Title>
                 <List.Icon icon={ChevronDownIcon} />
               </List.Item>
 
