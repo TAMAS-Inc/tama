@@ -1,22 +1,22 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import SearchBusStop from './index';
+import { CommuteModal } from './CommuteModal';
 
 const meta = {
-  component: SearchBusStop,
-  title: 'Page/SearchBusStop',
+  component: CommuteModal,
+  title: 'Components/DropdownModal',
   parameters: {
     design: {
       type: 'figma',
       url: 'figmaURL',
     },
   },
-} as ComponentMeta<typeof SearchBusStop>;
+} as ComponentMeta<typeof CommuteModal>;
 
 export default meta;
 
-const Template: ComponentStory<typeof SearchBusStop> = (args) => (
-  <SearchBusStop {...args} />
+const Template: ComponentStory<typeof CommuteModal> = (args) => (
+  <CommuteModal {...args} />
 );
 
 export const Default = Template.bind({});

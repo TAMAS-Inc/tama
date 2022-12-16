@@ -44,7 +44,7 @@ export function MainHeader({
       {isDropdownOpen && (
         <DropdownModal onDimBgClick={handleDropdownDimBgClick} />
       )}
-      <Header.Menu onClick={handleMenu} />
+      <Header.Menu onClick={handleMenuClick} />
       {isMenuOpen && (
         <MainMenu
           onDimBgClick={() => setIsMenuOpen(false)}

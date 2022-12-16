@@ -11,14 +11,14 @@ import {
   RealtimeReqParams,
   useRealtime,
 } from './hooks/useRealtime';
-import { currentCommuteState, isUserValidState } from '@/state/atom';
+import { currentCommuteState } from '@/state/atom';
 
 export default function Main() {
   const navigate = useNavigate();
   const currentCommute = useRecoilValue(currentCommuteState);
 
   const testParams: RealtimeReqParams = {
-    stationId: currentCommute.station.stationId,
+    stationId: currentCommute.station?.stationId as string,
     routeIds: currentCommute.routes.flatMap((r) => r.routeId),
     predictDate: getCurrentDate(),
   };
