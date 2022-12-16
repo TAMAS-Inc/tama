@@ -20,7 +20,7 @@ export function MainHeader({
     setIsDropdownOpen(true);
   };
 
-  const handleMenu: React.MouseEventHandler<HTMLButtonElement> = () => {
+  const handleMenuClick: React.MouseEventHandler<HTMLButtonElement> = () => {
     setIsMenuOpen(true);
   };
 
@@ -33,9 +33,9 @@ export function MainHeader({
       <Header.Dropdown onClick={handleDropdownClick}>
         {currentStation?.currentStation ?? children}
       </Header.Dropdown>
-      {isDropdownOpen && <DropdownModal handleDropdown={setIsDropdownOpen} />}
-      <Header.Menu onClick={handleMenu} />
-      {isMenuOpen && <MainMenu handleMenu={setIsMenuOpen} />}
+      {isDropdownOpen && <DropdownModal handleClick={setIsDropdownOpen} />}
+      <Header.Menu onClick={handleMenuClick} />
+      {isMenuOpen && <MainMenu handleClick={setIsMenuOpen} />}
     </Header>
   );
 }

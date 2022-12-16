@@ -5,14 +5,14 @@ import { BaseModal, BusCard } from '@/components';
 import { userStationsState, currentStationState } from '@/state/atom';
 
 type DropdownModalProps<T extends React.ElementType> = {
-  handleDropdown: (arg: boolean) => void;
+  handleClick: (arg: boolean) => void;
   handleCurrent?: React.Dispatch<React.SetStateAction<string>>;
 } & Component<T>;
 
 export function DropdownModal({
   children,
   className,
-  handleDropdown,
+  handleClick,
   handleCurrent,
   ...restProps
 }: DropdownModalProps<'div'>) {
@@ -36,7 +36,7 @@ export function DropdownModal({
   };
 
   const handleDimBgClick: React.MouseEventHandler<HTMLDivElement> = (e) => {
-    if (e.target === e.currentTarget) handleDropdown(false);
+    if (e.target === e.currentTarget) handleClick(false);
   };
 
   return (
