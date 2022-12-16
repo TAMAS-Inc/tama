@@ -31,8 +31,7 @@ const fetchRealtime: FetchRealtime = async ({
   predictDate,
 }) => {
   try {
-    const END_POINT =
-      'http://ec2-35-174-107-39.compute-1.amazonaws.com/realtime';
+    const END_POINT = 'http://localhost:3000/realtime';
 
     const REAL_URL = `${END_POINT}/${stationId}?predictDate=${predictDate}&${routeIds
       .map((id) => `routeIds=${id}`)
@@ -40,6 +39,7 @@ const fetchRealtime: FetchRealtime = async ({
 
     const TEST_URL =
       'https://raw.githubusercontent.com/TAMAS-Inc/MockAPI/main/realtime/228000191.routeIds.228000176.228000182.json';
+    // eslint-disable-next-line no-constant-condition
     const res = await fetch(true ? TEST_URL : REAL_URL);
 
     return res.json() as unknown as RealtimeInfo[];
