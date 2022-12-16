@@ -121,6 +121,6 @@ export const isUserValidState = selector({
   key: 'isUserValidState',
   get: ({ get }) => {
     const user = get(userState);
-    return user.userId !== null;
+    return user.commutes.length !== 0;
   },
 });
