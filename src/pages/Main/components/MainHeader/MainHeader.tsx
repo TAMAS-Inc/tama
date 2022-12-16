@@ -22,7 +22,7 @@ export function MainHeader({
     setIsDropdownOpen(true);
   };
 
-  const handleMenu: React.MouseEventHandler<HTMLButtonElement> = () => {
+  const handleMenuClick: React.MouseEventHandler<HTMLButtonElement> = () => {
     setIsMenuOpen(true);
   };
 

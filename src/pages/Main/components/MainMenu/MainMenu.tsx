@@ -22,7 +22,6 @@ export function MainMenu({
     이용약관: 'terms',
     '오픈소스 이용': 'opensource',
   };
-
   return (
     <BaseModal className={tw('', className)} {...restProps}>
       <BaseModal.Content className="right-0 h-full w-[300px] bg-White">
@@ -33,13 +32,11 @@ export function MainMenu({
           >
             <IconButton.Icon
               icon={XMarkIcon}
-              className="absolute right-4 top-8 h-6 w-6"
+              className="absolute right-4 top-4 mr-3 h-6 w-6"
             />
           </IconButton>
           <List.Item className="h-25 mt-9 pl-4 pb-6">
             <List.Title className="text-left">
-              <strong>타까마까님!</strong>
-              <br />
               <span>오늘도 산뜻한 출근길 되세요!</span>
             </List.Title>
           </List.Item>

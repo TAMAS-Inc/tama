@@ -18,7 +18,6 @@ export function DropdownModal({
 }: DropdownModalProps<'div'>) {
   const user = useRecoilValue(userState);
   const [currentComId, setCurrentComId] = useRecoilState(currentComIdState);
-
   const handleBusCardClick = (id: Commute['comId']) => {
     setCurrentComId(id);
   };
