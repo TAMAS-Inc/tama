@@ -1,42 +1,26 @@
 import { Link } from 'react-router-dom';
-import { useRecoilValue, useRecoilState } from 'recoil';
-import { tw } from '@/utils/tailwindMerge';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { BaseModal, BusCard } from '@/components';
-import { userStationsState, currentStationState } from '@/state/atom';
+import { currentComIdState, userState } from '@/state/atom';
+import { tw } from '@/utils/tailwindMerge';
 
 type DropdownModalProps<T extends React.ElementType> = {
-  handleClick: (arg: boolean) => void;
+  onDimBgClick: React.MouseEventHandler<HTMLDivElement>;
   handleCurrent?: React.Dispatch<React.SetStateAction<string>>;
 } & Component<T>;
 
 export function DropdownModal({
   children,
   className,
-  handleClick,
+  onDimBgClick: handleDimBgClick,
   handleCurrent,
   ...restProps
 }: DropdownModalProps<'div'>) {
-  const userStations = useRecoilValue(userStationsState);
-  const [currentStation, setCurrentStation] =
-    useRecoilState(currentStationState);
+  const user = useRecoilValue(userState);
+  const [currentComId, setCurrentComId] = useRecoilState(currentComIdState);
 
-  const handleBusCardClick: React.MouseEventHandler<HTMLDivElement> = (e) => {
-    const target = (e.target as HTMLElement).closest('.truncate');
-    if (target) {
-      const selectedStation = userStations.find(
-        (station) => station.id === target?.id
-      );
-      if (selectedStation) {
-        setCurrentStation({
-          id: target?.id,
-          currentStation: selectedStation?.userStationName,
-        });
-      }
-    }
-  };
-
-  const handleDimBgClick: React.MouseEventHandler<HTMLDivElement> = (e) => {
-    if (e.target === e.currentTarget) handleClick(false);
+  const handleBusCardClick = (id: Commute['comId']) => {
+    setCurrentComId(id);
   };
 
   return (
@@ -54,27 +38,25 @@ export function DropdownModal({
           </ul>
         </div>
 
-        {userStations.map(({ id, userStationName, stationName, routeList }) => (
+        {user.commutes.map(({ comId, comName, station, routes }) => (
           <BusCard
-            key={userStationName}
-            id={id}
-            className="flex flex-col items-start justify-center truncate"
-            onClick={handleBusCardClick}
+            key={comId}
+            id={comId}
+            className="flex cursor-pointer flex-col items-start justify-center truncate"
+            onClick={() => handleBusCardClick(comId)}
           >
             <BusCard.Info className="static left-0 flex translate-x-0 flex-row">
-              <BusCard.Content className="w-28 text-body1">
-                {userStationName}
+              <BusCard.Content className="mr-4 w-28 text-ellipsis text-body1 line-clamp-1">
+                {comName}
               </BusCard.Content>
               <BusCard.StationName className="mb-0 flex items-center justify-center">
-                {stationName}
+                {station.stationName}
               </BusCard.StationName>
             </BusCard.Info>
             <BusCard.Content className="text-Gray-400">
-              {routeList}
+              {routes.flatMap(({ routeName }) => routeName).join(', ')}
             </BusCard.Content>
-            {userStationName === currentStation?.currentStation && (
-              <BusCard.CheckIcon isChecked />
-            )}
+            {comId === currentComId && <BusCard.CheckIcon isChecked />}
           </BusCard>
         ))}
       </BaseModal.Content>

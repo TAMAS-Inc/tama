@@ -1,5 +1,43 @@
-import { atom } from 'recoil';
+import { atom, DefaultValue, selector } from 'recoil';
 import { recoilPersist } from 'recoil-persist';
+
+const dummyRoutes: Route[] = [
+  {
+    routeId: '228000176',
+    routeName: '5001',
+  },
+  {
+    routeId: '228000389',
+    routeName: '5003A',
+  },
+];
+
+const dummyStation: Station = {
+  stationId: '228000682',
+  stationName: '기흥역',
+};
+
+const dummyCommutes: Commute[] = [
+  {
+    comId: 'bd8d8bce-40a3-44ed-b830-21e67cce7ebb',
+    comName: '우리 집',
+    station: dummyStation,
+    routes: dummyRoutes,
+  },
+  {
+    comId: 'db7d8bce-40a3-44ed-b830-21e67eec7ebb',
+    comName: '다른 집',
+    station: dummyStation,
+    routes: dummyRoutes,
+  },
+];
+
+export const dummyUser: User = {
+  userId: 'bd8d8bce-40a3-44ed-b830-21e67cce7ebb',
+  commutes: dummyCommutes,
+  agreement: { allowLocation: true, allowMarketing: false },
+  currentComId: 'bd8d8bce-40a3-44ed-b830-21e67cce7ebb',
+};
 
 type CurrentStation = {
   id: string;
@@ -25,4 +63,46 @@ export const userStationsState = atom<UserStations[] | never[]>({
   key: `userStationState`,
   default: [],
   effects_UNSTABLE: [persistAtom],
+});
+
+export const userState = atom<User>({
+  key: 'userState',
+  default: dummyUser,
+  effects_UNSTABLE: [persistAtom],
+});
+
+export const currentComIdState = selector({
+  key: 'currentComIdState',
+  get: ({ get }) => {
+    const user = get(userState);
+    return user.currentComId;
+  },
+  set: ({ set, reset }, newValue) => {
+    if (newValue instanceof DefaultValue) {
+      reset(userState);
+    } else {
+      set(userState, (user) => ({
+        ...user,
+        currentComId: newValue,
+      }));
+    }
+  },
+});
+
+export const currentCommuteState = selector({
+  key: 'currentCommuteState',
+  get: ({ get }) => {
+    const user = get(userState);
+    const current = user.commutes.find((c) => c.comId === user.currentComId);
+    if (!current)
+      throw new Error('올바르지 않은 CommuteId가 포함되어있습니다!');
+    return current;
+  },
+});
+export const isUserValidState = selector({
+  key: 'isUserValidState',
+  get: ({ get }) => {
+    const user = get(userState);
+    return user.userId !== null;
+  },
 });

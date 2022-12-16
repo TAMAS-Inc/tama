@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
+import { useEffect, useState } from 'react';
+import { DropdownModal, Header } from '@/components';
+import { currentComIdState, currentCommuteState } from '@/state/atom';
 import { tw } from '@/utils/tailwindMerge';
-import { Header, DropdownModal } from '@/components';
 import { MainMenu } from '../MainMenu';
-import { currentStationState } from '@/state/atom';
 
 type MainHeaderProps<T extends React.ElementType> = Component<T>;
 
@@ -14,7 +14,9 @@ export function MainHeader({
 }: MainHeaderProps<'div'>) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const currentStation = useRecoilValue(currentStationState);
+
+  const currentComId = useRecoilValue(currentComIdState);
+  const currentCommute = useRecoilValue(currentCommuteState);
 
   const handleDropdownClick: React.MouseEventHandler<HTMLDivElement> = () => {
     setIsDropdownOpen(true);
@@ -24,18 +26,31 @@ export function MainHeader({
     setIsMenuOpen(true);
   };
 
+  const handleDropdownDimBgClick: React.MouseEventHandler<HTMLDivElement> = (
+    e
+  ) => {
+    if (e.target === e.currentTarget) setIsDropdownOpen(false);
+  };
+
   useEffect(() => {
     setIsDropdownOpen(false);
-  }, [currentStation]);
+  }, [currentComId]);
 
   return (
     <Header className={tw('pt-4', className)} {...restProps}>
       <Header.Dropdown onClick={handleDropdownClick}>
-        {currentStation?.currentStation ?? children}
+        {children ?? currentCommute.comName}
       </Header.Dropdown>
-      {isDropdownOpen && <DropdownModal handleClick={setIsDropdownOpen} />}
+      {isDropdownOpen && (
+        <DropdownModal onDimBgClick={handleDropdownDimBgClick} />
+      )}
       <Header.Menu onClick={handleMenuClick} />
-      {isMenuOpen && <MainMenu handleClick={setIsMenuOpen} />}
+      {isMenuOpen && (
+        <MainMenu
+          onDimBgClick={() => setIsMenuOpen(false)}
+          onCloseButtonClick={() => setIsMenuOpen(false)}
+        />
+      )}
     </Header>
   );
 }
