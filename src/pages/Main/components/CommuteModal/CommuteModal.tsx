@@ -4,18 +4,18 @@ import { BaseModal, BusCard } from '@/components';
 import { currentComIdState, userState } from '@/state/atom';
 import { tw } from '@/utils/tailwindMerge';
 
-type DropdownModalProps<T extends React.ElementType> = {
+type CommuteModalProps<T extends React.ElementType> = {
   onDimBgClick: React.MouseEventHandler<HTMLDivElement>;
   handleCurrent?: React.Dispatch<React.SetStateAction<string>>;
 } & Component<T>;
 
-export function DropdownModal({
+export function CommuteModal({
   children,
   className,
   onDimBgClick: handleDimBgClick,
   handleCurrent,
   ...restProps
-}: DropdownModalProps<'div'>) {
+}: CommuteModalProps<'div'>) {
   const user = useRecoilValue(userState);
   const [currentComId, setCurrentComId] = useRecoilState(currentComIdState);
   const handleBusCardClick = (id: Commute['comId']) => {
@@ -37,7 +37,7 @@ export function DropdownModal({
           </ul>
         </div>
 
-        {user.commutes.map(({ comId, comName, station, routes }) => (
+        {user.commutes.map(({ comId, comName, station, routes }:Commute) => (
           <BusCard
             key={comId}
             id={comId}
@@ -49,7 +49,7 @@ export function DropdownModal({
                 {comName}
               </BusCard.Content>
               <BusCard.StationName className="mb-0 flex items-center justify-center">
-                {station.stationName}
+                {(station as Station).stationName}
               </BusCard.StationName>
             </BusCard.Info>
             <BusCard.Content className="text-Gray-400">

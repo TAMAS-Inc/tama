@@ -1,7 +1,8 @@
 import { ChangeEventHandler, useEffect, useRef, useState } from 'react';
-import { Link, Navigate, useParams, useNavigate } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import { ChevronDownIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
+import { useSetRecoilState } from 'recoil';
 import {
   BaseModal,
   InputContainer,
@@ -14,7 +15,6 @@ import {
 import { useCommutes } from '@/hooks/useCommutes';
 import { dummyRoutes } from '../searchStation/[id]';
 import { tw } from '@/utils/tailwindMerge';
-import { useSetRecoilState } from 'recoil';
 import { currentComIdState } from '@/state/atom';
 
 type CommuteProps<T extends React.ElementType> = Component<T>;
@@ -31,7 +31,7 @@ export default function Commute({
 
   const { id: comId } = useParams();
 
-  const commute = commutes.find((c) => c.comId === comId)!;
+  const commute = commutes.find((c) => c.comId === comId) as Commute;
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -155,14 +155,15 @@ export default function Commute({
                         }
                       />
                       <InputContainer.Label.Input
-                        onChange={(e) => {
+                        onChange={() => {
                           handleRouteCheckChange(
                             { routeName, routeId },
-                            e.target.checked
+                            !commute.routes.find(r => r.routeId === routeId )
                           );
                         }}
                         type="checkbox"
                         className="bg-Gray-500"
+                        checked={!commute.routes.find(r => r.routeId === routeId )}
                       />
                     </InputContainer.Label>
                   </InputContainer>
