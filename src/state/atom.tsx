@@ -1,5 +1,6 @@
 import { atom, DefaultValue, selector } from 'recoil';
 import { recoilPersist } from 'recoil-persist';
+import { v4 as uuid } from 'uuid';
 
 const dummyRoutes: Route[] = [
   {
@@ -39,36 +40,35 @@ export const dummyUser: User = {
   currentComId: 'bd8d8bce-40a3-44ed-b830-21e67cce7ebb',
 };
 
-type CurrentStation = {
-  id: string;
-  currentStation?: string;
-};
-
-type UserStations = {
-  id: string;
-  userStationName: string;
-  stationName: string;
-  routeList: string;
-};
-
 const { persistAtom } = recoilPersist({ key: 'current' });
-
-export const currentStationState = atom<CurrentStation | null>({
-  key: `currentStationState`,
-  default: null,
-  effects_UNSTABLE: [persistAtom],
-});
-
-export const userStationsState = atom<UserStations[] | never[]>({
-  key: `userStationState`,
-  default: [],
-  effects_UNSTABLE: [persistAtom],
-});
 
 export const userState = atom<User>({
   key: 'userState',
-  default: dummyUser,
+  default: {
+    userId: uuid(),
+    commutes: [],
+    agreement: { allowLocation: false, allowMarketing: false },
+    currentComId: '',
+  },
   effects_UNSTABLE: [persistAtom],
+});
+
+export const commutesState = selector({
+  key: 'commutesState',
+  get: ({ get }) => {
+    const user = get(userState);
+    return user.commutes;
+  },
+  set: ({ set, reset }, newValue) => {
+    if (newValue instanceof DefaultValue) {
+      reset(userState);
+    } else {
+      set(userState, (user) => ({
+        ...user,
+        commutes: newValue,
+      }));
+    }
+  },
 });
 
 export const currentComIdState = selector({
@@ -84,6 +84,24 @@ export const currentComIdState = selector({
       set(userState, (user) => ({
         ...user,
         currentComId: newValue,
+      }));
+    }
+  },
+});
+
+export const agreementState = selector({
+  key: 'agreementState',
+  get: ({ get }) => {
+    const user = get(userState);
+    return user.agreement;
+  },
+  set: ({ set, reset }, newValue) => {
+    if (newValue instanceof DefaultValue) {
+      reset(userState);
+    } else {
+      set(userState, (user) => ({
+        ...user,
+        agreement: newValue,
       }));
     }
   },

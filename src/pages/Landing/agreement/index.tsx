@@ -1,7 +1,11 @@
-import { useState, ChangeEvent, useEffect, ChangeEventHandler } from 'react';
-import { Link } from 'react-router-dom';
+import { ChangeEventHandler } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import { v4 as uuid } from 'uuid';
 import { InputContainer, StatusButton } from '@/components';
+import { agreementState, userState } from '@/state/atom';
 import { tw } from '@/utils/tailwindMerge';
+import { useCommutes } from '@/hooks/useCommutes';
 
 type AgreementProps<T extends React.ElementType> = Component<T>;
 
@@ -41,24 +45,22 @@ export default function Agreement({
   className,
   ...restProps
 }: AgreementProps<'div'>) {
-  const [checkList, setCheckList] = useState<string[]>([]);
-  const [isAgree, setIsAgree] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const { createNewCommute } = useCommutes();
+  const [agreement, setAgreement] = useRecoilState(agreementState);
 
-  const checkAll = (e: ChangeEvent<HTMLInputElement>) =>
-    e.target.checked ? setCheckList(['location', 'ad']) : setCheckList([]);
+  const isAllAgreed = Object.values(agreement).every((value) => value);
 
-  const check = (e: ChangeEvent<HTMLInputElement>) =>
-    e.target.checked
-      ? setCheckList([...checkList, e.target.name])
-      : setCheckList(checkList.filter((choice) => choice !== e.target.name));
+  const handleCheckAllChange = () => {
+    if (isAllAgreed)
+      setAgreement({ allowLocation: false, allowMarketing: false });
+    else setAgreement({ allowLocation: true, allowMarketing: true });
+  };
 
-  useEffect(() => {
-    if (checkList.includes('location') || checkList.length === 2) {
-      setIsAgree(true);
-    } else {
-      setIsAgree(false);
-    }
-  }, [checkList]);
+  const handleConfirmButtonClick = () => {
+    const comId = createNewCommute();
+    navigate(`/commute/edit/${comId}`);
+  };
 
   return (
     <div className="pl-4 pr-4" {...restProps}>
@@ -68,8 +70,8 @@ export default function Agreement({
 
       <Checkbox
         name="all"
-        onChange={checkAll}
-        state={checkList.length === 2}
+        onChange={handleCheckAllChange}
+        state={isAllAgreed}
         className="border-bottom flex w-full rounded-none border-b border-b-Gray-400 pb-4"
       >
         전체 동의
@@ -77,24 +79,33 @@ export default function Agreement({
 
       <Checkbox
         name="location"
-        onChange={check}
-        state={checkList.includes('location')}
+        onChange={(e) => {
+          const { checked } = e.target as HTMLInputElement;
+          setAgreement((prev) => ({ ...prev, allowLocation: checked }));
+        }}
+        state={agreement.allowLocation}
       >
         위치 기반 서비스 약관 동의 (필수)
       </Checkbox>
 
-      <Checkbox name="ad" onChange={check} state={checkList.includes('ad')}>
+      <Checkbox
+        name="ad"
+        onChange={(e) => {
+          const { checked } = e.target as HTMLInputElement;
+          setAgreement((prev) => ({ ...prev, allowMarketing: checked }));
+        }}
+        state={agreement.allowMarketing}
+      >
         마케팅 정보 수신 동의 (선택)
       </Checkbox>
 
-      <Link to="/commute">
-        <StatusButton
-          disabled={!isAgree}
-          className="fixed bottom-8 w-[calc(100%-32px)]"
-        >
-          확인
-        </StatusButton>
-      </Link>
+      <StatusButton
+        disabled={!agreement.allowLocation}
+        className="fixed bottom-8 w-[calc(100%-32px)]"
+        onClick={handleConfirmButtonClick}
+      >
+        확인
+      </StatusButton>
     </div>
   );
 }
