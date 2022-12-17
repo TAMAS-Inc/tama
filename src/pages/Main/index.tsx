@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
-import { useRecoilValue } from 'recoil';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 
 import { AD, BusCard, Notification, SyncButton } from '@/components';
+import { currentCommuteState } from '@/state/atom';
 import { getCurrentDate } from '@/utils/date';
 import NotFound from '../404';
 import { MainHeader } from './components';
@@ -11,10 +12,10 @@ import {
   RealtimeReqParams,
   useRealtime,
 } from './hooks/useRealtime';
-import { currentCommuteState } from '@/state/atom';
 
 export default function Main() {
   const navigate = useNavigate();
+
   const currentCommute = useRecoilValue(currentCommuteState);
 
   const testParams: RealtimeReqParams = {
@@ -62,7 +63,7 @@ export default function Main() {
               onClick={(e) => {
                 if ((e.target as HTMLElement).closest('svg'))
                   navigate(
-                    `analysis/routeId=${routeId}&stationId=${stationId}`
+                    `analysis/routeId=${routeId}&stationId=${currentCommute.station?.stationId}`
                   );
                 else navigate(`busRoute/${routeName}`);
               }}
