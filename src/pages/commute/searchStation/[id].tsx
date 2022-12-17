@@ -1,4 +1,4 @@
-import { useRef, useState, ChangeEventHandler, useEffect } from 'react';
+import { useState, ChangeEventHandler } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { hangulIncludes, chosungIncludes } from '@toss/hangul';
 import { CheckCircleIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
@@ -44,7 +44,7 @@ export default function SearchBusStop({
   ...restProps
 }: SearchBusStopProps<'div'>) {
   const navigate = useNavigate();
-  const { id: comId } = useParams();
+  const { id: comId } = useParams() as { id: Commute['comId'] };
   const { commutes, editCommute } = useCommutes();
 
   const commute = commutes.find((c) => c.comId === comId) as Commute;
@@ -52,8 +52,7 @@ export default function SearchBusStop({
   const [currentComId, setCurrentComId] =
     useRecoilState<Station['stationId']>(currentComIdState);
   const [inputValue, setInputValue] = useState('');
-  const [showTip, setShowTip] = useState<boolean>(true);
-  const [isModalOpen, setIsModalOpen] = useState<boolean | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedStation, setSelectedStation] = useState<Station>(
     commute.station as Station
   );
@@ -74,16 +73,6 @@ export default function SearchBusStop({
       hangulIncludes(station.stationName, inputValue) ||
       chosungIncludes(station.stationName, inputValue)
   );
-
-  const inputRef = useRef<HTMLInputElement>(null);
-  useEffect(() => {
-    if (inputRef.current?.value === '') {
-      setShowTip(true);
-    }
-    if (filteredStations?.length === 0) {
-      setShowTip(false);
-    }
-  }, [inputRef.current?.value, filteredStations?.length]);
 
   const handleCloseClick = () => setIsModalOpen(false);
   const handleResetClick = () => {
@@ -128,7 +117,6 @@ export default function SearchBusStop({
           <InputContainer className="relative w-full pl-3 ">
             <InputContainer.Label>
               <InputContainer.Label.Input
-                ref={inputRef}
                 onChange={handleInputChange}
                 className="bg-Gray-100"
                 placeholder="정류장 검색"
@@ -142,7 +130,11 @@ export default function SearchBusStop({
         </Header.Title>
       </Header>
 
-      {showTip ? (
+      {filteredStations?.length === 0 ? (
+        <div className="pt-4 text-center text-body1">
+          해당 이름을 가진 정류장이 없어요 😭
+        </div>
+      ) : (
         <List className="pl-4">
           {isStationsLoading ||
             filteredStations?.map((station) => (
@@ -160,10 +152,6 @@ export default function SearchBusStop({
               </List.Item>
             ))}
         </List>
-      ) : (
-        <div className="pt-4 text-center text-body1">
-          해당 이름을 가진 정류장이 없어요 😭
-        </div>
       )}
       {isModalOpen && (
         <BaseModal>
@@ -177,7 +165,7 @@ export default function SearchBusStop({
                 <List.Icon icon={ChevronDownIcon} />
               </List.Item>
 
-              {isRouteLoading ||
+              {!isRouteLoading &&
                 routes?.map(({ routeName, routeId }) => (
                   <List.Item key={routeId} className="relative pl-4">
                     <InputContainer className="h-full pl-2 text-body1 text-Primary-700">
