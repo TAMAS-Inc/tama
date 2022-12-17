@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 interface Params {
-  stationId: Station['stationId'];
+  stationId: Station['stationId'] | null;
 }
 const fetchAvailableRoutes = async ({ stationId }: Params) => {
   try {
@@ -17,17 +17,11 @@ const fetchAvailableRoutes = async ({ stationId }: Params) => {
 };
 
 export const useAvailableRoutes = (params: Params) => {
-  const queryClient = useQueryClient();
   const query = useQuery<Route[]>({
     queryKey: ['availableStations', params],
     queryFn: async () => fetchAvailableRoutes(params),
+    enabled: params.stationId !== null,
   });
 
-  const mutation = useMutation({
-    mutationFn: fetchAvailableRoutes,
-    onSuccess: async () => {
-      await queryClient.invalidateQueries(['realtime']);
-    },
-  });
-  return { ...query, mutation };
+  return query;
 };
