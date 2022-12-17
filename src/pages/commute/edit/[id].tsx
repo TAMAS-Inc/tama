@@ -1,8 +1,9 @@
 import { ChangeEventHandler, useEffect, useRef, useState } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
-import { CheckCircleIcon } from '@heroicons/react/24/solid';
-import { ChevronDownIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
+import { ChevronDownIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
+import { CheckCircleIcon } from '@heroicons/react/24/solid';
+
 import {
   BaseModal,
   InputContainer,
@@ -11,11 +12,11 @@ import {
   StatusButton,
   TextButton,
 } from '@/components';
-
 import { useCommutes } from '@/hooks/useCommutes';
-import { dummyRoutes } from '../searchStation/[id]';
-import { tw } from '@/utils/tailwindMerge';
 import { currentComIdState } from '@/state/atom';
+import { tw } from '@/utils/tailwindMerge';
+
+import { dummyRoutes } from '../searchStation/[id]';
 
 type CommuteProps<T extends React.ElementType> = Component<T>;
 
@@ -41,6 +42,7 @@ export default function Commute({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   if (!comId) return null;
 
   const handleOpenClick = () => setIsModalOpen(true);

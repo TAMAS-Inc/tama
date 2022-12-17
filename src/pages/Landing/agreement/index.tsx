@@ -2,9 +2,9 @@ import { ChangeEventHandler } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { InputContainer, StatusButton } from '@/components';
+import { useCommutes } from '@/hooks/useCommutes';
 import { agreementState } from '@/state/atom';
 import { tw } from '@/utils/tailwindMerge';
-import { useCommutes } from '@/hooks/useCommutes';
 
 type AgreementProps<T extends React.ElementType> = Component<T>;
 

@@ -44,8 +44,8 @@ export default function SearchBusStop({
   const commute = commutes.find((c) => c.comId === comId) as Commute;
 
   const [showTip, setShowTip] = useState<boolean>(true);
-  const [selectedStation, setSelectedStation] = useState<Station|null>(
-    commute.station
+  const [selectedStation, setSelectedStation] = useState<Station>(
+    commute.station as Station
   );
   const [isModalOpen, setIsModalOpen] = useState<boolean | null>(null);
 
@@ -134,7 +134,7 @@ export default function SearchBusStop({
                 }}
                 className="rounded-t-2xl pl-6"
               >
-                <List.Title>{(selectedStation as Station).stationName}</List.Title>
+                <List.Title>{selectedStation.stationName}</List.Title>
                 <List.Icon icon={ChevronDownIcon} />
               </List.Item>
 
