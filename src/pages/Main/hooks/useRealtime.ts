@@ -39,6 +39,7 @@ const fetchRealtime: FetchRealtime = async ({
 
     const TEST_URL =
       'https://raw.githubusercontent.com/TAMAS-Inc/MockAPI/main/realtime/228000191.routeIds.228000176.228000182.json';
+    // eslint-disable-next-line no-constant-condition
     const res = await fetch(true ? TEST_URL : REAL_URL);
 
     return res.json() as unknown as RealtimeInfo[];

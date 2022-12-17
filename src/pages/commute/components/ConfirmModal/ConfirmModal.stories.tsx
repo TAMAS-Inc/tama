@@ -1,22 +1,22 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import SearchBusStop from './index';
+import { ConfirmModal } from './ConfirmModal';
 
 const meta = {
-  component: SearchBusStop,
-  title: 'Page/SearchBusStop',
+  component: ConfirmModal,
+  title: 'Components/ConfirmModal',
   parameters: {
     design: {
       type: 'figma',
       url: 'figmaURL',
     },
   },
-} as ComponentMeta<typeof SearchBusStop>;
+} as ComponentMeta<typeof ConfirmModal>;
 
 export default meta;
 
-const Template: ComponentStory<typeof SearchBusStop> = (args) => (
-  <SearchBusStop {...args} />
+const Template: ComponentStory<typeof ConfirmModal> = (args) => (
+  <ConfirmModal {...args} />
 );
 
 export const Default = Template.bind({});

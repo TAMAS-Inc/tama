@@ -157,14 +157,15 @@ export default function Commute({
                         }
                       />
                       <InputContainer.Label.Input
-                        onChange={(e) => {
+                        onChange={() => {
                           handleRouteCheckChange(
                             { routeName, routeId },
-                            e.target.checked
+                            !commute.routes.find(r => r.routeId === routeId )
                           );
                         }}
                         type="checkbox"
                         className="bg-Gray-500"
+                        checked={!commute.routes.find(r => r.routeId === routeId )}
                       />
                     </InputContainer.Label>
                   </InputContainer>

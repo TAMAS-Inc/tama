@@ -1,32 +1,17 @@
 import { ComposedChart, Bar, XAxis, YAxis, Legend, LabelList } from 'recharts';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { tw } from '@/utils/tailwindMerge';
 import { AD, NavigationHeader, Notification, SyncButton } from '@/components';
+import {
+  CurrentInfo,
+  PredictInfo,
+  AnalysisInfo,
+  AnalysisReqParams,
+  useAnalysis,
+} from '../hooks/useAnalysis';
+import { getCurrentDate } from '@/utils/date';
+import { useQueryString } from '../hooks/useQueryString';
 
 type AnalysisProps<T extends React.ElementType> = Component<T>;
-interface BaseInfo {
-  /** 정류장 ID */
-  stationId: string;
-  /** 정류장 이름 */
-  stationName: string;
-  /** 요청한 정류장 기준 몇 정거장 전인지 */
-  remainStationCnt: number;
-}
-
-interface PredictInfo extends BaseInfo {
-  /** 예측한 도착 시 남을 좌석 */
-  predictRemainSeatCnt: number;
-}
-
-interface CurrentInfo extends BaseInfo {
-  /** 현재 남은 좌석 수 */
-  remainSeatCnt: number;
-}
-
-interface AnalysisInfo {
-  current: CurrentInfo; // 현재 버스가 위치한 정류장 정보
-  predict: PredictInfo[]; // 요청한 정류장 기준 앞 3개 정류장 정보(요청 정류장 포함)
-}
 
 interface ChartData {
   label: string;
@@ -40,28 +25,17 @@ export default function Analysis({
   className,
   ...restProps
 }: AnalysisProps<'div'>) {
-  const queryClient = useQueryClient();
+  const query = useQueryString();
+  const routeId = query.get('routeId');
+  const stationId = query.get('stationId');
 
-  const TEST_URL =
-    'https://raw.githubusercontent.com/TAMAS-Inc/MockAPI/main/analysis/228000191.routeId=228000176.json';
-  const testData = {
-    stationId: '228000191',
-    predictDate: '2022-12-25T07:25',
-    routeIds: 228000176,
+  const testParams: AnalysisReqParams = {
+    stationId: stationId as unknown as string,
+    predictDate: getCurrentDate(),
+    routeId: routeId as unknown as string,
   };
 
-  const fetcher = () => fetch(TEST_URL).then((res) => res.json());
-
-  const { isLoading, isError, data } = useQuery<[]>(
-    ['realtime', testData],
-    () => fetcher()
-  );
-
-  const mutation = useMutation(() => fetcher(), {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries(['realtime']);
-    },
-  });
+  const { isLoading, isError, data, mutation } = useAnalysis(testParams);
 
   if (isError) return <>Error</>;
 
@@ -87,14 +61,14 @@ export default function Analysis({
   };
 
   const handleSyncButtonClick = () => {
-    mutation.mutate();
+    mutation.mutate({ ...testParams, predictDate: getCurrentDate() });
   };
 
   return (
     <div className={tw('', className)} {...restProps}>
       <NavigationHeader>실시간 분석</NavigationHeader>
       <Notification />
-      {isLoading ? (
+      {isLoading || mutation.isLoading ? (
         <span>Loading...</span>
       ) : (
         <div className="flex flex-col gap-4 pt-8 pl-7 pr-7 text-body1 font-bold">

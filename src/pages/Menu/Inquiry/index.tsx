@@ -8,7 +8,7 @@ import {
   InputContainer,
   NavigationHeader,
   StatusButton,
-  Modal,
+  MessageModal,
 } from '@/components';
 
 type InquiryProps<T extends React.ElementType> = Component<T>;
@@ -211,18 +211,20 @@ export default function Inquiry({
         </StatusButton>
       </form>
       {isModalOpen && (
-        <Modal>
-          <Modal.ModalContainer>
-            <Modal.Content className="flex flex-col">
+        <MessageModal>
+          <MessageModal.ModalContainer>
+            <MessageModal.Content className="flex flex-col">
               <p>정상적으로 처리되었습니다.</p>
               <p>감사합니다.</p>
-            </Modal.Content>
-            <Modal.ButtonContainer>
-              <Modal.Button onClick={handleModalClick}>확인</Modal.Button>
-            </Modal.ButtonContainer>
-          </Modal.ModalContainer>
-          <Modal.DimBackground />
-        </Modal>
+            </MessageModal.Content>
+            <MessageModal.ButtonContainer>
+              <MessageModal.Button onClick={handleModalClick}>
+                확인
+              </MessageModal.Button>
+            </MessageModal.ButtonContainer>
+          </MessageModal.ModalContainer>
+          <MessageModal.DimBackground />
+        </MessageModal>
       )}
     </div>
   );
