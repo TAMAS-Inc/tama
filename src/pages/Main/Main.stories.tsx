@@ -15,6 +15,4 @@ const meta = {
 
 export default meta;
 
-export const Default: ComponentStory<typeof Main> = (args) => (
-  <Main {...args} />
-);
+export const Default: ComponentStory<typeof Main> = () => <Main />;
