@@ -10,6 +10,7 @@ import {
   StatusButton,
   MessageModal,
 } from '@/components';
+import { postInquiry } from './hooks/useInquiry';
 
 type InquiryProps<T extends React.ElementType> = Component<T>;
 
@@ -30,9 +31,10 @@ export default function Inquiry({
     mode: 'onBlur',
   });
 
-  const onSubmit: SubmitHandler<Inquiry> = (data) => {
+  const onSubmit: SubmitHandler<Inquiry> = async (data) => {
     // eslint-disable-next-line no-console
-    console.log('이메일 전송', { ...data, inquiryId: uuid() });
+    const req = await postInquiry(data);
+    console.log('이메일 전송', req);
   };
   const handleStatusButtonClick = () => {
     setIsModalOpen(true);
