@@ -3,9 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { hangulIncludes, chosungIncludes } from '@toss/hangul';
 import { CheckCircleIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
-import { useRecoilState } from 'recoil';
 import Highlighter from 'react-highlight-words';
-import { currentComIdState } from '@/state/atom';
 import {
   BaseModal,
   Header,
@@ -49,24 +47,22 @@ export default function SearchBusStop({
 
   const commute = commutes.find((c) => c.comId === comId) as Commute;
 
-  const [currentComId, setCurrentComId] =
-    useRecoilState<Station['stationId']>(currentComIdState);
   const [inputValue, setInputValue] = useState('');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [selectedStation, setSelectedStation] = useState<Station>(
-    commute.station as Station
-  );
+  const [selectedStation, setSelectedStation] = useState<Station | null>(null);
 
   const {
     isLoading: isStationsLoading,
     isError: isStationsError,
     data: stations,
   } = useAvailableStations();
+
   const {
     isLoading: isRouteLoading,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     isError: isRouteError,
     data: routes,
-  } = useAvailableRoutes({ stationId: currentComId });
+  } = useAvailableRoutes({ stationId: selectedStation?.stationId ?? null });
 
   const filteredStations = stations?.filter(
     (station) =>
@@ -86,7 +82,6 @@ export default function SearchBusStop({
       routes: [],
     });
     setIsModalOpen(true);
-    setCurrentComId(station.stationId);
   };
   const handleInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setInputValue(e.target.value);
@@ -107,7 +102,7 @@ export default function SearchBusStop({
   };
 
   if (!comId) return null;
-  if (isStationsError || isRouteError) return <NotFound />;
+  if (isStationsError) return <NotFound />;
 
   return (
     <div className={tw('mt-4 w-full', className)} {...restProps}>
@@ -161,7 +156,7 @@ export default function SearchBusStop({
                 onClick={handleCloseClick}
                 className="rounded-t-2xl pl-6"
               >
-                <List.Title>{selectedStation.stationName}</List.Title>
+                <List.Title>{selectedStation?.stationName}</List.Title>
                 <List.Icon icon={ChevronDownIcon} />
               </List.Item>
 
