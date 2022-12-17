@@ -10,7 +10,7 @@ export const getCurrentDate = (): Date => {
   const padTwo = (num: number): string => num.toString().padStart(2, '0');
 
   const date = `${today.getFullYear()}-${padTwo(today.getMonth() + 1)}-${padTwo(
-    today.getDay()
+    today.getDate()
   )}T${padTwo(today.getHours())}:${padTwo(today.getMinutes())}`;
 
   if (!isRightDate(date))
