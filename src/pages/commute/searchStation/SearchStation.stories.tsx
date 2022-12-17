@@ -1,6 +1,6 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import SearchBusStop from './index';
+import SearchBusStop from './[id]';
 
 const meta = {
   component: SearchBusStop,

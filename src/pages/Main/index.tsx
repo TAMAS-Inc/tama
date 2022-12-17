@@ -1,66 +1,97 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { tw } from '@/utils/tailwindMerge';
+import { useRecoilValue } from 'recoil';
+
 import { AD, BusCard, Notification, SyncButton } from '@/components';
+import { currentCommuteState } from '@/state/atom';
+import { getCurrentDate } from '@/utils/date';
+import NotFound from '../404';
 import { MainHeader } from './components';
+import {
+  RealtimeInfo,
+  RealtimeReqParams,
+  useRealtime,
+} from './hooks/useRealtime';
 
-type MainProps<T extends React.ElementType> = Component<T>;
+const INTERVAL_TIME = 500000000;
 
-export default function Main({ className, ...restProps }: MainProps<'div'>) {
+export default function Main() {
   const navigate = useNavigate();
-  const data = [
-    {
-      routeId: '228000176',
-      routeName: '5001A',
-      remainSeatCnt: '34',
-      remainStationCnt: '3',
-      predictReaminTime: '12분 34초',
-      predictRemainSeatCnt: '12',
-    },
-    {
-      routeId: '228000177',
-      routeName: '5001B',
-      remainSeatCnt: '34',
-      remainStationCnt: '4',
-      predictReaminTime: '12분 34초',
-      predictRemainSeatCnt: '12',
-    },
-  ];
+  const currentCommute = useRecoilValue(currentCommuteState);
+
+  const testParams: RealtimeReqParams = {
+    stationId: commute.station?.stationId as string,
+    routeIds: commute.routes.flatMap((r) => r.routeId),
+    predictDate: getCurrentDate(),
+  };
+
+  const { isError, isLoading, data, mutation } = useRealtime(testParams);
+
+  useEffect(() => {
+    const refreshDataInterval = setInterval(() => {
+      // mutation.mutate({ ...testParams, predictDate: getCurrentDate() });
+    }, INTERVAL_TIME);
+
+    return () => clearInterval(refreshDataInterval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleSyncButtonClick = () => {
+    mutation.mutate({ ...testParams, predictDate: getCurrentDate() });
+  };
+
+  if (isError) return <NotFound />;
 
   return (
-    <div className={tw('pt-8', className)} {...restProps}>
-      <MainHeader>춘시기넹</MainHeader>
+    <>
+      <MainHeader />
       <Notification />
-      {data.map(
-        ({
-          routeId,
-          routeName,
-          remainSeatCnt,
-          remainStationCnt,
-          predictReaminTime,
-          predictRemainSeatCnt,
-        }) => (
-          <BusCard
-            key={routeId}
-            onClick={(e) => {
-              if ((e.target as HTMLElement).closest('svg'))
-                navigate(`main/analysis/${routeName}`);
-              else navigate(`main/busRoute/${routeName}`);
-            }}
-          >
-            <BusCard.RouteName>{routeName}</BusCard.RouteName>
-            <BusCard.Info>
-              <BusCard.Content>{predictReaminTime}</BusCard.Content>
-              <BusCard.Content>
-                {remainStationCnt}번째 전 (실시간 {remainSeatCnt}석, 예측{' '}
-                {predictRemainSeatCnt}석)
-              </BusCard.Content>
-            </BusCard.Info>
-            <BusCard.InfoIcon />
-          </BusCard>
+      {isLoading || mutation.isLoading ? (
+        <span>Loading...</span>
+      ) : (
+        data?.map(
+          ({
+            exist,
+            routeId,
+            routeName,
+            remainSeatCnt,
+            remainStationCnt,
+            predictRemainTime,
+            predictRemainSeatCnt,
+          }: RealtimeInfo) => (
+            <BusCard
+              key={routeId}
+              onClick={(e) => {
+                if ((e.target as HTMLElement).closest('svg'))
+                  navigate(
+                    `analysis/routeId=${routeId}&stationId=${currentCommute.station?.stationId}`
+                  );
+                else navigate(`busRoute/${routeName}`);
+              }}
+            >
+              <BusCard.RouteName>{routeName}</BusCard.RouteName>
+              <BusCard.Info>
+                <BusCard.Content>
+                  {exist ? `${predictRemainTime}분 후 도착` : '정보 없음'}
+                </BusCard.Content>
+                {exist && (
+                  <BusCard.Content>
+                    {remainStationCnt}번째 전 (실시간 {remainSeatCnt}석, 예측
+                    {predictRemainSeatCnt === -1
+                      ? '정보 없음'
+                      : ` 
+                    ${predictRemainSeatCnt}석`}
+                    )
+                  </BusCard.Content>
+                )}
+              </BusCard.Info>
+              <BusCard.InfoIcon />
+            </BusCard>
+          )
         )
       )}
-      <SyncButton />
+      <SyncButton onClick={handleSyncButtonClick} />
       <AD />
-    </div>
+    </>
   );
 }

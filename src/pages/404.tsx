@@ -7,7 +7,7 @@ export default function NotFound({
   ...restProps
 }: NotFoundProps<'div'>) {
   return (
-    <div className={tw('pt-8', className)} {...restProps}>
+    <div className={tw('pt-4', className)} {...restProps}>
       404
     </div>
   );

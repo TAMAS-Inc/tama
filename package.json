@@ -17,12 +17,20 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.0.13",
+    "@tailwindcss/line-clamp": "^0.4.2",
+    "@tanstack/react-query": "4.20.4",
+    "@toss/hangul": "^1.1.4",
     "modern-normalize": "^1.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-highlight-words": "^0.18.0",
     "react-hook-form": "7.40.0",
     "react-router-dom": "6.4.5",
-    "tailwind-merge": "^1.8.0"
+    "recharts": "2.2.0",
+    "recoil": "^0.7.6",
+    "recoil-persist": "^4.2.0",
+    "tailwind-merge": "^1.8.0",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.5",
@@ -36,6 +44,8 @@
     "@storybook/testing-library": "^0.0.13",
     "@types/react": "^18.0.24",
     "@types/react-dom": "^18.0.8",
+    "@types/react-highlight-words": "^0.16.4",
+    "@types/uuid": "9.0.0",
     "@typescript-eslint/eslint-plugin": "^5.45.0",
     "@typescript-eslint/parser": "^5.45.0",
     "@vitejs/plugin-react": "^2.2.0",

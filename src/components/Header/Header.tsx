@@ -1,10 +1,6 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Bars3Icon, ChevronLeftIcon } from '@heroicons/react/24/outline';
+import { useNavigate } from 'react-router-dom';
 import { ComponentProps } from 'react';
-import {
-  Bars3Icon,
-  ChevronLeftIcon,
-  ClockIcon,
-} from '@heroicons/react/24/outline';
 import { tw } from '@/utils/tailwindMerge';
 import { Dropdown } from '../Dropdown';
 import { IconButton } from '../IconButton';
@@ -18,7 +14,10 @@ export function Header({
 }: HeaderProps<'header'>) {
   return (
     <header
-      className={tw('relative flex h-12 w-full items-center p-4', className)}
+      className={tw(
+        'relative flex h-12 w-full items-center border-b-2 border-Gray-100 p-4 pb-2',
+        className
+      )}
       {...restProps}
     >
       {children}
@@ -66,24 +65,11 @@ function Menu({ children, className, ...restProps }: MenuProps<'button'>) {
       className={tw('absolute right-7 h-6 w-6', className)}
       {...restProps}
     >
-      <IconButton.Icon icon={Bars3Icon} />
+      <IconButton.Icon
+        icon={Bars3Icon}
+        className={tw('h-6 w-6 stroke-Black')}
+      />
     </IconButton>
-  );
-}
-
-type PredictProps<T extends React.ElementType> = Component<T>;
-
-function Predict({ children, className, ...restProps }: PredictProps<'a'>) {
-  return (
-    <Link
-      to="/prediction"
-      className={tw('absolute right-7 mr-10', className)}
-      {...restProps}
-    >
-      <IconButton className="h-6 w-6">
-        <IconButton.Icon className="stroke-Primary-700" icon={ClockIcon} />
-      </IconButton>
-    </Link>
   );
 }
 
@@ -105,5 +91,4 @@ function HDropdown({
 Header.BackButton = BackButton;
 Header.Title = Title;
 Header.Dropdown = HDropdown;
-Header.Predict = Predict;
 Header.Menu = Menu;

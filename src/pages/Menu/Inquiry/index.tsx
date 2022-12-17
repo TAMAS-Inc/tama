@@ -1,36 +1,45 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { v4 as uuid } from 'uuid';
 import { tw } from '@/utils/tailwindMerge';
-import { InputContainer, NavigationHeader } from '@/components';
-import { StatusButton } from '../../../components/StatusButton/StatusButton';
+import {
+  InputContainer,
+  NavigationHeader,
+  StatusButton,
+  MessageModal,
+} from '@/components';
 
 type InquiryProps<T extends React.ElementType> = Component<T>;
-
-type FormValue = {
-  email: string;
-  title: string;
-  content: string;
-  agreement: boolean;
-};
 
 export default function Inquiry({
   className,
   ...restProps
 }: InquiryProps<'div'>) {
+  const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [readMore, setReadMore] = useState(false);
+
   const {
     register,
     handleSubmit,
     formState,
     formState: { errors },
-  } = useForm<FormValue>({
+  } = useForm<Inquiry>({
     mode: 'onBlur',
   });
 
-  const onSubmit: SubmitHandler<FormValue> = (data) => {
+  const onSubmit: SubmitHandler<Inquiry> = (data) => {
     // eslint-disable-next-line no-console
-    console.log('이메일 전송', data);
+    console.log('이메일 전송', { ...data, inquiryId: uuid() });
+  };
+  const handleStatusButtonClick = () => {
+    setIsModalOpen(true);
+  };
+  const handleModalClick = () => {
+    setIsModalOpen(false);
+    navigate(-1);
   };
 
   const handleClick = () => {
@@ -38,7 +47,7 @@ export default function Inquiry({
   };
 
   interface Scheme {
-    key: keyof FormValue;
+    key: keyof Inquiry;
     type: 'text' | 'textarea' | 'checkbox';
     label: string;
     placeholder?: string;
@@ -93,7 +102,7 @@ export default function Inquiry({
   ];
 
   return (
-    <div className={tw(' pt-8', className)} {...restProps}>
+    <div className={tw('pt-4', className)} {...restProps}>
       <NavigationHeader>이메일 문의하기</NavigationHeader>
       <form
         className="mt-8 mr-4 ml-4 flex flex-col gap-4"
@@ -194,12 +203,29 @@ export default function Inquiry({
         )}
         <StatusButton
           type="submit"
+          onClick={handleStatusButtonClick}
           className="font-bold"
           disabled={!formState.isValid}
         >
           작성 완료
         </StatusButton>
       </form>
+      {isModalOpen && (
+        <MessageModal>
+          <MessageModal.ModalContainer>
+            <MessageModal.Content className="flex flex-col">
+              <p>정상적으로 처리되었습니다.</p>
+              <p>감사합니다.</p>
+            </MessageModal.Content>
+            <MessageModal.ButtonContainer>
+              <MessageModal.Button onClick={handleModalClick}>
+                확인
+              </MessageModal.Button>
+            </MessageModal.ButtonContainer>
+          </MessageModal.ModalContainer>
+          <MessageModal.DimBackground />
+        </MessageModal>
+      )}
     </div>
   );
 }

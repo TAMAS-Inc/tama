@@ -12,7 +12,7 @@ export default function OpenSourceItem({
 
   return (
     <div className={tw('pt-8', className)} {...restProps}>
-      <NavigationHeader>{id}번 오픈소스</NavigationHeader>
+      <NavigationHeader>{id}</NavigationHeader>
       <div className="mt-8 mr-4 ml-4">
         Lorem ipsum dolor, sit amet consectetur adipisicing elit. Explicabo
         beatae nemo, quae ipsa, tempora ipsum adipisci eligendi perspiciatis

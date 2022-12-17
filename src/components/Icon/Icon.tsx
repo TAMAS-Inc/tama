@@ -10,5 +10,5 @@ export function Icon({
   icon: IconElement,
   ...restProps
 }: IconProps<'svg'>) {
-  return <IconElement className={tw('text-Black', className)} {...restProps} />;
+  return <IconElement className={tw('h-6 w-6', className)} {...restProps} />;
 }

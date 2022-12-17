@@ -1,6 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
+import { useEffect, useState } from 'react';
+import { DropdownModal, Header } from '@/components';
+import { currentComIdState, currentCommuteState } from '@/state/atom';
 import { tw } from '@/utils/tailwindMerge';
-import { Header, DropdownModal } from '@/components';
 import { MainMenu } from '../MainMenu';
 
 type MainHeaderProps<T extends React.ElementType> = Component<T>;
@@ -12,32 +14,43 @@ export function MainHeader({
 }: MainHeaderProps<'div'>) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [current, setCurrent] = useState('춘시기네');
 
-  const handleDropdown: React.MouseEventHandler<HTMLDivElement> = () => {
+  const currentComId = useRecoilValue(currentComIdState);
+  const currentCommute = useRecoilValue(currentCommuteState);
+
+  const handleDropdownClick: React.MouseEventHandler<HTMLDivElement> = () => {
     setIsDropdownOpen(true);
   };
 
-  const handleMenu: React.MouseEventHandler<HTMLButtonElement> = () => {
+  const handleMenuClick: React.MouseEventHandler<HTMLButtonElement> = () => {
     setIsMenuOpen(true);
+  };
+
+  const handleDropdownDimBgClick: React.MouseEventHandler<HTMLDivElement> = (
+    e
+  ) => {
+    if (e.target === e.currentTarget) setIsDropdownOpen(false);
   };
 
   useEffect(() => {
     setIsDropdownOpen(false);
-  }, [current]);
+  }, [currentComId]);
 
   return (
-    <Header className={tw('pt-8', className)} {...restProps}>
-      <Header.Dropdown onClick={handleDropdown}>{current}</Header.Dropdown>
+    <Header className={tw('pt-4', className)} {...restProps}>
+      <Header.Dropdown onClick={handleDropdownClick}>
+        {children ?? currentCommute.comName}
+      </Header.Dropdown>
       {isDropdownOpen && (
-        <DropdownModal
-          handleCurrent={setCurrent}
-          handleDropdown={setIsDropdownOpen}
+        <DropdownModal onDimBgClick={handleDropdownDimBgClick} />
+      )}
+      <Header.Menu onClick={handleMenuClick} />
+      {isMenuOpen && (
+        <MainMenu
+          onDimBgClick={() => setIsMenuOpen(false)}
+          onCloseButtonClick={() => setIsMenuOpen(false)}
         />
       )}
-      <Header.Predict />
-      <Header.Menu onClick={handleMenu} />
-      {isMenuOpen && <MainMenu handleMenu={setIsMenuOpen} />}
     </Header>
   );
 }

@@ -1,23 +1,21 @@
 import { tw } from '@/utils/tailwindMerge';
 import { TextButton } from '../TextButton';
 
-type ModalProps<T extends React.ElementType> = {
-  isOpened?: boolean;
-} & Component<T>;
+type ModalProps<T extends React.ElementType> = Component<T>;
+type ButtonProps<T extends React.ElementType> = Component<T>;
+type ContentProps<T extends React.ElementType> = Component<T>;
+type DimBackgroundProps<T extends React.ElementType> = Component<T>;
+type ModalContainerProps<T extends React.ElementType> = Component<T>;
+type ButtonContainerProps<T extends React.ElementType> = Component<T>;
 
-export function Modal({
+export function MessageModal({
   children,
   className,
-  isOpened,
   ...restProps
 }: ModalProps<'div'>) {
   return (
     <div
-      className={tw(
-        'fixed top-0 left-0 z-[100] h-screen w-screen',
-        !isOpened && 'hidden',
-        className
-      )}
+      className={tw('fixed top-0 left-0 z-[100] h-screen w-screen', className)}
       aria-modal="true"
       {...restProps}
     >
@@ -25,8 +23,6 @@ export function Modal({
     </div>
   );
 }
-
-type ModalContainerProps<T extends React.ElementType> = Component<T>;
 
 function ModalContainer({
   children,
@@ -46,8 +42,6 @@ function ModalContainer({
   );
 }
 
-type ContentProps<T extends React.ElementType> = Component<T>;
-
 function Content({ children, className, ...restProps }: ContentProps<'div'>) {
   return (
     <div
@@ -61,8 +55,6 @@ function Content({ children, className, ...restProps }: ContentProps<'div'>) {
     </div>
   );
 }
-
-type ButtonContainerProps<T extends React.ElementType> = Component<T>;
 
 function ButtonContainer({
   children,
@@ -82,34 +74,26 @@ function ButtonContainer({
   );
 }
 
-type ButtonProps<T extends React.ElementType> = Component<T>;
-
 function Button({ children, className, ...restProps }: ButtonProps<'button'>) {
   return (
-    <Modal.TextButton
+    <MessageModal.TextButton
       className="h-full w-full rounded-none bg-Primary-300"
       {...restProps}
     >
       {children}
-    </Modal.TextButton>
+    </MessageModal.TextButton>
   );
 }
-
-type DimBackgroundProps<T extends React.ElementType> = {
-  isOpened?: boolean;
-} & Component<T>;
 
 function DimBackground({
   children,
   className,
-  isOpened,
   ...restProps
 }: DimBackgroundProps<'div'>) {
   return (
     <div
       className={tw(
         'fixed left-0 top-0 h-full w-full bg-Gray-700 opacity-80',
-        isOpened && 'hidden',
         className
       )}
       {...restProps}
@@ -119,9 +103,9 @@ function DimBackground({
   );
 }
 
-Modal.ModalContainer = ModalContainer;
-Modal.DimBackground = DimBackground;
-Modal.Content = Content;
-Modal.ButtonContainer = ButtonContainer;
-Modal.TextButton = TextButton;
-Modal.Button = Button;
+MessageModal.ModalContainer = ModalContainer;
+MessageModal.DimBackground = DimBackground;
+MessageModal.Content = Content;
+MessageModal.ButtonContainer = ButtonContainer;
+MessageModal.TextButton = TextButton;
+MessageModal.Button = Button;
