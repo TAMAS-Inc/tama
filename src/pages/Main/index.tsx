@@ -10,7 +10,7 @@ import { MainHeader } from './components';
 import {
   RealtimeInfo,
   RealtimeReqParams,
-  useRealtime
+  useRealtime,
 } from './hooks/useRealtime';
 
 export default function Main() {
@@ -62,7 +62,9 @@ export default function Main() {
               key={routeId}
               onClick={(e) => {
                 if ((e.target as HTMLElement).closest('svg'))
-                  navigate(`analysis/${routeName}`);
+                  navigate(
+                    `analysis/routeId=${routeId}&stationId=${currentCommute.station?.stationId}`
+                  );
                 else navigate(`busRoute/${routeName}`);
               }}
             >
