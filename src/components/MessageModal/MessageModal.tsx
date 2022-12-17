@@ -8,7 +8,7 @@ type DimBackgroundProps<T extends React.ElementType> = Component<T>;
 type ModalContainerProps<T extends React.ElementType> = Component<T>;
 type ButtonContainerProps<T extends React.ElementType> = Component<T>;
 
-export function Modal({
+export function MessageModal({
   children,
   className,
   ...restProps
@@ -76,12 +76,12 @@ function ButtonContainer({
 
 function Button({ children, className, ...restProps }: ButtonProps<'button'>) {
   return (
-    <Modal.TextButton
+    <MessageModal.TextButton
       className="h-full w-full rounded-none bg-Primary-300"
       {...restProps}
     >
       {children}
-    </Modal.TextButton>
+    </MessageModal.TextButton>
   );
 }
 
@@ -103,9 +103,9 @@ function DimBackground({
   );
 }
 
-Modal.ModalContainer = ModalContainer;
-Modal.DimBackground = DimBackground;
-Modal.Content = Content;
-Modal.ButtonContainer = ButtonContainer;
-Modal.TextButton = TextButton;
-Modal.Button = Button;
+MessageModal.ModalContainer = ModalContainer;
+MessageModal.DimBackground = DimBackground;
+MessageModal.Content = Content;
+MessageModal.ButtonContainer = ButtonContainer;
+MessageModal.TextButton = TextButton;
+MessageModal.Button = Button;

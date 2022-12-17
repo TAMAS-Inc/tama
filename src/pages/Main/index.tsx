@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
-import { useRecoilValue } from 'recoil';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 
 import { AD, BusCard, Notification, SyncButton } from '@/components';
+import { currentCommuteState } from '@/state/atom';
 import { getCurrentDate } from '@/utils/date';
 import NotFound from '../404';
 import { MainHeader } from './components';
@@ -11,17 +12,16 @@ import {
   RealtimeReqParams,
   useRealtime,
 } from './hooks/useRealtime';
-import { currentCommuteState, isUserValidState } from '@/state/atom';
+
+const INTERVAL_TIME = 500000000;
 
 export default function Main() {
   const navigate = useNavigate();
   const currentCommute = useRecoilValue(currentCommuteState);
-  const isUserValid = useRecoilValue(isUserValidState);
-  const stationId = '228000191';
 
   const testParams: RealtimeReqParams = {
-    stationId: currentCommute.station.stationId,
-    routeIds: currentCommute.routes.flatMap((r) => r.routeId),
+    stationId: commute.station?.stationId as string,
+    routeIds: commute.routes.flatMap((r) => r.routeId),
     predictDate: getCurrentDate(),
   };
 
@@ -29,16 +29,12 @@ export default function Main() {
 
   useEffect(() => {
     const refreshDataInterval = setInterval(() => {
-      mutation.mutate({ ...testParams, predictDate: getCurrentDate() });
-    }, 15000);
+      // mutation.mutate({ ...testParams, predictDate: getCurrentDate() });
+    }, INTERVAL_TIME);
 
     return () => clearInterval(refreshDataInterval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    if (!isUserValid) navigate('/landing');
-  }, [isUserValid, navigate]);
 
   const handleSyncButtonClick = () => {
     mutation.mutate({ ...testParams, predictDate: getCurrentDate() });
@@ -68,7 +64,7 @@ export default function Main() {
               onClick={(e) => {
                 if ((e.target as HTMLElement).closest('svg'))
                   navigate(
-                    `analysis/routeId=${routeId}&stationId=${stationId}`
+                    `analysis/routeId=${routeId}&stationId=${currentCommute.station?.stationId}`
                   );
                 else navigate(`busRoute/${routeName}`);
               }}

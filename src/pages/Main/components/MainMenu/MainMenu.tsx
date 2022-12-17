@@ -22,7 +22,6 @@ export function MainMenu({
     이용약관: 'terms',
     '오픈소스 이용': 'opensource',
   };
-
   return (
     <BaseModal className={tw('', className)} {...restProps}>
       <BaseModal.Content className="right-0 h-full w-[300px] bg-White">

@@ -1,22 +1,22 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import Commute from './index';
+import { ConfirmModal } from './ConfirmModal';
 
 const meta = {
-  component: Commute,
-  title: 'Page/Commute',
+  component: ConfirmModal,
+  title: 'Components/ConfirmModal',
   parameters: {
     design: {
       type: 'figma',
       url: 'figmaURL',
     },
   },
-} as ComponentMeta<typeof Commute>;
+} as ComponentMeta<typeof ConfirmModal>;
 
 export default meta;
 
-const Template: ComponentStory<typeof Commute> = (args) => (
-  <Commute {...args} />
+const Template: ComponentStory<typeof ConfirmModal> = (args) => (
+  <ConfirmModal {...args} />
 );
 
 export const Default = Template.bind({});

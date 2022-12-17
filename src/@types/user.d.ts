@@ -1,11 +1,11 @@
 interface User {
   userId: string | null;
   commutes: Commute[];
-  agreement: UserAgreement;
+  agreement: Agreement;
   currentComId: Commute['comId'];
 }
 
-interface UserAgreement {
+interface Agreement {
   allowLocation: boolean;
   allowMarketing: boolean;
 }
@@ -23,7 +23,7 @@ interface Station {
 interface Commute {
   comId: string;
   comName: string;
-  station: Station;
+  station: Station | null;
   routes: Route[];
 }
 
@@ -32,5 +32,5 @@ interface Inquiry {
   email: string;
   title: string;
   content: string;
-  agreement: string
+  agreement: string;
 }
