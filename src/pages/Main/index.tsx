@@ -20,8 +20,8 @@ export default function Main() {
   const currentCommute = useRecoilValue(currentCommuteState);
 
   const testParams: RealtimeReqParams = {
-    stationId: commute.station?.stationId as string,
-    routeIds: commute.routes.flatMap((r) => r.routeId),
+    stationId: currentCommute.station?.stationId as string,
+    routeIds: currentCommute.routes.flatMap((r) => r.routeId),
     predictDate: getCurrentDate(),
   };
 
@@ -64,7 +64,7 @@ export default function Main() {
               onClick={(e) => {
                 if ((e.target as HTMLElement).closest('svg'))
                   navigate(
-                    `analysis/routeId=${routeId}&stationId=${currentCommute.station?.stationId}`
+                    `analysis?routeId=${routeId}&stationId=${currentCommute.station?.stationId}`
                   );
                 else navigate(`busRoute/${routeName}`);
               }}

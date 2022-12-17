@@ -1,7 +1,9 @@
-import { useRef, useState } from 'react';
+import { useState, ChangeEventHandler } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { hangulIncludes, chosungIncludes } from '@toss/hangul';
 import { CheckCircleIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
+import Highlighter from 'react-highlight-words';
 import {
   BaseModal,
   Header,
@@ -11,9 +13,11 @@ import {
 } from '@/components';
 import { tw } from '@/utils/tailwindMerge';
 import { useCommutes } from '@/hooks/useCommutes';
+import { useAvailableStations } from '../hooks/useAvailableStations';
+import { useAvailableRoutes } from '../hooks/useAvailableRoutes';
+import NotFound from '@/pages/404';
 
 type SearchBusStopProps<T extends React.ElementType> = Component<T>;
-type SelectedStation = Station;
 
 export const dummyRoutes: Route[] = [
   {
@@ -26,37 +30,51 @@ export const dummyRoutes: Route[] = [
   },
 ];
 
-const stations = [
-  {
-    stationId: '228000682',
-    stationName: '기흥역',
-  },
-];
+// const stations = [
+//   {
+//     stationId: '228000682',
+//     stationName: '기흥역',
+//   },
+// ];
 
 export default function SearchBusStop({
   className,
   ...restProps
 }: SearchBusStopProps<'div'>) {
   const navigate = useNavigate();
-  const { id: comId } = useParams();
+  const { id: comId } = useParams() as { id: Commute['comId'] };
   const { commutes, editCommute } = useCommutes();
 
   const commute = commutes.find((c) => c.comId === comId) as Commute;
 
-  const [showTip, setShowTip] = useState<boolean>(true);
-  const [selectedStation, setSelectedStation] = useState<Station>(
-    commute.station as Station
+  const [inputValue, setInputValue] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [selectedStation, setSelectedStation] = useState<Station | null>(null);
+
+  const {
+    isLoading: isStationsLoading,
+    isError: isStationsError,
+    data: stations,
+  } = useAvailableStations();
+
+  const {
+    isLoading: isRouteLoading,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    isError: isRouteError,
+    data: routes,
+  } = useAvailableRoutes({ stationId: selectedStation?.stationId ?? null });
+
+  const filteredStations = stations?.filter(
+    (station) =>
+      hangulIncludes(station.stationName, inputValue) ||
+      chosungIncludes(station.stationName, inputValue)
   );
-  const [isModalOpen, setIsModalOpen] = useState<boolean | null>(null);
-
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  if (!comId) return null;
 
   const handleCloseClick = () => setIsModalOpen(false);
-  const handleResetClick = () => setShowTip(true);
-
-  const handleStationClick = (station: SelectedStation) => {
+  const handleResetClick = () => {
+    setInputValue('');
+  };
+  const handleStationClick = (station: Station) => {
     setSelectedStation(station);
     editCommute(comId, {
       ...commute,
@@ -65,25 +83,26 @@ export default function SearchBusStop({
     });
     setIsModalOpen(true);
   };
-
-  const handleChange = () => setShowTip(inputRef.current?.value === '');
-
-  const handleRouteCheckChange = (route: Route, checked: boolean) => {
-    if (checked) {
-      editCommute(comId, {
-        ...commute,
-        routes: [...commute.routes, route],
-      });
-    } else {
-      editCommute(comId, {
-        ...commute,
-        routes: commute.routes.filter((r) => r.routeId !== route.routeId),
-      });
-    }
+  const handleInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    setInputValue(e.target.value);
   };
+  const handleRouteCheckChange = (route: Route, checked: boolean) =>
+    checked
+      ? editCommute(comId, {
+          ...commute,
+          routes: [...commute.routes, route],
+        })
+      : editCommute(comId, {
+          ...commute,
+          routes: commute.routes.filter((r) => r.routeId !== route.routeId),
+        });
+
   const handleRoutesConfirmClick = () => {
     navigate(-1);
   };
+
+  if (!comId) return null;
+  if (isStationsError) return <NotFound />;
 
   return (
     <div className={tw('mt-4 w-full', className)} {...restProps}>
@@ -93,8 +112,7 @@ export default function SearchBusStop({
           <InputContainer className="relative w-full pl-3 ">
             <InputContainer.Label>
               <InputContainer.Label.Input
-                ref={inputRef}
-                onChange={handleChange}
+                onChange={handleInputChange}
                 className="bg-Gray-100"
                 placeholder="정류장 검색"
               />
@@ -107,20 +125,27 @@ export default function SearchBusStop({
         </Header.Title>
       </Header>
 
-      {showTip ? (
-        <div className="mt-4 pl-4">정류장 리스트</div>
+      {filteredStations?.length === 0 ? (
+        <div className="pt-4 text-center text-body1">
+          해당 이름을 가진 정류장이 없어요 😭
+        </div>
       ) : (
-        <List className="mt-4 pl-4">
-          {stations.map((station) => (
-            <List.Item
-              key={station.stationId}
-              onClick={() => handleStationClick(station)}
-              className="pl-2"
-            >
-              <List.Title>{station.stationName}</List.Title>
-              {/* <List.Subtitle>{subtitle} | 종점방면</List.Subtitle> */}
-            </List.Item>
-          ))}
+        <List className="pl-4">
+          {isStationsLoading ||
+            filteredStations?.map((station) => (
+              <List.Item
+                key={station.stationId}
+                onClick={() => handleStationClick(station)}
+                className="pl-2"
+              >
+                <List.Title>
+                  <Highlighter
+                    searchWords={[inputValue]}
+                    textToHighlight={station.stationName}
+                  />
+                </List.Title>
+              </List.Item>
+            ))}
         </List>
       )}
       {isModalOpen && (
@@ -128,50 +153,46 @@ export default function SearchBusStop({
           <BaseModal.Content className="top-56 h-full w-full rounded-t-2xl bg-White">
             <List className="rounded-t-2xl">
               <List.Item
-                onClick={(e) => {
-                  if (!(e.target as HTMLElement).closest('svg')) return;
-                  handleCloseClick();
-                }}
+                onClick={handleCloseClick}
                 className="rounded-t-2xl pl-6"
               >
-                <List.Title>{selectedStation.stationName}</List.Title>
+                <List.Title>{selectedStation?.stationName}</List.Title>
                 <List.Icon icon={ChevronDownIcon} />
               </List.Item>
 
-              {dummyRoutes.map(({ routeName, routeId }) => (
-                <List.Item key={routeId} className="relative pl-4">
-                  <List.Title className="pl-2 text-body1 text-Primary-700">
-                    {routeName}
-                  </List.Title>
-                  <InputContainer className="absolute top-6 right-6 h-6 w-6">
-                    <InputContainer.Label>
-                      <List.Icon
-                        className={tw(
-                          'absolute top-0 right-0 h-7 w-7',
-                          !commute.routes.find((r) => r.routeId === routeId)
-                            ? 'bg-White fill-White stroke-Gray-300'
-                            : 'bg-White fill-Primary-700'
-                        )}
-                        icon={
-                          !commute.routes.find((r) => r.routeId === routeId)
-                            ? PlusCircleIcon
-                            : CheckCircleIcon
-                        }
-                      />
-                      <InputContainer.Label.Input
-                        onChange={(e) => {
-                          handleRouteCheckChange(
-                            { routeName, routeId },
-                            e.target.checked
-                          );
-                        }}
-                        type="checkbox"
-                        className="bg-Gray-500"
-                      />
-                    </InputContainer.Label>
-                  </InputContainer>
-                </List.Item>
-              ))}
+              {!isRouteLoading &&
+                routes?.map(({ routeName, routeId }) => (
+                  <List.Item key={routeId} className="relative pl-4">
+                    <InputContainer className="h-full pl-2 text-body1 text-Primary-700">
+                      <InputContainer.Label>
+                        {routeName}
+                        <InputContainer.Label.Input
+                          onChange={(e) => {
+                            handleRouteCheckChange(
+                              { routeName, routeId },
+                              e.target.checked
+                            );
+                          }}
+                          type="checkbox"
+                          className="hidden"
+                        />
+                        <List.Icon
+                          className={tw(
+                            'absolute top-6 right-4 h-7 w-7',
+                            !commute.routes.find((r) => r.routeId === routeId)
+                              ? 'bg-White fill-White stroke-Gray-300'
+                              : 'bg-White fill-Primary-700'
+                          )}
+                          icon={
+                            !commute.routes.find((r) => r.routeId === routeId)
+                              ? PlusCircleIcon
+                              : CheckCircleIcon
+                          }
+                        />
+                      </InputContainer.Label>
+                    </InputContainer>
+                  </List.Item>
+                ))}
             </List>
             <StatusButton
               onClick={handleRoutesConfirmClick}
