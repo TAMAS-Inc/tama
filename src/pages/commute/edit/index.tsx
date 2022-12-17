@@ -5,6 +5,7 @@ import { tw } from '@/utils/tailwindMerge';
 import { BusCard, NavigationHeader, TextButton } from '@/components';
 import { commutesState, currentComIdState } from '@/state/atom';
 import { ConfirmDeleteModal } from '../components';
+import { useCommutes } from '@/hooks/useCommutes';
 
 type EditProps<T extends React.ElementType> = Component<T>;
 
@@ -17,8 +18,16 @@ export default function Edit({
   const commute = useRecoilValue(commutesState);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<Commute['comId']>('');
+  const { deleteCommute } = useCommutes();
 
-  const handleCloseModal = () => setIsConfirmModalOpen(false);
+  const handleDeleteClick = () => {
+    deleteCommute(deleteId);
+    setIsConfirmModalOpen(false);
+  };
+
+  const handleCancelClick = () => {
+    setIsConfirmModalOpen(false);
+  };
 
   return (
     <div className={tw('', className)} {...restProps}>
@@ -34,7 +43,7 @@ export default function Edit({
         >
           <div>
             <BusCard.Info className="static left-0 flex translate-x-0 flex-row">
-              <BusCard.Content className="w-28 text-body1">
+              <BusCard.Content className="w-28 text-body1 line-clamp-1">
                 {comName}
               </BusCard.Content>
               <BusCard.StationName className="mb-0 flex items-center justify-center">
@@ -71,7 +80,10 @@ export default function Edit({
         </BusCard>
       ))}
       {isConfirmModalOpen && (
-        <ConfirmDeleteModal onClose={handleCloseModal} deleteId={deleteId} />
+        <ConfirmDeleteModal
+          onCancelClick={handleCancelClick}
+          onDeleteClick={handleDeleteClick}
+        />
       )}
     </div>
   );

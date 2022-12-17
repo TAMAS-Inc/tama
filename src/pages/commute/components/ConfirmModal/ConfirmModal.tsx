@@ -1,30 +1,18 @@
 import { MessageModal } from '@/components';
-import { useCommutes } from '@/hooks/useCommutes';
 import { tw } from '@/utils/tailwindMerge';
 
 type ConfirmModalProps<T extends React.ElementType> = {
-  onClose: () => void;
-  deleteId: Commute['comId'];
+  onDeleteClick: () => void;
+  onCancelClick: () => void;
 } & Component<T>;
 
 export function ConfirmModal({
   children,
   className,
-  onClose: handleClose,
-  deleteId,
+  onDeleteClick: handleDeleteClick,
+  onCancelClick: handleCancelClick,
   ...restProps
 }: ConfirmModalProps<'div'>) {
-  const { deleteCommute } = useCommutes();
-
-  const handleDeleteClick = () => {
-    deleteCommute(deleteId);
-    handleClose();
-  };
-
-  const handleCancelClick = () => {
-    handleClose();
-  };
-
   return (
     <MessageModal className={tw('', className)} {...restProps}>
       <MessageModal.ModalContainer>
