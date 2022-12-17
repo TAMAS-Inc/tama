@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { tw } from '@/utils/tailwindMerge';
 import { NavigationHeader } from '@/components';
+import { useNotice } from '@/pages/Main/hooks/useNotice';
 
 type NoticeProps<T extends React.ElementType> = Component<T>;
 
@@ -9,16 +10,14 @@ export default function Notice({
   ...restProps
 }: NoticeProps<'div'>) {
   const { id } = useParams();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { isError, isLoading, data } = useNotice();
 
+  const notice = data?.find((d) => d.noticeId === id);
   return (
     <div className={tw('', className)} {...restProps}>
-      <NavigationHeader>{id}번 공지사항</NavigationHeader>
-      <div className="mt-8 mr-4 ml-4">
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Explicabo
-        beatae nemo, quae ipsa, tempora ipsum adipisci eligendi perspiciatis
-        accusantium repellendus quibusdam magni perferendis sequi suscipit
-        soluta illo autem sed in.
-      </div>
+      <NavigationHeader>{notice?.title}</NavigationHeader>
+      <div className="mt-8 mr-4 ml-4">{notice?.content}</div>
     </div>
   );
 }
