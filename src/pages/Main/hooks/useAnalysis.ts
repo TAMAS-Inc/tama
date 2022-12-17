@@ -47,6 +47,7 @@ const fetchAnalysis: FetchAnalysis = async ({
 
     const TEST_URL =
       'https://raw.githubusercontent.com/TAMAS-Inc/MockAPI/main/analysis/228000191.routeId=228000176.json';
+    // eslint-disable-next-line no-constant-condition
     const res = await fetch(true ? TEST_URL : REAL_URL);
 
     return res.json() as unknown as AnalysisInfo[];

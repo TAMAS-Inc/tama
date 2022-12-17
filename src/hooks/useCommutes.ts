@@ -5,6 +5,7 @@ import { commutesState } from '@/state/atom';
 export const useCommutes = () => {
   const [commutes, setCommutes] = useRecoilState(commutesState);
   type CreateNewCommute = () => Commute['comId'];
+  type DeleteCommute = (comId: Commute['comId']) => Commute[];
   type EditCommute = (comId: Commute['comId'], newValue: Commute) => void;
 
   const createNewCommute: CreateNewCommute = () => {
@@ -21,6 +22,11 @@ export const useCommutes = () => {
     return comId;
   };
 
+  const deleteCommute: DeleteCommute = (comId) => {
+    setCommutes((prev) => prev.filter((p) => p.comId !== comId));
+    return commutes;
+  };
+
   const editCommute: EditCommute = (comId, newValue) => {
     setCommutes((prev) =>
       prev.map((p) => {
@@ -30,5 +36,5 @@ export const useCommutes = () => {
     );
   };
 
-  return { commutes, createNewCommute, editCommute };
+  return { commutes, createNewCommute, deleteCommute, editCommute };
 };
