@@ -20,8 +20,8 @@ export default function Main() {
   const currentCommute = useRecoilValue(currentCommuteState);
 
   const testParams: RealtimeReqParams = {
-    stationId: commute.station?.stationId as string,
-    routeIds: commute.routes.flatMap((r) => r.routeId),
+    stationId: currentCommute.station?.stationId as string,
+    routeIds: currentCommute.routes.flatMap((r) => r.routeId),
     predictDate: getCurrentDate(),
   };
 
