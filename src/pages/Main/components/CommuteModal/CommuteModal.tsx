@@ -1,8 +1,9 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { BaseModal, BusCard } from '@/components';
 import { currentComIdState, userState } from '@/state/atom';
 import { tw } from '@/utils/tailwindMerge';
+import { useCommutes } from '@/hooks/useCommutes';
 
 type CommuteModalProps<T extends React.ElementType> = {
   onDimBgClick: React.MouseEventHandler<HTMLDivElement>;
@@ -16,10 +17,20 @@ export function CommuteModal({
   handleCurrent,
   ...restProps
 }: CommuteModalProps<'div'>) {
+  const navigate = useNavigate();
+
   const user = useRecoilValue(userState);
+  const { createNewCommute } = useCommutes();
+
   const [currentComId, setCurrentComId] = useRecoilState(currentComIdState);
+
   const handleBusCardClick = (id: Commute['comId']) => {
     setCurrentComId(id);
+  };
+
+  const addCommute = () => {
+    const newComId = createNewCommute();
+    navigate(`/commute/edit/${newComId}`);
   };
 
   return (
@@ -29,7 +40,9 @@ export function CommuteModal({
           <div className="text-body1 font-bold">내 정류장 설정</div>
           <ul className="flex gap-2 text-body2">
             <li>
-              <Link to="/commute">추가</Link>
+              <button type="button" onClick={addCommute}>
+                추가
+              </button>
             </li>
             <li>
               <Link to="/commute/edit">편집</Link>
@@ -37,7 +50,7 @@ export function CommuteModal({
           </ul>
         </div>
 
-        {user.commutes.map(({ comId, comName, station, routes }:Commute) => (
+        {user.commutes.map(({ comId, comName, station, routes }: Commute) => (
           <BusCard
             key={comId}
             id={comId}
