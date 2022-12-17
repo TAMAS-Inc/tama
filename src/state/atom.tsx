@@ -38,6 +38,12 @@ export const dummyUser: User = {
   commutes: dummyCommutes,
   agreement: { allowLocation: true, allowMarketing: false },
   currentComId: 'bd8d8bce-40a3-44ed-b830-21e67cce7ebb',
+  editing: {
+    comId: '',
+    comName: '',
+    station: null,
+    routes: [],
+  },
 };
 
 const { persistAtom } = recoilPersist({ key: 'current' });
@@ -49,6 +55,12 @@ export const userState = atom<User>({
     commutes: [],
     agreement: { allowLocation: false, allowMarketing: false },
     currentComId: '',
+    editing: {
+      comId: '',
+      comName: '',
+      station: null,
+      routes: [],
+    },
   },
   effects_UNSTABLE: [persistAtom],
 });
@@ -117,10 +129,41 @@ export const currentCommuteState = selector({
     return current;
   },
 });
+
 export const isUserValidState = selector({
   key: 'isUserValidState',
   get: ({ get }) => {
     const user = get(userState);
     return user.commutes.length !== 0;
+  },
+});
+
+export const isCommuteValidState = selector({
+  key: 'isCommuteValidState',
+  get: ({ get }) => {
+    const user = get(userState);
+    return (
+      user.commutes.filter(
+        (commute) => commute.station && commute.routes.length !== 0
+      ).length !== 0
+    );
+  },
+});
+
+export const editingState = selector({
+  key: 'editingState',
+  get: ({ get }) => {
+    const user = get(userState);
+    return user.editing;
+  },
+  set: ({ set, reset }, newValue) => {
+    if (newValue instanceof DefaultValue) {
+      reset(userState);
+    } else {
+      set(userState, (user) => ({
+        ...user,
+        editing: newValue,
+      }));
+    }
   },
 });
