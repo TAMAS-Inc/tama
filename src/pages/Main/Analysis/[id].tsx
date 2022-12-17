@@ -1,4 +1,5 @@
 import { ComposedChart, Bar, XAxis, YAxis, Legend, LabelList } from 'recharts';
+import { useParams } from 'react-router-dom';
 import { tw } from '@/utils/tailwindMerge';
 import { AD, NavigationHeader, Notification, SyncButton } from '@/components';
 import {
@@ -9,7 +10,6 @@ import {
   useAnalysis,
 } from '../hooks/useAnalysis';
 import { getCurrentDate } from '@/utils/date';
-import { useParams } from 'react-router-dom';
 
 type AnalysisProps<T extends React.ElementType> = Component<T>;
 
