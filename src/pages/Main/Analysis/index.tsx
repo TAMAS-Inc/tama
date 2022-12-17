@@ -1,5 +1,4 @@
 import { ComposedChart, Bar, XAxis, YAxis, Legend, LabelList } from 'recharts';
-import { useParams } from 'react-router-dom';
 import { tw } from '@/utils/tailwindMerge';
 import { AD, NavigationHeader, Notification, SyncButton } from '@/components';
 import {
@@ -10,6 +9,7 @@ import {
   useAnalysis,
 } from '../hooks/useAnalysis';
 import { getCurrentDate } from '@/utils/date';
+import { useQueryString } from '../hooks/useQueryString';
 
 type AnalysisProps<T extends React.ElementType> = Component<T>;
 
@@ -25,10 +25,9 @@ export default function Analysis({
   className,
   ...restProps
 }: AnalysisProps<'div'>) {
-  const { id } = useParams();
-  const params = id!.split('&')!;
-  const routeId = params[0].split('=')[1];
-  const stationId = params[1].split('=')[1];
+  const query = useQueryString();
+  const routeId = query.get('routeId');
+  const stationId = query.get('stationId');
 
   const testParams: AnalysisReqParams = {
     stationId: stationId as unknown as string,
