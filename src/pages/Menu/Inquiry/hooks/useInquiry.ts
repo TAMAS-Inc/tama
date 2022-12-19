@@ -12,12 +12,12 @@ export const postInquiry = async (data: Inquiry) => {
     const res = await fetch(URL, {
       method: 'POST',
       headers: {
-        'content-type': 'application/json;charset=UTF-8',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
     });
-    return res.json() as unknown;
-  } catch {
+    return res.json() as unknown as Inquiry;
+  } catch (e) {
     throw new Error('⛔️ 문의사항 전송에 실패하였습니다!');
   }
 };
