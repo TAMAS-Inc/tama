@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { v4 as uuid } from 'uuid';
 import { tw } from '@/utils/tailwindMerge';
 import {
   InputContainer,
@@ -10,6 +9,7 @@ import {
   StatusButton,
   MessageModal,
 } from '@/components';
+import { postInquiry } from './hooks/useInquiry';
 
 type InquiryProps<T extends React.ElementType> = Component<T>;
 
@@ -19,6 +19,7 @@ export default function Inquiry({
 }: InquiryProps<'div'>) {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [readMore, setReadMore] = useState(false);
 
   const {
@@ -30,16 +31,22 @@ export default function Inquiry({
     mode: 'onBlur',
   });
 
-  const onSubmit: SubmitHandler<Inquiry> = (data) => {
-    // eslint-disable-next-line no-console
-    console.log('이메일 전송', { ...data, inquiryId: uuid() });
+  const onSubmit: SubmitHandler<Inquiry> = async (data) => {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const req = await postInquiry(data);
+      setIsModalOpen(true);
+    } catch {
+      setIsError(true);
+      setIsModalOpen(true);
+    }
   };
-  const handleStatusButtonClick = () => {
-    setIsModalOpen(true);
-  };
+
   const handleModalClick = () => {
     setIsModalOpen(false);
-    navigate(-1);
+    if (!isError) {
+      navigate(-1);
+    }
   };
 
   const handleClick = () => {
@@ -203,7 +210,6 @@ export default function Inquiry({
         )}
         <StatusButton
           type="submit"
-          onClick={handleStatusButtonClick}
           className="font-bold"
           disabled={!formState.isValid}
         >
@@ -214,8 +220,14 @@ export default function Inquiry({
         <MessageModal>
           <MessageModal.ModalContainer>
             <MessageModal.Content className="flex flex-col">
-              <p>정상적으로 처리되었습니다.</p>
-              <p>감사합니다.</p>
+              {isError ? (
+                <p>🥲 문의하기에 실패하였습니다!</p>
+              ) : (
+                <>
+                  <p>정상적으로 처리되었습니다.</p>
+                  <p>감사합니다.</p>
+                </>
+              )}
             </MessageModal.Content>
             <MessageModal.ButtonContainer>
               <MessageModal.Button onClick={handleModalClick}>
