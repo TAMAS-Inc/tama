@@ -2,50 +2,6 @@ import { atom, DefaultValue, selector } from 'recoil';
 import { recoilPersist } from 'recoil-persist';
 import { v4 as uuid } from 'uuid';
 
-const dummyRoutes: Route[] = [
-  {
-    routeId: '228000176',
-    routeName: '5001',
-  },
-  {
-    routeId: '228000389',
-    routeName: '5003A',
-  },
-];
-
-const dummyStation: Station = {
-  stationId: '228000682',
-  stationName: '기흥역',
-};
-
-const dummyCommutes: Commute[] = [
-  {
-    comId: 'bd8d8bce-40a3-44ed-b830-21e67cce7ebb',
-    comName: '우리 집',
-    station: dummyStation,
-    routes: dummyRoutes,
-  },
-  {
-    comId: 'db7d8bce-40a3-44ed-b830-21e67eec7ebb',
-    comName: '다른 집',
-    station: dummyStation,
-    routes: dummyRoutes,
-  },
-];
-
-export const dummyUser: User = {
-  userId: 'bd8d8bce-40a3-44ed-b830-21e67cce7ebb',
-  commutes: dummyCommutes,
-  agreement: { allowLocation: true, allowMarketing: false },
-  currentComId: 'bd8d8bce-40a3-44ed-b830-21e67cce7ebb',
-  editing: {
-    comId: '',
-    comName: '',
-    station: null,
-    routes: [],
-  },
-};
-
 const { persistAtom } = recoilPersist({ key: 'current' });
 
 export const userState = atom<User>({

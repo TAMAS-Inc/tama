@@ -16,7 +16,6 @@ import { useCommutes } from '@/hooks/useCommutes';
 import { currentComIdState } from '@/state/atom';
 import { tw } from '@/utils/tailwindMerge';
 
-// import { dummyRoutes } from '../searchStation/[id]';
 import { useAvailableRoutes } from '../hooks/useAvailableRoutes';
 import NotFound from '@/pages/404';
 
