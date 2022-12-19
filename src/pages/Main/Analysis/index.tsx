@@ -1,5 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import { Bar, XAxis, YAxis, Legend, LabelList, BarChart, Cell } from 'recharts';
+import { Link } from 'react-router-dom';
 import { tw } from '@/utils/tailwindMerge';
 import { AD, NavigationHeader, Notification, SyncButton } from '@/components';
 import {
@@ -68,15 +69,11 @@ export default function Analysis({
       },
       ...chartData.map((station) => ({
         ...station,
-        predictRemainSeatCnt:
-          station.predictRemainSeatCnt < 0 ? 0 : station.predictRemainSeatCnt,
         label: `${station.remainStationCnt}번째 전`,
       })),
       {
         ...{
           ...target,
-          predictRemainSeatCnt:
-            target.predictRemainSeatCnt < 0 ? 0 : target.predictRemainSeatCnt,
         },
         label: target.stationName,
       },
@@ -91,37 +88,40 @@ export default function Analysis({
     <div className={tw('', className)} {...restProps}>
       <NavigationHeader>실시간 분석</NavigationHeader>
       <Notification />
-      <div className="flex flex-col gap-4 pt-8 pl-7 pr-7 text-body1 font-bold">
-        <p>
-          <strong className="font-bold text-Primary-600">
-            {isLoading || mutation.isLoading ? '    ' : data.target.stationName}
-          </strong>
-          에서
-          <br />
-          <strong className="font-bold text-Primary-600">
-            {isLoading || mutation.isLoading ? '    ' : data.routeName}번
-          </strong>
-          버스의 예상 잔여 좌석은
-          <br />
-          {isLoading || mutation.isLoading ? (
-            '  '
-          ) : data.target.predictRemainSeatCnt < 0 ? (
-            '현재 알 수 없어요!'
+      {!isLoading && !mutation.isLoading ? (
+        <div className="flex flex-col gap-4 pt-8 pl-7 pr-7 text-body1 font-bold">
+          <p>
+            <strong className="font-bold text-Primary-600">
+              {data.target.stationName}
+            </strong>
+            에서
+            <br />
+            <strong className="font-bold text-Primary-600">
+              {isLoading || mutation.isLoading ? <> </> : data.routeName}번
+            </strong>
+            버스의 예상 잔여 좌석은
+            <br />
+            {data.target.predictRemainSeatCnt < 0 ? (
+              '현재 알 수 없어요!'
+            ) : (
+              <>
+                <strong className="font-bold text-Primary-600">
+                  {data.target.predictRemainSeatCnt}석
+                </strong>
+                일 것 같아요!
+              </>
+            )}
+          </p>
+          {data.exist ? (
+            <Analysis.Chart data={getChartData(data)} />
           ) : (
-            <>
-              <strong className="font-bold text-Primary-600">
-                {data.target.predictRemainSeatCnt}석
-              </strong>
-              일 것 같아요!
-            </>
+            <Link to="/main">메인으로 돌아가기</Link>
           )}
-        </p>
-        {isLoading || mutation.isLoading ? (
-          <>LoadingSpinner</>
-        ) : (
-          <Analysis.Chart data={getChartData(data)} />
-        )}
-      </div>
+        </div>
+      ) : (
+        <>로딩중</>
+      )}
+
       <SyncButton onClick={handleSyncButtonClick} />
       <AD />
     </div>
@@ -145,16 +145,24 @@ function Chart({ data }: { data: (CurrentInfo | PredictInfo)[] }) {
         fontSize={5}
         fill="#ffb707"
         className="fill-none"
-      />
+      >
+        {data.map((entry) => (
+          <Cell key={`${entry}`} className="fill-none" />
+        ))}
+      </Bar>
       <Bar
         name="예측 좌석"
         type="monotone"
         barSize={20}
         dataKey="predictRemainSeatCnt"
         fill="#bababa"
+        className="fill-Gray-300"
       >
         {data.map((entry, index) => (
-          <Cell key={`${entry}`} fill={index === 0 ? '#ffb70f' : '#bababa'} />
+          <Cell
+            key={`${entry}`}
+            className={index === 0 ? 'fill-Primary-500' : 'fill-Gray-300'}
+          />
         ))}
         <LabelList
           fontSize="14px"

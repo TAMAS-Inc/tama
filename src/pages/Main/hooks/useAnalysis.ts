@@ -20,6 +20,8 @@ export interface CurrentInfo extends BaseInfo {
 }
 
 export interface AnalysisInfo {
+  /** 현재 도착 정보 여부 */
+  exist: boolean;
   /** 현재 노선 이름 */
   routeName: string;
   /** 현재 버스가 위치한 정류장 정보 */
