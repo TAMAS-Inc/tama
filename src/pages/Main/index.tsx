@@ -1,8 +1,14 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
-import { AD, BusCard, Notification, SyncButton } from '@/components';
+import {
+  AD,
+  BusCard,
+  LoadingWithDelay,
+  Notification,
+  SyncButton,
+} from '@/components';
 import { currentCommuteState } from '@/state/atom';
 import { getCurrentDate } from '@/utils/date';
 import NotFound from '../404';
@@ -13,10 +19,9 @@ import {
   useRealtime,
 } from './hooks/useRealtime';
 
-const INTERVAL_TIME = 500000000;
-
 export default function Main() {
   const navigate = useNavigate();
+  const [fetchTime, setFetchTime] = useState(15);
   const currentCommute = useRecoilValue(currentCommuteState);
 
   const testParams: RealtimeReqParams = {
@@ -25,20 +30,31 @@ export default function Main() {
     predictDate: getCurrentDate(),
   };
 
-  const { isError, isLoading, data, mutation } = useRealtime(testParams);
-
-  useEffect(() => {
-    const refreshDataInterval = setInterval(() => {
-      // mutation.mutate({ ...testParams, predictDate: getCurrentDate() });
-    }, INTERVAL_TIME);
-
-    return () => clearInterval(refreshDataInterval);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const {
+    isError,
+    isLoading,
+    data: Routes,
+    mutation,
+  } = useRealtime(testParams);
 
   const handleSyncButtonClick = () => {
     mutation.mutate({ ...testParams, predictDate: getCurrentDate() });
+    setFetchTime(15);
   };
+
+  useEffect(() => {
+    const timeId = setInterval(() => {
+      setFetchTime((time) => time - 1);
+    }, 1000);
+    return () => {
+      if (fetchTime === 0) {
+        setFetchTime(15);
+        mutation.mutate({ ...testParams, predictDate: getCurrentDate() });
+      }
+      clearInterval(timeId);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetchTime]);
 
   if (isError) return <NotFound />;
 
@@ -46,10 +62,10 @@ export default function Main() {
     <>
       <MainHeader />
       <Notification />
-      {isLoading || mutation.isLoading ? (
-        <span>Loading...</span>
+      {isLoading ? (
+        <LoadingWithDelay />
       ) : (
-        data?.map(
+        Routes?.map(
           ({
             exist,
             routeId,
@@ -90,7 +106,7 @@ export default function Main() {
           )
         )
       )}
-      <SyncButton onClick={handleSyncButtonClick} />
+      <SyncButton fetchTime={fetchTime} onClick={handleSyncButtonClick} />
       <AD />
     </>
   );

@@ -3,11 +3,11 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import { CheckCircleIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
-
 import {
   BaseModal,
   InputContainer,
   List,
+  LoadingWithDelay,
   NavigationHeader,
   StatusButton,
   TextButton,
@@ -15,7 +15,6 @@ import {
 import { useCommutes } from '@/hooks/useCommutes';
 import { currentComIdState } from '@/state/atom';
 import { tw } from '@/utils/tailwindMerge';
-
 import { useAvailableRoutes } from '../hooks/useAvailableRoutes';
 import NotFound from '@/pages/404';
 
@@ -144,7 +143,7 @@ export default function Commute({
               </List.Item>
 
               {isLoading ? (
-                <>로딩중 </>
+                <LoadingWithDelay />
               ) : (
                 routes?.map(({ routeName, routeId }) => (
                   <List.Item key={routeId} className="relative pl-4">

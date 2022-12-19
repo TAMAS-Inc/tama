@@ -9,6 +9,7 @@ import {
   Header,
   InputContainer,
   List,
+  LoadingWithDelay,
   StatusButton,
 } from '@/components';
 import { tw } from '@/utils/tailwindMerge';
@@ -112,7 +113,9 @@ export default function SearchBusStop({
         </div>
       ) : (
         <List className="pl-4">
-          {isStationsLoading ||
+          {isStationsLoading ? (
+            <LoadingWithDelay />
+          ) : (
             filteredStations?.map((station) => (
               <List.Item
                 key={station.stationId}
@@ -126,7 +129,8 @@ export default function SearchBusStop({
                   />
                 </List.Title>
               </List.Item>
-            ))}
+            ))
+          )}
         </List>
       )}
       {isModalOpen && (

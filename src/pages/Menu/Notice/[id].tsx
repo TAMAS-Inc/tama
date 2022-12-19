@@ -1,7 +1,8 @@
 import { useParams } from 'react-router-dom';
 import { tw } from '@/utils/tailwindMerge';
-import { NavigationHeader } from '@/components';
+import { LoadingWithDelay, NavigationHeader } from '@/components';
 import { useNotice } from '@/pages/Main/hooks/useNotice';
+import NotFound from '@/pages/404';
 
 type NoticeProps<T extends React.ElementType> = Component<T>;
 
@@ -10,14 +11,21 @@ export default function Notice({
   ...restProps
 }: NoticeProps<'div'>) {
   const { id } = useParams();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { isError, isLoading, data } = useNotice();
+
+  if (isError) <NotFound />;
 
   const notice = data?.find((d) => d.noticeId === id);
   return (
     <div className={tw('', className)} {...restProps}>
-      <NavigationHeader>{notice?.title}</NavigationHeader>
-      <div className="mt-8 mr-4 ml-4">{notice?.content}</div>
+      {isLoading ? (
+        <LoadingWithDelay />
+      ) : (
+        <div>
+          <NavigationHeader>{notice?.title}</NavigationHeader>
+          <div className="mt-8 mr-4 ml-4">{notice?.content}</div>
+        </div>
+      )}
     </div>
   );
 }
