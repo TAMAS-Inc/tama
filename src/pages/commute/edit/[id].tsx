@@ -35,11 +35,13 @@ export default function Commute({
 
   const commute = commutes.find((c) => c.comId === comId) as Commute;
 
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   const {
-    // isLoading,
-    // isError,
+    isLoading,
+    isError,
     data: routes,
   } = useAvailableRoutes({ stationId: commute.station?.stationId ?? null });
+  /* eslint-enable @typescript-eslint/no-unused-vars */
 
   const inputRef = useRef<HTMLInputElement>(null);
 
