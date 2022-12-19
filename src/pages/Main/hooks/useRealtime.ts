@@ -41,7 +41,7 @@ const fetchRealtime: FetchRealtime = async ({
 
     return res.json() as unknown as RealtimeInfo[];
   } catch {
-    return [];
+    throw new Error('Realtime fetch error');
   }
 };
 

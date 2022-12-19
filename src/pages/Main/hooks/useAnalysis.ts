@@ -54,7 +54,7 @@ const fetchAnalysis: FetchAnalysis = async ({
 
     return res.json() as unknown as AnalysisInfo;
   } catch {
-    return {} as AnalysisInfo;
+    throw new Error('Analysis fetch error');
   }
 };
 
