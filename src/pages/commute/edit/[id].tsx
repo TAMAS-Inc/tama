@@ -36,8 +36,10 @@ export default function Commute({
   const commute = commutes.find((c) => c.comId === comId) as Commute;
 
   const {
-    // isLoading,
-    // isError,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    isLoading,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    isError,
     data: routes,
   } = useAvailableRoutes({ stationId: commute.station?.stationId ?? null });
 
