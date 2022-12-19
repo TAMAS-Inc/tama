@@ -5,17 +5,17 @@ import { commutesState, editingState } from '@/state/atom';
 export const useCommutes = () => {
   const [commutes, setCommutes] = useRecoilState(commutesState);
   const [editing, setEditing] = useRecoilState(editingState);
-  type CreateNewCommute = () => Commute['comId'];
+  type CreateNewCommute = (defaultComName: string) => Commute['comId'];
   type AddCommute = (newCommute: Commute) => void;
   type DeleteCommute = (comId: Commute['comId']) => Commute[];
   type EditCommute = (newValue: Commute) => void;
   type ResetEdit = () => void;
 
-  const createNewCommute: CreateNewCommute = () => {
+  const createNewCommute: CreateNewCommute = (defaultComName = '') => {
     const comId = uuid();
     setEditing(() => ({
       comId,
-      comName: '춘식이네',
+      comName: defaultComName,
       station: null,
       routes: [],
     }));
@@ -29,7 +29,7 @@ export const useCommutes = () => {
       station: null,
       routes: [],
     });
-  }
+  };
 
   const addCommute: AddCommute = (newCommute) => {
     setCommutes((prev) => [
