@@ -1,4 +1,5 @@
-import { ComposedChart, Bar, XAxis, YAxis, Legend, LabelList } from 'recharts';
+/* eslint-disable no-nested-ternary */
+import { Bar, XAxis, YAxis, Legend, LabelList, BarChart, Cell } from 'recharts';
 import { tw } from '@/utils/tailwindMerge';
 import { AD, NavigationHeader, Notification, SyncButton } from '@/components';
 import {
@@ -9,7 +10,7 @@ import {
   useAnalysis,
 } from '../hooks/useAnalysis';
 import { getCurrentDate } from '@/utils/date';
-import { useQueryString } from '../hooks/useQueryString';
+import { useQueryString } from '@/hooks/useQueryString';
 
 type AnalysisProps<T extends React.ElementType> = Component<T>;
 
@@ -39,24 +40,46 @@ export default function Analysis({
 
   if (isError) return <>Error</>;
 
-  const getSortedPredicts = (src: PredictInfo[]) =>
-    src.sort((a, b) => b.predictRemainSeatCnt - a.predictRemainSeatCnt);
+  const getSortedData = (predictsInfo: PredictInfo[]) =>
+    predictsInfo.sort((a, b) => b.remainStationCnt - a.remainStationCnt);
 
-  const getChartData = ({ current, predict }: AnalysisInfo): ChartData[] => {
-    const sortedPredict = getSortedPredicts(predict);
+  const getValidData = (
+    currentRamainStationCnt: number,
+    predictsInfo: PredictInfo[]
+  ) =>
+    predictsInfo.filter(
+      (predict) => predict.remainStationCnt < currentRamainStationCnt
+    );
+
+  const getChartData = ({
+    current,
+    nearbys,
+    target,
+  }: AnalysisInfo): ChartData[] => {
+    const chartData = getValidData(
+      current.remainStationCnt,
+      getSortedData(nearbys)
+    );
 
     return [
       {
         ...{ ...current, predictRemainSeatCnt: current.remainSeatCnt },
         label: `${current.remainStationCnt}번째 전`,
       },
-      ...sortedPredict.map((station) => ({
+      ...chartData.map((station) => ({
         ...station,
-        label:
-          station.remainStationCnt === 0
-            ? station.stationName
-            : `${station.remainStationCnt}번째 전`,
+        predictRemainSeatCnt:
+          station.predictRemainSeatCnt < 0 ? 0 : station.predictRemainSeatCnt,
+        label: `${station.remainStationCnt}번째 전`,
       })),
+      {
+        ...{
+          ...target,
+          predictRemainSeatCnt:
+            target.predictRemainSeatCnt < 0 ? 0 : target.predictRemainSeatCnt,
+        },
+        label: target.stationName,
+      },
     ];
   };
 
@@ -68,32 +91,37 @@ export default function Analysis({
     <div className={tw('', className)} {...restProps}>
       <NavigationHeader>실시간 분석</NavigationHeader>
       <Notification />
-      {isLoading || mutation.isLoading ? (
-        <span>Loading...</span>
-      ) : (
-        <div className="flex flex-col gap-4 pt-8 pl-7 pr-7 text-body1 font-bold">
-          <p>
-            <strong className="font-bold text-Primary-600">기흥역</strong>
-            에서
-            <br />
-            <strong className="font-bold text-Primary-600">5001번</strong>{' '}
-            버스의 예상 잔여 좌석은
-            <br />
-            <strong className="font-bold text-Primary-600">
-              {
-                getSortedPredicts((data as unknown as AnalysisInfo).predict).at(
-                  -1
-                )?.predictRemainSeatCnt
-              }
-              석
-            </strong>
-            일 것 같아요!
-          </p>
-          <Analysis.Chart
-            data={getChartData(data as unknown as AnalysisInfo)}
-          />
-        </div>
-      )}
+      <div className="flex flex-col gap-4 pt-8 pl-7 pr-7 text-body1 font-bold">
+        <p>
+          <strong className="font-bold text-Primary-600">
+            {isLoading || mutation.isLoading ? '    ' : data.target.stationName}
+          </strong>
+          에서
+          <br />
+          <strong className="font-bold text-Primary-600">
+            {isLoading || mutation.isLoading ? '    ' : data.routeName}번
+          </strong>
+          버스의 예상 잔여 좌석은
+          <br />
+          {isLoading || mutation.isLoading ? (
+            '  '
+          ) : data.target.predictRemainSeatCnt < 0 ? (
+            '현재 알 수 없어요!'
+          ) : (
+            <>
+              <strong className="font-bold text-Primary-600">
+                {data.target.predictRemainSeatCnt}석
+              </strong>
+              일 것 같아요!
+            </>
+          )}
+        </p>
+        {isLoading || mutation.isLoading ? (
+          <>LoadingSpinner</>
+        ) : (
+          <Analysis.Chart data={getChartData(data)} />
+        )}
+      </div>
       <SyncButton onClick={handleSyncButtonClick} />
       <AD />
     </div>
@@ -102,14 +130,7 @@ export default function Analysis({
 
 function Chart({ data }: { data: (CurrentInfo | PredictInfo)[] }) {
   return (
-    <ComposedChart
-      width={350}
-      height={400}
-      data={data}
-      margin={{
-        left: -30,
-      }}
-    >
+    <BarChart width={350} height={400} data={data}>
       <XAxis dataKey="label" fontSize="14px" />
       <YAxis fontSize="12px" />
       <Legend
@@ -122,26 +143,26 @@ function Chart({ data }: { data: (CurrentInfo | PredictInfo)[] }) {
         dataKey="remainSeatCnt"
         barSize={20}
         fontSize={5}
-        fill="#ffb70f"
-      >
-        <LabelList fontSize="14px" dataKey="remainSeatCnt" position="top" />
-      </Bar>
+        fill="#ffb707"
+        className="fill-none"
+      />
       <Bar
         name="예측 좌석"
         type="monotone"
         barSize={20}
-        fill="#bababa"
         dataKey="predictRemainSeatCnt"
-        className="fill-Gray-300"
+        fill="#bababa"
       >
+        {data.map((entry, index) => (
+          <Cell key={`${entry}`} fill={index === 0 ? '#ffb70f' : '#bababa'} />
+        ))}
         <LabelList
           fontSize="14px"
-          className="fill-Gray-300"
           dataKey="predictRemainSeatCnt"
           position="top"
         />
       </Bar>
-    </ComposedChart>
+    </BarChart>
   );
 }
 
