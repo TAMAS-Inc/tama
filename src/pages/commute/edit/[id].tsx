@@ -1,8 +1,8 @@
 import { ChangeEventHandler, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
-import { ChevronDownIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
-import { CheckCircleIcon } from '@heroicons/react/24/solid';
+import { PlusCircleIcon } from '@heroicons/react/24/outline';
+import { CheckCircleIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
 
 import {
   BaseModal,
@@ -16,7 +16,8 @@ import { useCommutes } from '@/hooks/useCommutes';
 import { currentComIdState } from '@/state/atom';
 import { tw } from '@/utils/tailwindMerge';
 
-import { dummyRoutes } from '../searchStation/[id]';
+// import { dummyRoutes } from '../searchStation/[id]';
+import { useAvailableRoutes } from '../hooks/useAvailableRoutes';
 
 type CommuteProps<T extends React.ElementType> = Component<T>;
 
@@ -33,6 +34,14 @@ export default function Commute({
   const { id: comId } = useParams();
 
   const commute = commutes.find((c) => c.comId === comId) as Commute;
+
+  /* eslint-disable @typescript-eslint/no-unused-vars */
+  const {
+    isLoading,
+    isError,
+    data: routes,
+  } = useAvailableRoutes({ stationId: commute.station?.stationId ?? null });
+  /* eslint-enable @typescript-eslint/no-unused-vars */
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -96,10 +105,7 @@ export default function Commute({
       <div className="mt-8">
         <h2 className="mb-2 text-body2">정류장 이름</h2>
         <Link to={`/commute/searchStation/${comId}`}>
-          <TextButton
-            // ref={buttonStationRef}
-            className="relative h-12 w-full rounded-lg border border-Gray-300 bg-White text-left text-body2 text-Gray-400"
-          >
+          <TextButton className="relative h-12 w-full rounded-lg border border-Gray-300 bg-White text-left text-body2 text-Gray-400">
             {commute.station?.stationName ?? '정류장 선택'}
           </TextButton>
         </Link>
@@ -126,26 +132,34 @@ export default function Commute({
           <BaseModal.Content className="top-56 h-full w-full rounded-t-2xl bg-White">
             <List className="rounded-t-2xl">
               <List.Item
-                onClick={(e) => {
-                  if (!(e.target as HTMLElement).closest('svg')) return;
-                  handleCloseClick();
-                }}
+                onClick={handleCloseClick}
                 className="rounded-t-2xl pl-6"
               >
                 <List.Title>{commute.station?.stationName}</List.Title>
                 <List.Icon icon={ChevronDownIcon} />
               </List.Item>
 
-              {dummyRoutes.map(({ routeName, routeId }) => (
+              {routes?.map(({ routeName, routeId }) => (
                 <List.Item key={routeId} className="relative pl-4">
-                  <List.Title className="pl-2 text-body1 text-Primary-700">
-                    {routeName}
-                  </List.Title>
-                  <InputContainer className="absolute top-6 right-6 h-6 w-6">
+                  <InputContainer className="h-full w-full pl-2 text-body1 text-Primary-700">
                     <InputContainer.Label>
+                      {routeName}
+                      <InputContainer.Label.Input
+                        onChange={() => {
+                          handleRouteCheckChange(
+                            { routeName, routeId },
+                            !commute.routes.find((r) => r.routeId === routeId)
+                          );
+                        }}
+                        type="checkbox"
+                        className="hidden"
+                        checked={
+                          !commute.routes.find((r) => r.routeId === routeId)
+                        }
+                      />
                       <List.Icon
                         className={tw(
-                          'absolute top-0 right-0 h-7 w-7',
+                          'absolute top-6 right-4 h-7 w-7',
                           !commute.routes.find((r) => r.routeId === routeId)
                             ? 'bg-White fill-White stroke-Gray-300'
                             : 'bg-White fill-Primary-700'
@@ -155,17 +169,6 @@ export default function Commute({
                             ? PlusCircleIcon
                             : CheckCircleIcon
                         }
-                      />
-                      <InputContainer.Label.Input
-                        onChange={() => {
-                          handleRouteCheckChange(
-                            { routeName, routeId },
-                            !commute.routes.find(r => r.routeId === routeId )
-                          );
-                        }}
-                        type="checkbox"
-                        className="bg-Gray-500"
-                        checked={!commute.routes.find(r => r.routeId === routeId )}
                       />
                     </InputContainer.Label>
                   </InputContainer>

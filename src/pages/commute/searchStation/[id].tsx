@@ -19,24 +19,6 @@ import NotFound from '@/pages/404';
 
 type SearchBusStopProps<T extends React.ElementType> = Component<T>;
 
-export const dummyRoutes: Route[] = [
-  {
-    routeId: '228000176',
-    routeName: '5001',
-  },
-  {
-    routeId: '228000389',
-    routeName: '5003A',
-  },
-];
-
-// const stations = [
-//   {
-//     stationId: '228000682',
-//     stationName: '기흥역',
-//   },
-// ];
-
 export default function SearchBusStop({
   className,
   ...restProps
@@ -163,7 +145,7 @@ export default function SearchBusStop({
               {!isRouteLoading &&
                 routes?.map(({ routeName, routeId }) => (
                   <List.Item key={routeId} className="relative pl-4">
-                    <InputContainer className="h-full pl-2 text-body1 text-Primary-700">
+                    <InputContainer className="h-full w-full pl-2 text-body1 text-Primary-700">
                       <InputContainer.Label>
                         {routeName}
                         <InputContainer.Label.Input
