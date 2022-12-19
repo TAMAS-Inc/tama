@@ -25,9 +25,7 @@ export default function SearchBusStop({
 }: SearchBusStopProps<'div'>) {
   const navigate = useNavigate();
   const { id: comId } = useParams() as { id: Commute['comId'] };
-  const { commutes, editCommute } = useCommutes();
-
-  const commute = commutes.find((c) => c.comId === comId) as Commute;
+  const { editing, editCommute } = useCommutes();
 
   const [inputValue, setInputValue] = useState('');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -58,8 +56,8 @@ export default function SearchBusStop({
   };
   const handleStationClick = (station: Station) => {
     setSelectedStation(station);
-    editCommute(comId, {
-      ...commute,
+    editCommute({
+      ...editing,
       station,
       routes: [],
     });
@@ -70,13 +68,14 @@ export default function SearchBusStop({
   };
   const handleRouteCheckChange = (route: Route, checked: boolean) =>
     checked
-      ? editCommute(comId, {
-          ...commute,
-          routes: [...commute.routes, route],
+      ? editCommute({
+          ...editing,
+          routes: [...editing.routes, route],
         })
-      : editCommute(comId, {
-          ...commute,
-          routes: commute.routes.filter((r) => r.routeId !== route.routeId),
+      : editCommute({
+          ...editing,
+          routes:
+            editing.routes.filter((r) => r.routeId !== route.routeId) ?? [],
         });
 
   const handleRoutesConfirmClick = () => {
@@ -161,12 +160,12 @@ export default function SearchBusStop({
                         <List.Icon
                           className={tw(
                             'absolute top-6 right-4 h-7 w-7',
-                            !commute.routes.find((r) => r.routeId === routeId)
+                            !editing.routes.find((r) => r.routeId === routeId)
                               ? 'bg-White fill-White stroke-Gray-300'
                               : 'bg-White fill-Primary-700'
                           )}
                           icon={
-                            !commute.routes.find((r) => r.routeId === routeId)
+                            !editing.routes.find((r) => r.routeId === routeId)
                               ? PlusCircleIcon
                               : CheckCircleIcon
                           }
@@ -178,7 +177,7 @@ export default function SearchBusStop({
             </List>
             <StatusButton
               onClick={handleRoutesConfirmClick}
-              disabled={!commute.routes.length}
+              disabled={!editing.routes.length}
               className="fixed left-4 bottom-8 w-[calc(100%-32px)]"
             >
               확인

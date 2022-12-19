@@ -1,6 +1,6 @@
 import { ChangeEventHandler, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import { CheckCircleIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
 
@@ -16,8 +16,8 @@ import { useCommutes } from '@/hooks/useCommutes';
 import { currentComIdState } from '@/state/atom';
 import { tw } from '@/utils/tailwindMerge';
 
-// import { dummyRoutes } from '../searchStation/[id]';
 import { useAvailableRoutes } from '../hooks/useAvailableRoutes';
+import NotFound from '@/pages/404';
 
 type CommuteProps<T extends React.ElementType> = Component<T>;
 
@@ -28,26 +28,29 @@ export default function Commute({
 }: CommuteProps<'div'>) {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const setCurrentComId = useSetRecoilState(currentComIdState);
-  const { commutes, editCommute } = useCommutes();
+  const [currentComId, setCurrentComId] = useRecoilState(currentComIdState);
+
+  const { commutes, editing, editCommute, addCommute } = useCommutes();
 
   const { id: comId } = useParams();
 
-  const commute = commutes.find((c) => c.comId === comId) as Commute;
-
-  /* eslint-disable @typescript-eslint/no-unused-vars */
   const {
     isLoading,
     isError,
     data: routes,
-  } = useAvailableRoutes({ stationId: commute.station?.stationId ?? null });
-  /* eslint-enable @typescript-eslint/no-unused-vars */
+  } = useAvailableRoutes({ stationId: editing.station?.stationId as string });
+
+  if (isError) <NotFound />;
 
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    const commute = commutes.find((c) => c.comId === comId);
+    if (commute && commute.comId !== editing.comId) {
+      editCommute(commute);
+    }
     if (inputRef?.current) {
-      inputRef.current.value = commute.comName;
+      inputRef.current.value = commute?.comName ?? editing.comName;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -58,22 +61,22 @@ export default function Commute({
   const handleCloseClick = () => setIsModalOpen(false);
 
   const handleComNameChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    editCommute(comId, {
-      ...commute,
+    editCommute({
+      ...editing,
       comName: e.target.value,
     });
   };
 
   const handleRouteCheckChange = (route: Route, checked: boolean) => {
     if (checked) {
-      editCommute(comId, {
-        ...commute,
-        routes: [...commute.routes, route],
+      editCommute({
+        ...editing,
+        routes: [...editing.routes, route],
       });
     } else {
-      editCommute(comId, {
-        ...commute,
-        routes: commute.routes.filter((r) => r.routeId !== route.routeId),
+      editCommute({
+        ...editing,
+        routes: editing.routes.filter((r) => r.routeId !== route.routeId) ?? [],
       });
     }
   };
@@ -82,7 +85,8 @@ export default function Commute({
   };
 
   const handleConfirmClick = () => {
-    setCurrentComId(commute.comId);
+    if (!currentComId) setCurrentComId(editing.comId);
+    addCommute(editing);
     navigate('/main');
   };
 
@@ -106,22 +110,22 @@ export default function Commute({
         <h2 className="mb-2 text-body2">정류장 이름</h2>
         <Link to={`/commute/searchStation/${comId}`}>
           <TextButton className="relative h-12 w-full rounded-lg border border-Gray-300 bg-White text-left text-body2 text-Gray-400">
-            {commute.station?.stationName ?? '정류장 선택'}
+            {editing.station?.stationName ?? '정류장 선택'}
           </TextButton>
         </Link>
       </div>
       <div className="mt-8">
         <h2 className="mb-2 text-body2">버스 번호</h2>
         <TextButton
-          disabled={!commute.station}
+          disabled={!editing.station}
           onClick={handleOpenClick}
           className="relative h-12 w-full rounded-lg border border-Gray-300 bg-White text-left text-body2 text-Gray-400"
         >
-          {commute.routes.map((r) => r.routeName).join(', ') ?? '버스 선택'}
+          {editing.routes.map((r) => r.routeName).join(', ') ?? '버스 선택'}
         </TextButton>
       </div>
       <StatusButton
-        disabled={!commute.routes.length}
+        disabled={!editing.routes.length}
         className="fixed bottom-8 w-[calc(100%-32px)]"
         onClick={handleConfirmClick}
       >
@@ -135,49 +139,67 @@ export default function Commute({
                 onClick={handleCloseClick}
                 className="rounded-t-2xl pl-6"
               >
-                <List.Title>{commute.station?.stationName}</List.Title>
+                <List.Title>{editing.station?.stationName}</List.Title>
                 <List.Icon icon={ChevronDownIcon} />
               </List.Item>
 
-              {routes?.map(({ routeName, routeId }) => (
-                <List.Item key={routeId} className="relative pl-4">
-                  <InputContainer className="h-full w-full pl-2 text-body1 text-Primary-700">
-                    <InputContainer.Label>
-                      {routeName}
-                      <InputContainer.Label.Input
-                        onChange={() => {
-                          handleRouteCheckChange(
-                            { routeName, routeId },
-                            !commute.routes.find((r) => r.routeId === routeId)
-                          );
-                        }}
-                        type="checkbox"
-                        className="hidden"
-                        checked={
-                          !commute.routes.find((r) => r.routeId === routeId)
-                        }
-                      />
+              {isLoading ? (
+                <>로딩중 </>
+              ) : (
+                routes?.map(({ routeName, routeId }) => (
+                  <List.Item key={routeId} className="relative pl-4">
+                    <InputContainer className="h-full w-full pl-2 text-body1 text-Primary-700">
+                      <InputContainer.Label>
+                        {routeName}
+                        <InputContainer.Label.Input
+                          onChange={() => {
+                            handleRouteCheckChange(
+                              { routeName, routeId },
+                              !editing.routes.find((e) => e.routeId === routeId)
+                            );
+                          }}
+                          type="checkbox"
+                          className="hidden"
+                          checked={
+                            !editing.routes.find((e) => e.routeId === routeId)
+                          }
+                        />
+
+                        <InputContainer.Label.Input
+                          onChange={() => {
+                            handleRouteCheckChange(
+                              { routeName, routeId },
+                              !editing.routes.find((r) => r.routeId === routeId)
+                            );
+                          }}
+                          type="checkbox"
+                          className="hidden"
+                          checked={
+                            !editing.routes.find((r) => r.routeId === routeId)
+                          }
+                        />
+                      </InputContainer.Label>
                       <List.Icon
                         className={tw(
                           'absolute top-6 right-4 h-7 w-7',
-                          !commute.routes.find((r) => r.routeId === routeId)
+                          !editing.routes.find((e) => e.routeId === routeId)
                             ? 'bg-White fill-White stroke-Gray-300'
                             : 'bg-White fill-Primary-700'
                         )}
                         icon={
-                          !commute.routes.find((r) => r.routeId === routeId)
+                          !editing.routes.find((e) => e.routeId === routeId)
                             ? PlusCircleIcon
                             : CheckCircleIcon
                         }
                       />
-                    </InputContainer.Label>
-                  </InputContainer>
-                </List.Item>
-              ))}
+                    </InputContainer>
+                  </List.Item>
+                ))
+              )}
             </List>
             <StatusButton
               onClick={handleRoutesConfirmClick}
-              disabled={!commute.routes.length}
+              disabled={!editing.routes.length}
               className="fixed left-4 bottom-8 w-[calc(100%-32px)]"
             >
               확인

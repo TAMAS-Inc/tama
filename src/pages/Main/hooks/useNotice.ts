@@ -16,7 +16,7 @@ const fetchNotice: FetchNotice = async () => {
     const res = await fetch(URL);
     return res.json() as unknown as NoticeInfo[];
   } catch {
-    return [];
+    throw new Error('Notice fetch error');
   }
 };
 

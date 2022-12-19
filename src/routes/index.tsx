@@ -31,11 +31,33 @@ const preserved: { [key: string]: string } = Object.keys(PRESERVED).reduce(
   {}
 );
 
+const Redirect = (
+  path: string,
+  Component:
+    | string
+    | React.ExoticComponent<{
+        children?: React.ReactNode;
+      }>,
+  isUserValid: boolean
+) => {
+  const [page] = [...path]
+    .join('')
+    .split('/')
+    .filter((p) => p !== '')
+    .map((p) => p.toLowerCase());
+
+  if (page === 'main' && !isUserValid)
+    return <Navigate to="/landing/agreement" />;
+  if (page === 'landing' && isUserValid) return <Navigate to="/main" />;
+  return <Component />;
+};
+
 export const Router = () => {
   // eslint-disable-next-line @typescript-eslint/dot-notation
   const App = preserved?.['_app'] || Fragment;
   const NotFound = preserved?.['404'] || Fragment;
   const isUserValid = useRecoilValue(isUserValidState);
+
   return (
     <App>
       <Routes>
@@ -43,13 +65,7 @@ export const Router = () => {
           <Route
             key={path}
             path={path}
-            element={
-              path === '/Main/' && !isUserValid ? (
-                <Navigate to="/landing/agreement" />
-              ) : (
-                <Component />
-              )
-            }
+            element={Redirect(path, Component, isUserValid)}
           />
         ))}
         <Route path="*" element={<NotFound />} />

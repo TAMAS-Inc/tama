@@ -1,25 +1,42 @@
 import { useRecoilState } from 'recoil';
 import { v4 as uuid } from 'uuid';
-import { commutesState } from '@/state/atom';
+import { commutesState, editingState } from '@/state/atom';
 
 export const useCommutes = () => {
   const [commutes, setCommutes] = useRecoilState(commutesState);
-  type CreateNewCommute = () => Commute['comId'];
+  const [editing, setEditing] = useRecoilState(editingState);
+  type CreateNewCommute = (defaultComName: string) => Commute['comId'];
+  type AddCommute = (newCommute: Commute) => void;
   type DeleteCommute = (comId: Commute['comId']) => Commute[];
-  type EditCommute = (comId: Commute['comId'], newValue: Commute) => void;
+  type EditCommute = (newValue: Commute) => void;
+  type ResetEdit = () => void;
 
-  const createNewCommute: CreateNewCommute = () => {
+  const createNewCommute: CreateNewCommute = (defaultComName = '') => {
     const comId = uuid();
-    setCommutes((prev) => [
-      ...prev,
-      {
-        comId,
-        comName: '춘식이네',
-        station: null,
-        routes: [],
-      },
-    ]);
+    setEditing(() => ({
+      comId,
+      comName: defaultComName,
+      station: null,
+      routes: [],
+    }));
     return comId;
+  };
+
+  const resetEditing: ResetEdit = () => {
+    setEditing({
+      comId: '',
+      comName: '',
+      station: null,
+      routes: [],
+    });
+  };
+
+  const addCommute: AddCommute = (newCommute) => {
+    setCommutes((prev) => [
+      ...prev.filter((p) => p.comId !== newCommute.comId),
+      editing,
+    ]);
+    resetEditing();
   };
 
   const deleteCommute: DeleteCommute = (comId) => {
@@ -27,14 +44,17 @@ export const useCommutes = () => {
     return commutes;
   };
 
-  const editCommute: EditCommute = (comId, newValue) => {
-    setCommutes((prev) =>
-      prev.map((p) => {
-        if (p.comId !== comId) return p;
-        return newValue;
-      })
-    );
+  const editCommute: EditCommute = (newValue) => {
+    setEditing((prev) => ({ ...prev, ...newValue }));
   };
 
-  return { commutes, createNewCommute, deleteCommute, editCommute };
+  return {
+    commutes,
+    editing,
+    createNewCommute,
+    addCommute,
+    deleteCommute,
+    editCommute,
+    resetEditing,
+  };
 };
