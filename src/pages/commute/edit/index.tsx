@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useRecoilValue, useRecoilState } from 'recoil';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { tw } from '@/utils/tailwindMerge';
 import { BusCard, NavigationHeader, TextButton } from '@/components';
 import { commutesState, currentComIdState } from '@/state/atom';
@@ -18,7 +18,12 @@ export default function Edit({
   const commute = useRecoilValue(commutesState);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<Commute['comId']>('');
-  const { deleteCommute } = useCommutes();
+  const { deleteCommute, resetEditing } = useCommutes();
+
+  useEffect(() => {
+    resetEditing();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleDeleteClick = () => {
     deleteCommute(deleteId);

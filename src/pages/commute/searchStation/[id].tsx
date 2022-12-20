@@ -9,6 +9,7 @@ import {
   Header,
   InputContainer,
   List,
+  Error,
   StatusButton,
 } from '@/components';
 import { tw } from '@/utils/tailwindMerge';
@@ -19,33 +20,13 @@ import NotFound from '@/pages/404';
 
 type SearchBusStopProps<T extends React.ElementType> = Component<T>;
 
-// export const dummyRoutes: Route[] = [
-//   {
-//     routeId: '228000176',
-//     routeName: '5001',
-//   },
-//   {
-//     routeId: '228000389',
-//     routeName: '5003A',
-//   },
-// ];
-
-// const stations = [
-//   {
-//     stationId: '228000682',
-//     stationName: '기흥역',
-//   },
-// ];
-
 export default function SearchBusStop({
   className,
   ...restProps
 }: SearchBusStopProps<'div'>) {
   const navigate = useNavigate();
   const { id: comId } = useParams() as { id: Commute['comId'] };
-  const { commutes, editCommute } = useCommutes();
-
-  const commute = commutes.find((c) => c.comId === comId) as Commute;
+  const { editing, editCommute } = useCommutes();
 
   const [inputValue, setInputValue] = useState('');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -59,7 +40,6 @@ export default function SearchBusStop({
 
   const {
     isLoading: isRouteLoading,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     isError: isRouteError,
     data: routes,
   } = useAvailableRoutes({ stationId: selectedStation?.stationId ?? null });
@@ -76,8 +56,8 @@ export default function SearchBusStop({
   };
   const handleStationClick = (station: Station) => {
     setSelectedStation(station);
-    editCommute(comId, {
-      ...commute,
+    editCommute({
+      ...editing,
       station,
       routes: [],
     });
@@ -88,21 +68,21 @@ export default function SearchBusStop({
   };
   const handleRouteCheckChange = (route: Route, checked: boolean) =>
     checked
-      ? editCommute(comId, {
-          ...commute,
-          routes: [...commute.routes, route],
+      ? editCommute({
+          ...editing,
+          routes: [...editing.routes, route],
         })
-      : editCommute(comId, {
-          ...commute,
-          routes: commute.routes.filter((r) => r.routeId !== route.routeId),
+      : editCommute({
+          ...editing,
+          routes:
+            editing.routes.filter((r) => r.routeId !== route.routeId) ?? [],
         });
 
   const handleRoutesConfirmClick = () => {
     navigate(-1);
   };
 
-  if (!comId) return null;
-  if (isStationsError) return <NotFound />;
+  if (!comId || isStationsError || isRouteError) return <NotFound />;
 
   return (
     <div className={tw('', className)} {...restProps}>
@@ -126,9 +106,14 @@ export default function SearchBusStop({
       </Header>
 
       {filteredStations?.length === 0 ? (
-        <div className="pt-4 text-center text-body1">
-          해당 이름을 가진 정류장이 없어요 😭
-        </div>
+        <Error>
+          <Error.SVG />
+          <Error.Text>
+            검색하신 입력어로 정류장을 찾을 수 없어요.
+            <br />
+            다른 검색어로 다시 시도해주세요.
+          </Error.Text>
+        </Error>
       ) : (
         <List>
           {isStationsLoading ||
@@ -148,14 +133,13 @@ export default function SearchBusStop({
             ))}
         </List>
       )}
-
-      <BaseModal
-        className={tw(
-          'fixed inset-0 top-56 z-50 h-[calc(100%-14rem)] w-full rounded-t-2xl bg-White transition duration-300 ease-in-out',
-          isModalOpen ? 'translate-y-0' : 'translate-y-[1800px]'
-        )}
-      >
-        <BaseModal.Content className="w-full">
+      <BaseModal>
+        <BaseModal.Content
+          className={tw(
+            'fixed inset-0 top-56 z-50 h-[calc(100%-14rem)] w-full rounded-t-2xl bg-White transition duration-300 ease-in-out',
+            isModalOpen ? 'translate-y-0' : 'translate-y-[1800px]'
+          )}
+        >
           <List className="rounded-t-2xl">
             <List.Item
               onClick={handleCloseClick}
@@ -164,7 +148,6 @@ export default function SearchBusStop({
               <List.Title>{selectedStation?.stationName}</List.Title>
               <List.Icon icon={ChevronDownIcon} />
             </List.Item>
-
             {!isRouteLoading &&
               routes?.map(({ routeName, routeId }) => (
                 <List.Item key={routeId} className="relative pl-4">
@@ -184,12 +167,12 @@ export default function SearchBusStop({
                       <List.Icon
                         className={tw(
                           'absolute top-6 right-4 h-7 w-7',
-                          !commute.routes.find((r) => r.routeId === routeId)
+                          !editing.routes.find((r) => r.routeId === routeId)
                             ? 'bg-White fill-White stroke-Gray-300'
                             : 'bg-White fill-Primary-700'
                         )}
                         icon={
-                          !commute.routes.find((r) => r.routeId === routeId)
+                          !editing.routes.find((r) => r.routeId === routeId)
                             ? PlusCircleIcon
                             : CheckCircleIcon
                         }
@@ -201,21 +184,20 @@ export default function SearchBusStop({
           </List>
           <StatusButton
             onClick={handleRoutesConfirmClick}
-            disabled={!commute.routes.length}
+            disabled={!editing.routes.length}
             className="fixed left-4 bottom-8 w-[calc(100%-32px)]"
           >
             확인
           </StatusButton>
         </BaseModal.Content>
+        <BaseModal.DimBg
+          onClick={handleCloseClick}
+          className={tw(
+            'fixed inset-0 z-20  bg-Gray-700 opacity-80',
+            isModalOpen ? '' : 'hidden'
+          )}
+        />
       </BaseModal>
-      <div
-        aria-hidden="true"
-        onClick={handleCloseClick}
-        className={tw(
-          'fixed inset-0 z-20  bg-Gray-700 opacity-80',
-          isModalOpen ? '' : 'hidden'
-        )}
-      />
     </div>
   );
 }

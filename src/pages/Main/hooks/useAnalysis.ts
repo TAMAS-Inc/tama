@@ -20,10 +20,16 @@ export interface CurrentInfo extends BaseInfo {
 }
 
 export interface AnalysisInfo {
+  /** 현재 도착 정보 여부 */
+  exist: boolean;
+  /** 현재 노선 이름 */
+  routeName: string;
   /** 현재 버스가 위치한 정류장 정보 */
   current: CurrentInfo;
-  /** 요청한 정류장 기준 앞 3개 정류장 정보(요청 정류장 포함) */
-  predict: PredictInfo[];
+  /** 요청한 정류장 기준 앞 2개 정류장 예측 정보 */
+  nearbys: PredictInfo[];
+  /** 현재 정류장 예측 정보 */
+  target: PredictInfo;
 }
 
 export interface AnalysisReqParams {
@@ -32,7 +38,7 @@ export interface AnalysisReqParams {
   predictDate: string;
 }
 
-type FetchAnalysis = (params: AnalysisReqParams) => Promise<AnalysisInfo[]>;
+type FetchAnalysis = (params: AnalysisReqParams) => Promise<AnalysisInfo>;
 
 const fetchAnalysis: FetchAnalysis = async ({
   stationId,
@@ -40,26 +46,22 @@ const fetchAnalysis: FetchAnalysis = async ({
   predictDate,
 }) => {
   try {
-    const END_POINT =
-      'http://ec2-35-174-107-39.compute-1.amazonaws.com/Analysis';
+    const url = `${
+      import.meta.env.VITE_END_POINT
+    }/analysis/${stationId}?predictDate=${predictDate}&routeId=${routeId}`;
 
-    const REAL_URL = `${END_POINT}/${stationId}?predictDate=${predictDate}&routeId=${routeId}`;
+    const res = await fetch(url);
 
-    const TEST_URL =
-      'https://raw.githubusercontent.com/TAMAS-Inc/MockAPI/main/analysis/228000191.routeId=228000176.json';
-    // eslint-disable-next-line no-constant-condition
-    const res = await fetch(true ? TEST_URL : REAL_URL);
-
-    return res.json() as unknown as AnalysisInfo[];
+    return res.json() as unknown as AnalysisInfo;
   } catch {
-    return [];
+    throw new Error('Analysis fetch error');
   }
 };
 
 export const useAnalysis = (params: AnalysisReqParams) => {
   const queryClient = useQueryClient();
 
-  const query = useQuery<AnalysisInfo[]>({
+  const query = useQuery<AnalysisInfo>({
     queryKey: ['analysis', params],
     queryFn: async () => fetchAnalysis(params),
   });

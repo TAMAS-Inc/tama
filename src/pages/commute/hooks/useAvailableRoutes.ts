@@ -1,13 +1,13 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
 interface Params {
   stationId: Station['stationId'] | null;
 }
 const fetchAvailableRoutes = async ({ stationId }: Params) => {
   try {
-    const END_POINT = `http://localhost:3000/available/routes`;
-    const url = `${END_POINT}/${stationId}`;
-
+    const url = `${
+      import.meta.env.VITE_END_POINT
+    }/available/routes/${stationId}`;
     const response = await fetch(url);
 
     return response.json() as unknown as Route[];

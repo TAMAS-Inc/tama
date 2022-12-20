@@ -6,18 +6,17 @@ export interface Inquiry {
 
 export const postInquiry = async (data: Inquiry) => {
   try {
-    const END_POINT = 'http://localhost:3000/inquiry';
-    const URL = `${END_POINT}/add`;
+    const url = `${import.meta.env.VITE_END_POINT}/inquiry/add`;
 
-    const res = await fetch(URL, {
+    const res = await fetch(url, {
       method: 'POST',
       headers: {
-        'content-type': 'application/json;charset=UTF-8',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
     });
-    return res.json() as unknown;
-  } catch {
+    return res.json() as unknown as Inquiry;
+  } catch (e) {
     throw new Error('⛔️ 문의사항 전송에 실패하였습니다!');
   }
 };

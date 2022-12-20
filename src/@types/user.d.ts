@@ -3,6 +3,7 @@ interface User {
   commutes: Commute[];
   agreement: Agreement;
   currentComId: Commute['comId'];
+  editing: Commute;
 }
 
 interface Agreement {
