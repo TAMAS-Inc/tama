@@ -26,9 +26,17 @@ export function Notification({
       className={tw('mb-2 h-9 pl-4 pr-4 font-bold', className)}
       {...restProps}
     >
-      <Link to={`/menu/notice/${data && data[0].noticeId}`}>
-        <Toast.Content className="pl-2">{data && data[0].title}</Toast.Content>
-      </Link>
+      {isError ? (
+        <Toast.Content className="pl-2">
+          🦋 타까마까에 오신 것을 환영합니다!
+        </Toast.Content>
+      ) : (
+        <Link to={`/menu/notice/${data && data[0].noticeId}`}>
+          <Toast.Content className="pl-2">
+            {data && data[0].title}
+          </Toast.Content>
+        </Link>
+      )}
       <Toast.CloseButton onClick={handleClick} />
     </Toast>
   );

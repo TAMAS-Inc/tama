@@ -8,7 +8,7 @@ export function BaseModal({
   ...restProps
 }: BaseModalProps<'div'>) {
   return (
-    <div className={tw('fixed inset-0 z-50', className)} {...restProps}>
+    <div className={tw('', className)} {...restProps}>
       {children}
     </div>
   );
@@ -18,10 +18,7 @@ type ContentProps<T extends React.ElementType> = Component<T>;
 
 function Content({ children, className, ...restProps }: ContentProps<'div'>) {
   return (
-    <div
-      className={tw('absolute z-30  bg-Primary-300', className)}
-      {...restProps}
-    >
+    <div className={tw('absolute z-30', className)} {...restProps}>
       {children}
     </div>
   );

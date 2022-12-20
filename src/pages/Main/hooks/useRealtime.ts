@@ -31,17 +31,17 @@ const fetchRealtime: FetchRealtime = async ({
   predictDate,
 }) => {
   try {
-    const END_POINT = 'http://localhost:3000/realtime';
-
-    const REAL_URL = `${END_POINT}/${stationId}?predictDate=${predictDate}&${routeIds
+    const url = `${
+      import.meta.env.VITE_END_POINT
+    }/realtime/${stationId}?predictDate=${predictDate}&${routeIds
       .map((id) => `routeIds=${id}`)
       .join('&')}`;
 
-    const res = await fetch(REAL_URL);
+    const res = await fetch(url);
 
     return res.json() as unknown as RealtimeInfo[];
   } catch {
-    return [];
+    throw new Error('Realtime fetch error');
   }
 };
 
