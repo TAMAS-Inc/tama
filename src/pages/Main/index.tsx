@@ -66,7 +66,7 @@ export default function Main() {
                   navigate(
                     `analysis?routeId=${routeId}&stationId=${currentCommute.station?.stationId}`
                   );
-                else navigate(`busRoute/${routeName}`);
+                else navigate(`RouteMap/${routeId}`);
               }}
             >
               <BusCard.RouteName>{routeName}</BusCard.RouteName>
