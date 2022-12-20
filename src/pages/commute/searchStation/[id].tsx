@@ -9,6 +9,7 @@ import {
   Header,
   InputContainer,
   List,
+  Error,
   StatusButton,
 } from '@/components';
 import { tw } from '@/utils/tailwindMerge';
@@ -39,7 +40,6 @@ export default function SearchBusStop({
 
   const {
     isLoading: isRouteLoading,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     isError: isRouteError,
     data: routes,
   } = useAvailableRoutes({ stationId: selectedStation?.stationId ?? null });
@@ -82,8 +82,7 @@ export default function SearchBusStop({
     navigate(-1);
   };
 
-  if (!comId) return null;
-  if (isStationsError) return <NotFound />;
+  if (!comId || isStationsError || isRouteError) return <NotFound />;
 
   return (
     <div className={tw('mt-4 w-full', className)} {...restProps}>
@@ -107,9 +106,14 @@ export default function SearchBusStop({
       </Header>
 
       {filteredStations?.length === 0 ? (
-        <div className="pt-4 text-center text-body1">
-          해당 이름을 가진 정류장이 없어요 😭
-        </div>
+        <Error>
+          <Error.SVG />
+          <Error.Text>
+            검색하신 입력어로 정류장을 찾을 수 없어요.
+            <br />
+            다른 검색어로 다시 시도해주세요.
+          </Error.Text>
+        </Error>
       ) : (
         <List className="pl-4">
           {isStationsLoading ||
