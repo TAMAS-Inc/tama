@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { tw } from '@/utils/tailwindMerge';
 import { List, NavigationHeader } from '@/components';
-import { OpenSourceData } from '../../../../public/assets/data/openSourceData/index';
+import { OpenSourceData } from '@/assets/data/openSourceData/index';
 
 type OpenSourceProps<T extends React.ElementType> = Component<T>;
 

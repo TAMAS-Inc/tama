@@ -126,7 +126,6 @@ export default function Main() {
         )
       )}
       <SyncButton fetchTime={fetchTime} onClick={handleSyncButtonClick} />
-      <AD />
     </>
   );
 }

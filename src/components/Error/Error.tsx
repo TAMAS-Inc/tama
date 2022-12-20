@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { tw } from '@/utils/tailwindMerge';
-import { ReactComponent as Logo } from '@/../public/assets/logo/logo.svg';
+import { ReactComponent as Logo } from '@/assets/logo/logo.svg';
 import { TextButton } from '../TextButton/TextButton';
 
 type ErrorProps<T extends React.ElementType> = Component<T>;

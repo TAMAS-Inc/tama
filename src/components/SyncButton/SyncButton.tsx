@@ -4,7 +4,7 @@ import { tw } from '@/utils/tailwindMerge';
 import { IconButton } from '@/components';
 
 type SyncButtonProps<T extends React.ElementType> = {
-  fetchTime: number;
+  fetchTime?: number;
 } & Component<T>;
 
 export function SyncButton({
@@ -27,7 +27,7 @@ export function SyncButton({
   return (
     <IconButton
       className={tw(
-        'fixed bottom-16 right-4 mb-3 h-14 w-14 rounded-full bg-Primary-600',
+        'fixed bottom-16 right-4 mb-3 h-14 w-14 rounded-full bg-Gray-600 text-White',
         className
       )}
       onClick={handleSyncClick}
@@ -37,7 +37,7 @@ export function SyncButton({
         icon={ArrowPathIcon}
         className={tw(
           isSyncing ? 'animate-spin' : '',
-          'absolute h-12 w-12 stroke-Primary-100'
+          'absolute h-12 w-12 stroke-White stroke-1'
         )}
       />
       {fetchTime}

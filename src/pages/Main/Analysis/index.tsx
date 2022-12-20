@@ -9,6 +9,7 @@ import {
   SyncButton,
   TextButton,
   Error,
+  LoadingWithDelay,
 } from '@/components';
 import {
   CurrentInfo,
@@ -142,17 +143,16 @@ export default function Analysis({
                 <strong>타까마까의 실시간 예측 정보</strong>는 <br />{' '}
                 <strong>평일 아침 6시부터 10시 사이</strong>에 제공됩니다.
               </p>
-              <TextButton className="fixed bottom-8 h-12 w-[calc(100%-32px)] bg-Primary-200 px-4 text-body1 font-bold">
+              <TextButton className="h-12 bg-Primary-400 px-4 text-body1 font-bold">
                 <Link to="/main">타까마까 홈으로 가기</Link>
               </TextButton>
             </>
           )}
         </div>
       ) : (
-        <>로딩중</>
+        <LoadingWithDelay />
       )}
       <SyncButton onClick={handleSyncButtonClick} />
-      <AD />
     </div>
   );
 }
