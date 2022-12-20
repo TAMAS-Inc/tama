@@ -30,7 +30,8 @@
     "recoil": "^0.7.6",
     "recoil-persist": "^4.2.0",
     "tailwind-merge": "^1.8.0",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "vite-plugin-svgr": "2.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.5",
