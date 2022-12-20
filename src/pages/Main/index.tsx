@@ -92,7 +92,9 @@ export default function Main() {
                 </BusCard.Content>
                 {exist && (
                   <BusCard.Content>
-                    {remainStationCnt}번째 전 (실시간 {remainSeatCnt}석, 예측
+                    {remainStationCnt}번째 전 (실시간
+                    {remainSeatCnt < 0 ? '정보 없음' : `${remainSeatCnt}석`},
+                    예측
                     {predictRemainSeatCnt === -1
                       ? '정보 없음'
                       : ` 
