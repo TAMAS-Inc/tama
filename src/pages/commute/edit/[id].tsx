@@ -58,6 +58,9 @@ export default function Commute({
 
   const handleOpenClick = () => setIsModalOpen(true);
   const handleCloseClick = () => setIsModalOpen(false);
+  const handleResetClick = () => {
+    inputRef.current?.focus();
+  };
 
   const handleComNameChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     editCommute({
@@ -118,7 +121,10 @@ export default function Commute({
                   onChange={handleComNameChange}
                 />
               </InputContainer.Label>
-              <InputContainer.ResetButton className="absolute top-3 right-3 h-6 w-6 fill-Gray-500" />
+              <InputContainer.ResetButton
+                onClick={handleResetClick}
+                className="absolute top-3 right-3 h-6 w-6 fill-Gray-500"
+              />
             </InputContainer>
           </div>
           <div className="mt-8">

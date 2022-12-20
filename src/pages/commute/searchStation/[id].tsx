@@ -1,4 +1,4 @@
-import { useState, ChangeEventHandler } from 'react';
+import { useState, ChangeEventHandler, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { hangulIncludes, chosungIncludes } from '@toss/hangul';
 import { CheckCircleIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
@@ -39,6 +39,8 @@ export default function SearchBusStop({
     data: stations,
   } = useAvailableStations();
 
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const {
     isLoading: isRouteLoading,
     isError: isRouteError,
@@ -54,6 +56,7 @@ export default function SearchBusStop({
   const handleCloseClick = () => setIsModalOpen(false);
   const handleResetClick = () => {
     setInputValue('');
+    inputRef.current?.focus();
   };
   const handleStationClick = (station: Station) => {
     setSelectedStation(station);
@@ -93,6 +96,7 @@ export default function SearchBusStop({
           <InputContainer className="relative w-full pl-3 ">
             <InputContainer.Label>
               <InputContainer.Label.Input
+                ref={inputRef}
                 onChange={handleInputChange}
                 className="bg-Gray-100"
                 placeholder="정류장 검색"
