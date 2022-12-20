@@ -48,7 +48,7 @@ const Redirect = (
 
   if (page === 'main' && !isUserValid)
     return <Navigate to="/landing/agreement" />;
-  if (page === 'landing' && isUserValid) return <Navigate to="/main" />;
+  if (page === 'landing' && isUserValid) return <Navigate to="/intro" />;
   return <Component />;
 };
 
