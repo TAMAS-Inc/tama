@@ -1,4 +1,5 @@
 export { BusCard } from './BusCard';
+export { Error } from './Error';
 export { CommuteModal as DropdownModal } from '../pages/Main/components/CommuteModal';
 export { BaseModal } from './BaseModal';
 export { List } from './List';

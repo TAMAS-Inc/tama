@@ -1,13 +1,14 @@
+/* eslint-disable no-nested-ternary */
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-
 import {
   AD,
   BusCard,
-  LoadingWithDelay,
+  Error,
   Notification,
   SyncButton,
+  LoadingWithDelay,
 } from '@/components';
 import { currentCommuteState } from '@/state/atom';
 import { getCurrentDate } from '@/utils/date';
@@ -19,9 +20,11 @@ import {
   useRealtime,
 } from './hooks/useRealtime';
 
+const INTERVAL_TIME = 15;
+
 export default function Main() {
   const navigate = useNavigate();
-  const [fetchTime, setFetchTime] = useState(15);
+  const [fetchTime, setFetchTime] = useState(INTERVAL_TIME);
   const currentCommute = useRecoilValue(currentCommuteState);
 
   const testParams: RealtimeReqParams = {
@@ -39,7 +42,7 @@ export default function Main() {
 
   const handleSyncButtonClick = () => {
     mutation.mutate({ ...testParams, predictDate: getCurrentDate() });
-    setFetchTime(15);
+    setFetchTime(INTERVAL_TIME);
   };
 
   useEffect(() => {
@@ -48,12 +51,12 @@ export default function Main() {
     }, 1000);
     return () => {
       if (fetchTime === 0) {
-        setFetchTime(15);
+        setFetchTime(INTERVAL_TIME);
         mutation.mutate({ ...testParams, predictDate: getCurrentDate() });
       }
       clearInterval(timeId);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchTime]);
 
   if (isError) return <NotFound />;
@@ -62,7 +65,21 @@ export default function Main() {
     <>
       <MainHeader />
       <Notification />
-      {isLoading ? (
+      {isError ? (
+        <Error>
+          <Error.SVG />
+          <Error.Text>
+            현재 보고 계신 페이지를 이용할 수 없습니다.
+            <br />
+            재접속 후에도 화면이 나타나지 않는다면
+            <br />
+            아래 버튼을 눌러 알려주세요!
+          </Error.Text>
+          <Error.InduceLink path="/menu/inquiry">
+            문의하러 가기
+          </Error.InduceLink>
+        </Error>
+      ) : isLoading ? (
         <LoadingWithDelay />
       ) : (
         Routes?.map(
@@ -82,7 +99,7 @@ export default function Main() {
                   navigate(
                     `analysis?routeId=${routeId}&stationId=${currentCommute.station?.stationId}`
                   );
-                else navigate(`busRoute/${routeName}`);
+                else navigate(`RouteMap/${routeId}`);
               }}
             >
               <BusCard.RouteName>{routeName}</BusCard.RouteName>
