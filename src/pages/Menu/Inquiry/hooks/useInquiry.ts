@@ -6,10 +6,9 @@ export interface Inquiry {
 
 export const postInquiry = async (data: Inquiry) => {
   try {
-    const END_POINT = 'http://localhost:3000/inquiry';
-    const URL = `${END_POINT}/add`;
+    const url = `${import.meta.env.VITE_END_POINT}/inquiry/add`;
 
-    const res = await fetch(URL, {
+    const res = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

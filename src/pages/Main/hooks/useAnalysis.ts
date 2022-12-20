@@ -46,11 +46,11 @@ const fetchAnalysis: FetchAnalysis = async ({
   predictDate,
 }) => {
   try {
-    const END_POINT = 'http://localhost:3000/analysis';
+    const url = `${
+      import.meta.env.VITE_END_POINT
+    }/analysis/${stationId}?predictDate=${predictDate}&routeId=${routeId}`;
 
-    const REAL_URL = `${END_POINT}/${stationId}?predictDate=${predictDate}&routeId=${routeId}`;
-
-    const res = await fetch(REAL_URL);
+    const res = await fetch(url);
 
     return res.json() as unknown as AnalysisInfo;
   } catch {
