@@ -1,4 +1,5 @@
 import { useParams } from 'react-router-dom';
+import { OpenSourceData } from '@/../public/assets/data/openSourceData';
 import { tw } from '@/utils/tailwindMerge';
 import { NavigationHeader } from '@/components';
 
@@ -10,14 +11,16 @@ export default function OpenSourceItem({
 }: OpenSourceItemProps<'div'>) {
   const { id } = useParams();
 
+  const opensourchItem = id ? OpenSourceData.find((d) => d.id === +id) : null;
+
   return (
     <div className={tw('', className)} {...restProps}>
-      <NavigationHeader>{id}</NavigationHeader>
-      <div className="mt-8 mr-4 ml-4">
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Explicabo
-        beatae nemo, quae ipsa, tempora ipsum adipisci eligendi perspiciatis
-        accusantium repellendus quibusdam magni perferendis sequi suscipit
-        soluta illo autem sed in.
+      <NavigationHeader>{opensourchItem?.title}</NavigationHeader>
+      <div className="m-4 flex flex-col gap-4">
+        <p>{opensourchItem?.data.copyright}</p>
+        <p>{opensourchItem?.data.description}</p>
+        <p>{opensourchItem?.data.licence}</p>
+        <p>{opensourchItem?.data.content}</p>
       </div>
     </div>
   );

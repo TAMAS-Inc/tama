@@ -1,4 +1,6 @@
-type Date = string; // regex를 이용한 변경 필요
+// type Date =
+//   `${number}${number}${number}${number}-${number}${number}-${number}${number}T${number}${number}:${number}${number}`; // regex를 이용한 변경 필요
+type Date = string;
 
 export const isRightDate = (date: string): date is Date => {
   const dateRegex = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/;

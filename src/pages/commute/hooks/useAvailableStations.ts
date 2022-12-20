@@ -2,8 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 
 const fetchAvailableStations = async () => {
   try {
-    const END_POINT = `http://localhost:3000/available/stations`;
-    const url = `${END_POINT}`;
+    const url = `${import.meta.env.VITE_END_POINT}/available/stations`;
     const response = await fetch(url);
 
     return response.json() as unknown as Station[];

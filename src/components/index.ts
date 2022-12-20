@@ -1,4 +1,5 @@
 export { BusCard } from './BusCard';
+export { Error } from './Error';
 export { CommuteModal as DropdownModal } from '../pages/Main/components/CommuteModal';
 export { BaseModal } from './BaseModal';
 export { List } from './List';
@@ -16,3 +17,4 @@ export { Toast } from './Toast';
 export { ToggleIconButton } from './ToggleIconButton';
 export { Notification } from './Notification';
 export { MessageModal } from './MessageModal';
+export { LoadingWithDelay } from './LoadingWithDelay';

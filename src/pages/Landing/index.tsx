@@ -1,5 +1,5 @@
-import Intro from './auth';
+import Access from './access';
 
 export default function index() {
-  return <Intro />;
+  return <Access />;
 }

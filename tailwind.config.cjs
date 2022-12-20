@@ -1,5 +1,5 @@
 const plugin = require('tailwindcss/plugin');
-
+const defaultTheme = require('tailwindcss/defaultTheme');
 /** @type {import('tailwindcss').Config} */
 
 module.exports = {
@@ -44,10 +44,6 @@ module.exports = {
       'line-seed-sans-kr': 'LINE Seed Sans KR',
     },
     extend: {
-      backgroundImage: {
-        'icon-close': 'url(/public/assets/images/icon-close.svg)',
-        'icon-search': 'url(/public/assets/images/icon-search.svg)',
-      },
       fontSize: {
         body1: '20px',
         body2: '16px',

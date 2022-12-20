@@ -1,9 +1,12 @@
 import { Link } from 'react-router-dom';
 import { StatusButton } from '@/components';
 
-type IntroProps<T extends React.ElementType> = Component<T>;
+type AccessProps<T extends React.ElementType> = Component<T>;
 
-export default function Intro({ className, ...restProps }: IntroProps<'div'>) {
+export default function Access({
+  className,
+  ...restProps
+}: AccessProps<'div'>) {
   return (
     <div className="pl-4 pr-4" {...restProps}>
       <p className="mt-24 border-b border-b-Gray-400 pb-8">

@@ -1,9 +1,10 @@
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { v4 as uuid } from 'uuid';
-import { commutesState, editingState } from '@/state/atom';
+import { commutesState, editingState, currentComIdState } from '@/state/atom';
 
 export const useCommutes = () => {
   const [commutes, setCommutes] = useRecoilState(commutesState);
+  const setComId = useSetRecoilState(currentComIdState);
   const [editing, setEditing] = useRecoilState(editingState);
   type CreateNewCommute = (defaultComName: string) => Commute['comId'];
   type AddCommute = (newCommute: Commute) => void;
@@ -36,6 +37,7 @@ export const useCommutes = () => {
       ...prev.filter((p) => p.comId !== newCommute.comId),
       editing,
     ]);
+    setComId(newCommute.comId);
     resetEditing();
   };
 

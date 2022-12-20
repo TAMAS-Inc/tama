@@ -1,8 +1,15 @@
-import { useEffect } from 'react';
+/* eslint-disable no-nested-ternary */
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-
-import { AD, BusCard, Notification, SyncButton } from '@/components';
+import {
+  AD,
+  BusCard,
+  Error,
+  Notification,
+  SyncButton,
+  LoadingWithDelay,
+} from '@/components';
 import { currentCommuteState } from '@/state/atom';
 import { getCurrentDate } from '@/utils/date';
 import NotFound from '../404';
@@ -13,10 +20,11 @@ import {
   useRealtime,
 } from './hooks/useRealtime';
 
-const INTERVAL_TIME = 500000000;
+const INTERVAL_TIME = 15;
 
 export default function Main() {
   const navigate = useNavigate();
+  const [fetchTime, setFetchTime] = useState(INTERVAL_TIME);
   const currentCommute = useRecoilValue(currentCommuteState);
 
   const testParams: RealtimeReqParams = {
@@ -25,20 +33,31 @@ export default function Main() {
     predictDate: getCurrentDate(),
   };
 
-  const { isError, isLoading, data, mutation } = useRealtime(testParams);
-
-  useEffect(() => {
-    const refreshDataInterval = setInterval(() => {
-      // mutation.mutate({ ...testParams, predictDate: getCurrentDate() });
-    }, INTERVAL_TIME);
-
-    return () => clearInterval(refreshDataInterval);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const {
+    isError,
+    isLoading,
+    data: Routes,
+    mutation,
+  } = useRealtime(testParams);
 
   const handleSyncButtonClick = () => {
     mutation.mutate({ ...testParams, predictDate: getCurrentDate() });
+    setFetchTime(INTERVAL_TIME);
   };
+
+  useEffect(() => {
+    const timeId = setInterval(() => {
+      setFetchTime((time) => time - 1);
+    }, 1000);
+    return () => {
+      if (fetchTime === 0) {
+        setFetchTime(INTERVAL_TIME);
+        mutation.mutate({ ...testParams, predictDate: getCurrentDate() });
+      }
+      clearInterval(timeId);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetchTime]);
 
   if (isError) return <NotFound />;
 
@@ -46,10 +65,24 @@ export default function Main() {
     <>
       <MainHeader />
       <Notification />
-      {isLoading || mutation.isLoading ? (
-        <span>Loading...</span>
+      {isError ? (
+        <Error>
+          <Error.SVG />
+          <Error.Text>
+            현재 보고 계신 페이지를 이용할 수 없습니다.
+            <br />
+            재접속 후에도 화면이 나타나지 않는다면
+            <br />
+            아래 버튼을 눌러 알려주세요!
+          </Error.Text>
+          <Error.InduceLink path="/menu/inquiry">
+            문의하러 가기
+          </Error.InduceLink>
+        </Error>
+      ) : isLoading ? (
+        <LoadingWithDelay />
       ) : (
-        data?.map(
+        Routes?.map(
           ({
             exist,
             routeId,
@@ -66,7 +99,7 @@ export default function Main() {
                   navigate(
                     `analysis?routeId=${routeId}&stationId=${currentCommute.station?.stationId}`
                   );
-                else navigate(`busRoute/${routeName}`);
+                else navigate(`RouteMap/${routeId}`);
               }}
             >
               <BusCard.RouteName>{routeName}</BusCard.RouteName>
@@ -76,7 +109,9 @@ export default function Main() {
                 </BusCard.Content>
                 {exist && (
                   <BusCard.Content>
-                    {remainStationCnt}번째 전 (실시간 {remainSeatCnt}석, 예측
+                    {remainStationCnt}번째 전 (실시간
+                    {remainSeatCnt < 0 ? '정보 없음' : `${remainSeatCnt}석`},
+                    예측
                     {predictRemainSeatCnt === -1
                       ? '정보 없음'
                       : ` 
@@ -90,7 +125,7 @@ export default function Main() {
           )
         )
       )}
-      <SyncButton onClick={handleSyncButtonClick} />
+      <SyncButton fetchTime={fetchTime} onClick={handleSyncButtonClick} />
       <AD />
     </>
   );
