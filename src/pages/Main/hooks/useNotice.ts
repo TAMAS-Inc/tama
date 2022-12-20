@@ -10,10 +10,9 @@ type FetchNotice = () => Promise<NoticeInfo[]>;
 
 const fetchNotice: FetchNotice = async () => {
   try {
-    const END_POINT = 'http://localhost:3000/notice/all';
-    const URL = `${END_POINT}`;
+    const url = `${import.meta.env.VITE_END_POINT}/notice/all`;
 
-    const res = await fetch(URL);
+    const res = await fetch(url);
     return res.json() as unknown as NoticeInfo[];
   } catch {
     throw new Error('Notice fetch error');
