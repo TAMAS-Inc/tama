@@ -4,8 +4,10 @@ import { BaseModal, BusCard } from '@/components';
 import { currentComIdState, userState } from '@/state/atom';
 import { tw } from '@/utils/tailwindMerge';
 import { useCommutes } from '@/hooks/useCommutes';
+import { animatedBaseModal } from '../../../../constants/style';
 
 type CommuteModalProps<T extends React.ElementType> = {
+  isModalOpen: boolean;
   onDimBgClick: React.MouseEventHandler<HTMLDivElement>;
   handleCurrent?: React.Dispatch<React.SetStateAction<string>>;
 } & Component<T>;
@@ -13,6 +15,7 @@ type CommuteModalProps<T extends React.ElementType> = {
 export function CommuteModal({
   children,
   className,
+  isModalOpen,
   onDimBgClick: handleDimBgClick,
   handleCurrent,
   ...restProps
@@ -35,7 +38,13 @@ export function CommuteModal({
 
   return (
     <BaseModal className={tw('', className)} {...restProps}>
-      <BaseModal.Content className="bottom-0 h-[620px] w-full overflow-hidden rounded-lg bg-White">
+      <BaseModal.Content
+        className={tw(
+          'bottom-0 h-[620px] w-full overflow-hidden rounded-lg bg-White',
+          animatedBaseModal,
+          isModalOpen ? 'translate-y-0' : 'translate-y-[1800px]'
+        )}
+      >
         <div className="flex flex-row justify-between pt-8 pl-6 pr-8 pb-8">
           <div className="text-body1 font-bold">내 정류장 설정</div>
           <ul className="flex gap-2 text-body2">
@@ -72,7 +81,10 @@ export function CommuteModal({
           </BusCard>
         ))}
       </BaseModal.Content>
-      <BaseModal.DimBg onClick={handleDimBgClick} />
+      <BaseModal.DimBg
+        onClick={handleDimBgClick}
+        className={tw(isModalOpen ? '' : 'hidden')}
+      />
     </BaseModal>
   );
 }

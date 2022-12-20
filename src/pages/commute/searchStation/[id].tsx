@@ -105,7 +105,7 @@ export default function SearchBusStop({
   if (isStationsError) return <NotFound />;
 
   return (
-    <div className={tw('mt-4 w-full', className)} {...restProps}>
+    <div className={tw('', className)} {...restProps}>
       <Header>
         <Header.BackButton />
         <Header.Title className="grow">
@@ -130,13 +130,13 @@ export default function SearchBusStop({
           해당 이름을 가진 정류장이 없어요 😭
         </div>
       ) : (
-        <List className="pl-4">
+        <List>
           {isStationsLoading ||
             filteredStations?.map((station) => (
               <List.Item
                 key={station.stationId}
                 onClick={() => handleStationClick(station)}
-                className="pl-2"
+                className="pl-4"
               >
                 <List.Title>
                   <Highlighter
@@ -148,63 +148,74 @@ export default function SearchBusStop({
             ))}
         </List>
       )}
-      {isModalOpen && (
-        <BaseModal>
-          <BaseModal.Content className="top-56 h-full w-full rounded-t-2xl bg-White">
-            <List className="rounded-t-2xl">
-              <List.Item
-                onClick={handleCloseClick}
-                className="rounded-t-2xl pl-6"
-              >
-                <List.Title>{selectedStation?.stationName}</List.Title>
-                <List.Icon icon={ChevronDownIcon} />
-              </List.Item>
 
-              {!isRouteLoading &&
-                routes?.map(({ routeName, routeId }) => (
-                  <List.Item key={routeId} className="relative pl-4">
-                    <InputContainer className="h-full w-full pl-2 text-body1 text-Primary-700">
-                      <InputContainer.Label>
-                        {routeName}
-                        <InputContainer.Label.Input
-                          onChange={(e) => {
-                            handleRouteCheckChange(
-                              { routeName, routeId },
-                              e.target.checked
-                            );
-                          }}
-                          type="checkbox"
-                          className="hidden"
-                        />
-                        <List.Icon
-                          className={tw(
-                            'absolute top-6 right-4 h-7 w-7',
-                            !commute.routes.find((r) => r.routeId === routeId)
-                              ? 'bg-White fill-White stroke-Gray-300'
-                              : 'bg-White fill-Primary-700'
-                          )}
-                          icon={
-                            !commute.routes.find((r) => r.routeId === routeId)
-                              ? PlusCircleIcon
-                              : CheckCircleIcon
-                          }
-                        />
-                      </InputContainer.Label>
-                    </InputContainer>
-                  </List.Item>
-                ))}
-            </List>
-            <StatusButton
-              onClick={handleRoutesConfirmClick}
-              disabled={!commute.routes.length}
-              className="fixed left-4 bottom-8 w-[calc(100%-32px)]"
+      <BaseModal
+        className={tw(
+          'fixed inset-0 top-56 z-50 h-[calc(100%-14rem)] w-full rounded-t-2xl bg-White transition duration-300 ease-in-out',
+          isModalOpen ? 'translate-y-0' : 'translate-y-[1800px]'
+        )}
+      >
+        <BaseModal.Content className="w-full">
+          <List className="rounded-t-2xl">
+            <List.Item
+              onClick={handleCloseClick}
+              className="rounded-t-2xl pl-6"
             >
-              확인
-            </StatusButton>
-          </BaseModal.Content>
-          <BaseModal.DimBg onClick={handleCloseClick} />
-        </BaseModal>
-      )}
+              <List.Title>{selectedStation?.stationName}</List.Title>
+              <List.Icon icon={ChevronDownIcon} />
+            </List.Item>
+
+            {!isRouteLoading &&
+              routes?.map(({ routeName, routeId }) => (
+                <List.Item key={routeId} className="relative pl-4">
+                  <InputContainer className="h-full w-full pl-2 text-body1 text-Primary-700">
+                    <InputContainer.Label>
+                      {routeName}
+                      <InputContainer.Label.Input
+                        onChange={(e) => {
+                          handleRouteCheckChange(
+                            { routeName, routeId },
+                            e.target.checked
+                          );
+                        }}
+                        type="checkbox"
+                        className="hidden"
+                      />
+                      <List.Icon
+                        className={tw(
+                          'absolute top-6 right-4 h-7 w-7',
+                          !commute.routes.find((r) => r.routeId === routeId)
+                            ? 'bg-White fill-White stroke-Gray-300'
+                            : 'bg-White fill-Primary-700'
+                        )}
+                        icon={
+                          !commute.routes.find((r) => r.routeId === routeId)
+                            ? PlusCircleIcon
+                            : CheckCircleIcon
+                        }
+                      />
+                    </InputContainer.Label>
+                  </InputContainer>
+                </List.Item>
+              ))}
+          </List>
+          <StatusButton
+            onClick={handleRoutesConfirmClick}
+            disabled={!commute.routes.length}
+            className="fixed left-4 bottom-8 w-[calc(100%-32px)]"
+          >
+            확인
+          </StatusButton>
+        </BaseModal.Content>
+      </BaseModal>
+      <div
+        aria-hidden="true"
+        onClick={handleCloseClick}
+        className={tw(
+          'fixed inset-0 z-20  bg-Gray-700 opacity-80',
+          isModalOpen ? '' : 'hidden'
+        )}
+      />
     </div>
   );
 }

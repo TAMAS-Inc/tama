@@ -18,6 +18,7 @@ import { tw } from '@/utils/tailwindMerge';
 
 // import { dummyRoutes } from '../searchStation/[id]';
 import { useAvailableRoutes } from '../hooks/useAvailableRoutes';
+import { animatedBaseModal } from '../../../constants/style';
 
 type CommuteProps<T extends React.ElementType> = Component<T>;
 
@@ -85,9 +86,9 @@ export default function Commute({
   };
 
   return (
-    <div className="pl-4 pr-4" {...restProps}>
-      <NavigationHeader className="-ml-4">출근길 관리</NavigationHeader>
-      <div className="mt-8">
+    <div className="overflow-hidden" {...restProps}>
+      <NavigationHeader className="">출근길 관리</NavigationHeader>
+      <div className="mt-8 px-4">
         <h2 className="mb-2 text-body2">내 정류장 별칭 입력</h2>
         <InputContainer className="relative h-12 w-full">
           <InputContainer.Label>
@@ -100,90 +101,106 @@ export default function Commute({
           <InputContainer.ResetButton className="absolute top-3 right-3 h-6 w-6 fill-Gray-500" />
         </InputContainer>
       </div>
-      <div className="mt-8">
+      <div className="mt-8 px-4">
         <h2 className="mb-2 text-body2">정류장 이름</h2>
         <Link to={`/commute/searchStation/${comId}`}>
-          <TextButton className="relative h-12 w-full rounded-lg border border-Gray-300 bg-White text-left text-body2 text-Gray-400">
+          <TextButton
+            className={tw(
+              'relative h-12 w-full rounded-lg border border-Gray-300 bg-White text-left text-body2 text-Gray-400',
+              !commute.station?.stationName ? '' : 'text-Black'
+            )}
+          >
             {commute.station?.stationName ?? '정류장 선택'}
           </TextButton>
         </Link>
       </div>
-      <div className="mt-8">
+      <div className="mt-8 px-4">
         <h2 className="mb-2 text-body2">버스 번호</h2>
         <TextButton
           disabled={!commute.station}
           onClick={handleOpenClick}
-          className="relative h-12 w-full rounded-lg border border-Gray-300 bg-White text-left text-body2 text-Gray-400"
+          className={tw(
+            'relative h-12 w-full rounded-lg border border-Gray-300 bg-White text-left text-body2 text-Gray-400',
+            !commute.routes.map((r) => r.routeName).join(', ')
+              ? ''
+              : 'text-Black'
+          )}
         >
           {commute.routes.map((r) => r.routeName).join(', ') ?? '버스 선택'}
         </TextButton>
       </div>
       <StatusButton
         disabled={!commute.routes.length}
-        className="fixed bottom-8 w-[calc(100%-32px)]"
+        className="fixed bottom-8 left-4 w-[calc(100%-32px)] px-4"
         onClick={handleConfirmClick}
       >
         확인
       </StatusButton>
-      {isModalOpen && (
-        <BaseModal>
-          <BaseModal.Content className="top-56 h-full w-full rounded-t-2xl bg-White">
-            <List className="rounded-t-2xl">
-              <List.Item
-                onClick={handleCloseClick}
-                className="rounded-t-2xl pl-6"
-              >
-                <List.Title>{commute.station?.stationName}</List.Title>
-                <List.Icon icon={ChevronDownIcon} />
-              </List.Item>
-
-              {routes?.map(({ routeName, routeId }) => (
-                <List.Item key={routeId} className="relative pl-4">
-                  <InputContainer className="h-full w-full pl-2 text-body1 text-Primary-700">
-                    <InputContainer.Label>
-                      {routeName}
-                      <InputContainer.Label.Input
-                        onChange={() => {
-                          handleRouteCheckChange(
-                            { routeName, routeId },
-                            !commute.routes.find((r) => r.routeId === routeId)
-                          );
-                        }}
-                        type="checkbox"
-                        className="hidden"
-                        checked={
-                          !commute.routes.find((r) => r.routeId === routeId)
-                        }
-                      />
-                      <List.Icon
-                        className={tw(
-                          'absolute top-6 right-4 h-7 w-7',
-                          !commute.routes.find((r) => r.routeId === routeId)
-                            ? 'bg-White fill-White stroke-Gray-300'
-                            : 'bg-White fill-Primary-700'
-                        )}
-                        icon={
-                          !commute.routes.find((r) => r.routeId === routeId)
-                            ? PlusCircleIcon
-                            : CheckCircleIcon
-                        }
-                      />
-                    </InputContainer.Label>
-                  </InputContainer>
-                </List.Item>
-              ))}
-            </List>
-            <StatusButton
-              onClick={handleRoutesConfirmClick}
-              disabled={!commute.routes.length}
-              className="fixed left-4 bottom-8 w-[calc(100%-32px)]"
+      <BaseModal>
+        <BaseModal.Content
+          className={tw(
+            animatedBaseModal,
+            isModalOpen ? 'translate-y-0' : 'translate-y-[1800px]'
+          )}
+        >
+          <List className="rounded-t-2xl">
+            <List.Item
+              onClick={handleCloseClick}
+              className="rounded-t-2xl pl-6"
             >
-              확인
-            </StatusButton>
-          </BaseModal.Content>
-          <BaseModal.DimBg onClick={handleCloseClick} />
-        </BaseModal>
-      )}
+              <List.Title>{commute.station?.stationName}</List.Title>
+              <List.Icon icon={ChevronDownIcon} />
+            </List.Item>
+
+            {routes?.map(({ routeName, routeId }) => (
+              <List.Item key={routeId} className="relative pl-4">
+                <InputContainer className="h-full w-full pl-2 text-body1 text-Primary-700">
+                  <InputContainer.Label>
+                    {routeName}
+                    <InputContainer.Label.Input
+                      onChange={() => {
+                        handleRouteCheckChange(
+                          { routeName, routeId },
+                          !commute.routes.find((r) => r.routeId === routeId)
+                        );
+                      }}
+                      type="checkbox"
+                      className="hidden"
+                      checked={
+                        !commute.routes.find((r) => r.routeId === routeId)
+                      }
+                    />
+                    <List.Icon
+                      className={tw(
+                        'absolute top-6 right-4 h-7 w-7',
+                        !commute.routes.find((r) => r.routeId === routeId)
+                          ? 'bg-White fill-White stroke-Gray-300'
+                          : 'bg-White fill-Primary-700'
+                      )}
+                      icon={
+                        !commute.routes.find((r) => r.routeId === routeId)
+                          ? PlusCircleIcon
+                          : CheckCircleIcon
+                      }
+                    />
+                  </InputContainer.Label>
+                </InputContainer>
+              </List.Item>
+            ))}
+          </List>
+          <StatusButton
+            onClick={handleRoutesConfirmClick}
+            disabled={!commute.routes.length}
+            className="fixed left-4 bottom-8 w-[calc(100%-32px)]"
+          >
+            확인
+          </StatusButton>
+        </BaseModal.Content>
+        <BaseModal.DimBg
+          onClick={handleCloseClick}
+          className={tw(isModalOpen ? '' : 'hidden')}
+        />
+      </BaseModal>
     </div>
   );
 }
