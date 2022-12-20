@@ -1,6 +1,7 @@
+/* eslint-disable no-nested-ternary */
 import { useParams } from 'react-router-dom';
 import { tw } from '@/utils/tailwindMerge';
-import { NavigationHeader, Error } from '@/components';
+import { LoadingWithDelay, NavigationHeader, Error } from '@/components';
 import { useNotice } from '@/pages/Main/hooks/useNotice';
 import NotFound from '@/pages/404';
 
@@ -11,8 +12,9 @@ export default function Notice({
   ...restProps
 }: NoticeProps<'div'>) {
   const { id } = useParams();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { isError, isLoading, data } = useNotice();
+
+  if (isError) <NotFound />;
 
   const notice = data?.find((d) => d.noticeId === id);
 
@@ -35,8 +37,12 @@ export default function Notice({
             문의하러 가기
           </Error.InduceLink>
         </Error>
+      ) : isLoading ? (
+        <LoadingWithDelay />
       ) : (
-        <div className="mt-8 mr-4 ml-4">{notice?.content}</div>
+        <div>
+          <div className="mt-8 mr-4 ml-4">{notice?.content}</div>
+        </div>
       )}
     </div>
   );

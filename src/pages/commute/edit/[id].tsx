@@ -8,6 +8,7 @@ import {
   Error,
   InputContainer,
   List,
+  LoadingWithDelay,
   NavigationHeader,
   StatusButton,
   TextButton,
@@ -162,9 +163,8 @@ export default function Commute({
               <List.Title>{editing.station?.stationName}</List.Title>
               <List.Icon icon={ChevronDownIcon} />
             </List.Item>
-
             {isLoading ? (
-              <>로딩중 </>
+              <LoadingWithDelay />
             ) : (
               routes?.map(({ routeName, routeId }) => (
                 <List.Item key={routeId} className="relative pl-4">

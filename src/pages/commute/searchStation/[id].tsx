@@ -9,6 +9,7 @@ import {
   Header,
   InputContainer,
   List,
+  LoadingWithDelay,
   Error,
   StatusButton,
 } from '@/components';
@@ -115,8 +116,10 @@ export default function SearchBusStop({
           </Error.Text>
         </Error>
       ) : (
-        <List>
-          {isStationsLoading ||
+        <List className="pl-4">
+          {isStationsLoading ? (
+            <LoadingWithDelay />
+          ) : (
             filteredStations?.map((station) => (
               <List.Item
                 key={station.stationId}
@@ -130,7 +133,8 @@ export default function SearchBusStop({
                   />
                 </List.Title>
               </List.Item>
-            ))}
+            ))
+          )}
         </List>
       )}
       <BaseModal>
