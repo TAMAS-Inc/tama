@@ -10,6 +10,7 @@ import {
   BusCard,
   Icon,
   SyncButton,
+  LoadingWithDelay,
 } from '@/components';
 
 import { useRouteMap, RouteMapInfo } from '../hooks/useRouteMap';
@@ -61,6 +62,7 @@ export default function RouteMap({
       <>
         <NavigationHeader>로딩중...</NavigationHeader>
         <Notification />
+        <LoadingWithDelay />
       </>
     );
 
@@ -123,7 +125,6 @@ export default function RouteMap({
         )
       )}
       <SyncButton onClick={handleSyncButtonClick} />
-      <AD />
     </div>
   );
 }

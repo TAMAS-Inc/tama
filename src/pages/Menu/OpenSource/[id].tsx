@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { OpenSourceData } from '@/../public/assets/data/openSourceData';
+import { OpenSourceData } from '@/assets/data/openSourceData';
 import { tw } from '@/utils/tailwindMerge';
 import { NavigationHeader } from '@/components';
 

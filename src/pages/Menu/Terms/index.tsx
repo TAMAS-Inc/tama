@@ -1,6 +1,6 @@
 import { tw } from '@/utils/tailwindMerge';
 import { AD, NavigationHeader } from '@/components';
-import { TERMS_OF_SERVICE } from '../../../../public/assets/data/termsOfServices';
+import { TERMS_OF_SERVICE } from '@/assets/data/termsOfServices';
 
 type TermsProps<T extends React.ElementType> = Component<T>;
 
@@ -25,7 +25,6 @@ export default function Terms({ className, ...restProps }: TermsProps<'div'>) {
           </div>
         ))}
       </div>
-      <AD />
     </div>
   );
 }
