@@ -21,6 +21,6 @@
       "@/*":["src/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "public/assets/data/termsOfServices/index.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

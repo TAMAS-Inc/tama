@@ -2,3 +2,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+@layer base{
+  @font-face {
+    font-family: "LINE Seed Sans KR";
+    font-weight: 400;
+    src: url("/assets/fonts/LINE_Seed_Sans_KR/Webfont/WOFF2/LINESeedKR-Rg.woff2") format("woff2");
+  }
+
+  @font-face {
+    font-family: "LINE Seed Sans KR";
+    font-weight: 500;
+    src: url("/assets/fonts/LINE_Seed_Sans_KR/Webfont/WOFF2/LINESeedKR-Bd.woff2") format("woff2");
+  }
+}
