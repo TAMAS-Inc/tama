@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import { tw } from '@/utils/tailwindMerge';
 import { IconButton, List } from '@/components';
 import { BaseModal } from '../../../../components/BaseModal/BaseModal';
+import { animatedBaseModal } from '../../../../constants/style';
 
 type MainMenuProps<T extends React.ElementType> = {
+  isModalOpen: boolean;
   onDimBgClick: React.MouseEventHandler<HTMLDivElement>;
   onCloseButtonClick: React.MouseEventHandler<HTMLButtonElement>;
 } & Component<T>;
@@ -12,6 +14,7 @@ type MainMenuProps<T extends React.ElementType> = {
 export function MainMenu({
   children,
   className,
+  isModalOpen,
   onDimBgClick: handleDimBgClick,
   onCloseButtonClick: handleCloseButtonClick,
   ...restProps
@@ -24,16 +27,18 @@ export function MainMenu({
   };
   return (
     <BaseModal className={tw('', className)} {...restProps}>
-      <BaseModal.Content className="right-0 h-full w-[300px] bg-White">
-        <List>
+      <BaseModal.Content
+        className={tw(
+          'fixed top-0 right-0 z-50 h-full w-[300px] rounded-t-2xl bg-White transition duration-500 ease-in-out',
+          isModalOpen ? 'translate-x-0' : 'translate-x-full'
+        )}
+      >
+        <List className="relative">
           <IconButton
             onClick={handleCloseButtonClick}
-            className="relative right-1 mt-[20px] h-14 w-full text-right"
+            className="absolute -top-4 right-4 z-10 h-10 w-10"
           >
-            <IconButton.Icon
-              icon={XMarkIcon}
-              className="absolute right-4 top-4 mr-3 h-6 w-6"
-            />
+            <IconButton.Icon icon={XMarkIcon} className="h-6 w-6" />
           </IconButton>
           <List.Item className="h-25 mt-9 pl-4 pb-6">
             <List.Title className="text-left">
@@ -49,7 +54,10 @@ export function MainMenu({
           ))}
         </List>
       </BaseModal.Content>
-      <BaseModal.DimBg onClick={handleDimBgClick} />
+      <BaseModal.DimBg
+        onClick={handleDimBgClick}
+        className={tw(isModalOpen ? '' : 'hidden')}
+      />
     </BaseModal>
   );
 }

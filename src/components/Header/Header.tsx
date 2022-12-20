@@ -15,7 +15,7 @@ export function Header({
   return (
     <header
       className={tw(
-        'relative flex h-12 w-full items-center border-b-2 border-Gray-100 p-4 pb-2',
+        'relative flex h-16 w-full items-center border-b-2 border-Gray-100 pl-4 pr-4',
         className
       )}
       {...restProps}

@@ -2,7 +2,15 @@
 import { Bar, XAxis, YAxis, Legend, LabelList, BarChart, Cell } from 'recharts';
 import { Link } from 'react-router-dom';
 import { tw } from '@/utils/tailwindMerge';
-import { AD, NavigationHeader, Notification, SyncButton } from '@/components';
+import {
+  AD,
+  NavigationHeader,
+  Notification,
+  SyncButton,
+  TextButton,
+  Error,
+  LoadingWithDelay,
+} from '@/components';
 import {
   CurrentInfo,
   PredictInfo,
@@ -12,6 +20,7 @@ import {
 } from '../hooks/useAnalysis';
 import { getCurrentDate } from '@/utils/date';
 import { useQueryString } from '@/hooks/useQueryString';
+import NotFound from '@/pages/404';
 
 type AnalysisProps<T extends React.ElementType> = Component<T>;
 
@@ -39,7 +48,7 @@ export default function Analysis({
 
   const { isLoading, isError, data, mutation } = useAnalysis(testParams);
 
-  if (isError) return <>Error</>;
+  if (isError) return <NotFound />;
 
   const getSortedData = (predictsInfo: PredictInfo[]) =>
     predictsInfo.sort((a, b) => b.remainStationCnt - a.remainStationCnt);
@@ -88,7 +97,21 @@ export default function Analysis({
     <div className={tw('', className)} {...restProps}>
       <NavigationHeader>실시간 분석</NavigationHeader>
       <Notification />
-      {!isLoading && !mutation.isLoading ? (
+      {isError ? (
+        <Error>
+          <Error.SVG />
+          <Error.Text>
+            현재 보고 계신 페이지를 이용할 수 없습니다.
+            <br />
+            재접속 후에도 화면이 나타나지 않는다면
+            <br />
+            아래 버튼을 눌러 알려주세요!
+          </Error.Text>
+          <Error.InduceLink path="/menu/inquiry">
+            문의하러 가기
+          </Error.InduceLink>
+        </Error>
+      ) : !isLoading && !mutation.isLoading ? (
         <div className="flex flex-col gap-4 pt-8 pl-7 pr-7 text-body1 font-bold">
           <p>
             <strong className="font-bold text-Primary-600">
@@ -115,15 +138,21 @@ export default function Analysis({
           {data.exist ? (
             <Analysis.Chart data={getChartData(data)} />
           ) : (
-            <Link to="/main">메인으로 돌아가기</Link>
+            <>
+              <p>
+                <strong>타까마까의 실시간 예측 정보</strong>는 <br />{' '}
+                <strong>평일 아침 6시부터 10시 사이</strong>에 제공됩니다.
+              </p>
+              <TextButton className="h-12 bg-Primary-400 px-4 text-body1 font-bold">
+                <Link to="/main">타까마까 홈으로 가기</Link>
+              </TextButton>
+            </>
           )}
         </div>
       ) : (
-        <>로딩중</>
+        <LoadingWithDelay />
       )}
-
       <SyncButton onClick={handleSyncButtonClick} />
-      <AD />
     </div>
   );
 }

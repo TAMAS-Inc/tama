@@ -37,20 +37,20 @@ export function MainHeader({
   }, [currentComId]);
 
   return (
-    <Header className={tw('pt-4', className)} {...restProps}>
+    <Header className={tw('overflow-hidden', className)} {...restProps}>
       <Header.Dropdown onClick={handleDropdownClick}>
         {children ?? currentCommute.comName}
       </Header.Dropdown>
-      {isDropdownOpen && (
-        <DropdownModal onDimBgClick={handleDropdownDimBgClick} />
-      )}
+      <DropdownModal
+        isModalOpen={isDropdownOpen}
+        onDimBgClick={handleDropdownDimBgClick}
+      />
       <Header.Menu onClick={handleMenuClick} />
-      {isMenuOpen && (
-        <MainMenu
-          onDimBgClick={() => setIsMenuOpen(false)}
-          onCloseButtonClick={() => setIsMenuOpen(false)}
-        />
-      )}
+      <MainMenu
+        isModalOpen={isMenuOpen}
+        onDimBgClick={() => setIsMenuOpen(false)}
+        onCloseButtonClick={() => setIsMenuOpen(false)}
+      />
     </Header>
   );
 }

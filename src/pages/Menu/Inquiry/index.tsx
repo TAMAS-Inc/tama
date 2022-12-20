@@ -109,7 +109,7 @@ export default function Inquiry({
   ];
 
   return (
-    <div className={tw('pt-4', className)} {...restProps}>
+    <div className={tw('', className)} {...restProps}>
       <NavigationHeader>이메일 문의하기</NavigationHeader>
       <form
         className="mt-8 mr-4 ml-4 flex flex-col gap-4"

@@ -5,6 +5,6 @@ export default function Main() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    navigate('main');
+    navigate('/intro');
   });
 }
