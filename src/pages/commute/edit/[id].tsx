@@ -3,7 +3,6 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import { CheckCircleIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
-
 import {
   BaseModal,
   Error,
@@ -16,10 +15,9 @@ import {
 import { useCommutes } from '@/hooks/useCommutes';
 import { currentComIdState } from '@/state/atom';
 import { tw } from '@/utils/tailwindMerge';
-
 import { useAvailableRoutes } from '../hooks/useAvailableRoutes';
+import { animatedBaseModal } from '../../../constants/style';
 import NotFound from '@/pages/404';
-import { Inquiry } from '../../Menu/Inquiry/hooks/useInquiry';
 
 type CommuteProps<T extends React.ElementType> = Component<T>;
 
@@ -149,83 +147,89 @@ export default function Commute({
           </StatusButton>
         </>
       )}
-      {isModalOpen && (
-        <BaseModal>
-          <BaseModal.Content className="top-56 h-full w-full rounded-t-2xl bg-White">
-            <List className="rounded-t-2xl">
-              <List.Item
-                onClick={handleCloseClick}
-                className="rounded-t-2xl pl-6"
-              >
-                <List.Title>{editing.station?.stationName}</List.Title>
-                <List.Icon icon={ChevronDownIcon} />
-              </List.Item>
+      <BaseModal>
+        <BaseModal.Content
+          className={tw(
+            animatedBaseModal,
+            isModalOpen ? 'translate-y-0' : 'translate-y-[1800px]'
+          )}
+        >
+          <List className="rounded-t-2xl">
+            <List.Item
+              onClick={handleCloseClick}
+              className="rounded-t-2xl pl-6"
+            >
+              <List.Title>{editing.station?.stationName}</List.Title>
+              <List.Icon icon={ChevronDownIcon} />
+            </List.Item>
 
-              {isLoading ? (
-                <>로딩중 </>
-              ) : (
-                routes?.map(({ routeName, routeId }) => (
-                  <List.Item key={routeId} className="relative pl-4">
-                    <InputContainer className="h-full w-full pl-2 text-body1 text-Primary-700">
-                      <InputContainer.Label>
-                        {routeName}
-                        <InputContainer.Label.Input
-                          onChange={() => {
-                            handleRouteCheckChange(
-                              { routeName, routeId },
-                              !editing.routes.find((e) => e.routeId === routeId)
-                            );
-                          }}
-                          type="checkbox"
-                          className="hidden"
-                          checked={
+            {isLoading ? (
+              <>로딩중 </>
+            ) : (
+              routes?.map(({ routeName, routeId }) => (
+                <List.Item key={routeId} className="relative pl-4">
+                  <InputContainer className="h-full w-full pl-2 text-body1 text-Primary-700">
+                    <InputContainer.Label>
+                      {routeName}
+                      <InputContainer.Label.Input
+                        onChange={() => {
+                          handleRouteCheckChange(
+                            { routeName, routeId },
                             !editing.routes.find((e) => e.routeId === routeId)
-                          }
-                        />
-
-                        <InputContainer.Label.Input
-                          onChange={() => {
-                            handleRouteCheckChange(
-                              { routeName, routeId },
-                              !editing.routes.find((r) => r.routeId === routeId)
-                            );
-                          }}
-                          type="checkbox"
-                          className="hidden"
-                          checked={
-                            !editing.routes.find((r) => r.routeId === routeId)
-                          }
-                        />
-                      </InputContainer.Label>
-                      <List.Icon
-                        className={tw(
-                          'absolute top-6 right-4 h-7 w-7',
+                          );
+                        }}
+                        type="checkbox"
+                        className="hidden"
+                        checked={
                           !editing.routes.find((e) => e.routeId === routeId)
-                            ? 'bg-White fill-White stroke-Gray-300'
-                            : 'bg-White fill-Primary-700'
-                        )}
-                        icon={
-                          !editing.routes.find((e) => e.routeId === routeId)
-                            ? PlusCircleIcon
-                            : CheckCircleIcon
                         }
                       />
-                    </InputContainer>
-                  </List.Item>
-                ))
-              )}
-            </List>
-            <StatusButton
-              onClick={handleRoutesConfirmClick}
-              disabled={!editing.routes.length}
-              className="fixed left-4 bottom-8 w-[calc(100%-32px)]"
-            >
-              확인
-            </StatusButton>
-          </BaseModal.Content>
-          <BaseModal.DimBg onClick={handleCloseClick} />
-        </BaseModal>
-      )}
+
+                      <InputContainer.Label.Input
+                        onChange={() => {
+                          handleRouteCheckChange(
+                            { routeName, routeId },
+                            !editing.routes.find((r) => r.routeId === routeId)
+                          );
+                        }}
+                        type="checkbox"
+                        className="hidden"
+                        checked={
+                          !editing.routes.find((r) => r.routeId === routeId)
+                        }
+                      />
+                    </InputContainer.Label>
+                    <List.Icon
+                      className={tw(
+                        'absolute top-6 right-4 h-7 w-7',
+                        !editing.routes.find((e) => e.routeId === routeId)
+                          ? 'bg-White fill-White stroke-Gray-300'
+                          : 'bg-White fill-Primary-700'
+                      )}
+                      icon={
+                        !editing.routes.find((e) => e.routeId === routeId)
+                          ? PlusCircleIcon
+                          : CheckCircleIcon
+                      }
+                    />
+                  </InputContainer>
+                </List.Item>
+              ))
+            )}
+          </List>
+          <StatusButton
+            onClick={handleRoutesConfirmClick}
+            disabled={!editing.routes.length}
+            className="fixed left-4 bottom-8 w-[calc(100%-32px)]"
+          >
+            확인
+          </StatusButton>
+        </BaseModal.Content>
+        <BaseModal.DimBg
+          onClick={handleCloseClick}
+          className={tw(isModalOpen ? '' : 'hidden')}
+        />
+      </BaseModal>
     </div>
   );
 }

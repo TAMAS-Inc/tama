@@ -25,11 +25,11 @@ function Checkbox({
 }: CheckboxProps) {
   return (
     <InputContainer className={tw('mt-4 flex rounded-none', className)}>
-      <InputContainer.Label>
+      <InputContainer.Label className="cursor-pointer">
         <InputContainer.Label.Input
           name={name}
           type="checkbox"
-          className="mx-2 h-6 w-6 bg-Gray-500"
+          className="mx-2 h-6 w-6 accent-Primary-400 hover:accent-Primary-300"
           onChange={onChange}
           checked={state}
         />
