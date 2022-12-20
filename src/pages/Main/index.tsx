@@ -1,9 +1,8 @@
 /* eslint-disable no-nested-ternary */
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import {
-  AD,
   BusCard,
   Error,
   Notification,
@@ -20,44 +19,34 @@ import {
   useRealtime,
 } from './hooks/useRealtime';
 
-const INTERVAL_TIME = 15;
-
 export default function Main() {
   const navigate = useNavigate();
-  const [fetchTime, setFetchTime] = useState(INTERVAL_TIME);
   const currentCommute = useRecoilValue(currentCommuteState);
 
-  const testParams: RealtimeReqParams = {
-    stationId: currentCommute.station?.stationId as string,
-    routeIds: currentCommute.routes.flatMap((r) => r.routeId),
-    predictDate: getCurrentDate(),
-  };
+  const params: RealtimeReqParams = useMemo(
+    () => ({
+      stationId: currentCommute.station?.stationId as string,
+      routeIds: currentCommute.routes.flatMap((r) => r.routeId),
+      predictDate: getCurrentDate(),
+    }),
+    [currentCommute.routes, currentCommute.station?.stationId]
+  );
 
-  const {
-    isError,
-    isLoading,
-    data: Routes,
-    mutation,
-  } = useRealtime(testParams);
+  const { isError, isLoading, data: Routes, mutation } = useRealtime(params);
 
   const handleSyncButtonClick = () => {
-    mutation.mutate({ ...testParams, predictDate: getCurrentDate() });
-    setFetchTime(INTERVAL_TIME);
+    mutation.mutate({ ...params, predictDate: getCurrentDate() });
   };
 
   useEffect(() => {
     const timeId = setInterval(() => {
-      setFetchTime((time) => time - 1);
-    }, 1000);
+      mutation.mutate({ ...params, predictDate: getCurrentDate() });
+    }, 16000);
     return () => {
-      if (fetchTime === 0) {
-        setFetchTime(INTERVAL_TIME);
-        mutation.mutate({ ...testParams, predictDate: getCurrentDate() });
-      }
       clearInterval(timeId);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchTime]);
+  }, [params]);
 
   if (isError) return <NotFound />;
 
@@ -125,7 +114,7 @@ export default function Main() {
           )
         )
       )}
-      <SyncButton fetchTime={fetchTime} onClick={handleSyncButtonClick} />
+      <SyncButton onClick={handleSyncButtonClick} />
     </>
   );
 }

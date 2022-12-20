@@ -3,13 +3,12 @@ import { Bar, XAxis, YAxis, Legend, LabelList, BarChart, Cell } from 'recharts';
 import { Link } from 'react-router-dom';
 import { tw } from '@/utils/tailwindMerge';
 import {
-  AD,
   NavigationHeader,
   Notification,
-  SyncButton,
   TextButton,
   Error,
   LoadingWithDelay,
+  SyncButtonWithoutTime,
 } from '@/components';
 import {
   CurrentInfo,
@@ -152,7 +151,7 @@ export default function Analysis({
       ) : (
         <LoadingWithDelay />
       )}
-      <SyncButton onClick={handleSyncButtonClick} />
+      <SyncButtonWithoutTime onClick={handleSyncButtonClick} />
     </div>
   );
 }
