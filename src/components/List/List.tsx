@@ -44,10 +44,7 @@ type SubtitleProps<T extends React.ElementType> = Component<T>;
 
 function Subtitle({ children, className, ...restProps }: SubtitleProps<'p'>) {
   return (
-    <p
-      className={tw('text-body3 font-bold text-Gray-400', className)}
-      {...restProps}
-    >
+    <p className={tw('text-body3 text-Gray-400', className)} {...restProps}>
       {children}
     </p>
   );
