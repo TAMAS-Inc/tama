@@ -8,6 +8,7 @@ module.exports = {
     colors: {
       Black: '#181818',
       White: '#ffffff',
+      Red: '#FF597B',
       Primary: {
         '100': '#fff4db',
         '200': '#ffe5a8',
@@ -42,6 +43,7 @@ module.exports = {
     },
     fontFamily: {
       'line-seed-sans-kr': 'LINE Seed Sans KR',
+      Pretendard: 'Pretendard',
     },
     extend: {
       fontSize: {
