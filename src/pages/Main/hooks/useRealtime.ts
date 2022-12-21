@@ -38,7 +38,7 @@ const fetchRealtime: FetchRealtime = async ({
       .join('&')}`;
 
     const res = await fetch(url);
-
+    if (res.status !== 200) throw new Error('Realtime fetch error');
     return res.json() as unknown as RealtimeInfo[];
   } catch {
     throw new Error('Realtime fetch error');
@@ -51,6 +51,7 @@ export const useRealtime = (params: RealtimeReqParams) => {
   const query = useQuery<RealtimeInfo[]>({
     queryKey: ['realtime', params],
     queryFn: async () => fetchRealtime(params),
+    retry: 20,
   });
 
   const mutation = useMutation({

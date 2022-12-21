@@ -32,22 +32,24 @@ export default function Main() {
     mutation.mutate({ ...params, predictDate: getCurrentDate() });
   };
 
-  if (isError)
+  if (!Routes && isError)
     return (
       <div>
         <MainHeader />
-        <Notification />
         <Error>
           <Error.SVG />
           <Error.Text>
             현재 보고 계신 페이지를 이용할 수 없습니다.
             <br />
-            재접속 후에도 화면이 나타나지 않는다면
-            <br />
-            아래 버튼을 눌러 알려주세요!
+            아래의 버튼을 눌러 재시도 해주세요.
           </Error.Text>
-          <Error.InduceLink path="/menu/inquiry">
-            문의하러 가기
+          <Error.InduceLink
+            path="/main"
+            onClick={() => {
+              window.location.reload();
+            }}
+          >
+            재시도
           </Error.InduceLink>
         </Error>
       </div>
@@ -57,7 +59,7 @@ export default function Main() {
     <div>
       <MainHeader />
       <Notification />
-      {isLoading ? (
+      {isLoading && !mutation.isLoading ? (
         <LoadingWithDelay />
       ) : (
         Routes?.map(
