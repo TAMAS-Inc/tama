@@ -1,7 +1,7 @@
-import { useState, ChangeEventHandler, useRef } from 'react';
+import { useState, ChangeEventHandler, useRef, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { hangulIncludes, chosungIncludes } from '@toss/hangul';
-import { CheckCircleIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
+import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import Highlighter from 'react-highlight-words';
 import {
@@ -11,7 +11,7 @@ import {
   List,
   LoadingWithDelay,
   Error,
-  StatusButton,
+  TextButton,
 } from '@/components';
 import { tw } from '@/utils/tailwindMerge';
 import { useCommutes } from '@/hooks/useCommutes';
@@ -29,6 +29,8 @@ export default function SearchBusStop({
   const { id: comId } = useParams() as { id: Commute['comId'] };
   const { editing, editCommute } = useCommutes();
 
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [targetId, setTargetId] = useState<string | null>(null);
   const [inputValue, setInputValue] = useState('');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedStation, setSelectedStation] = useState<Station | null>(null);
@@ -53,6 +55,10 @@ export default function SearchBusStop({
       chosungIncludes(station.stationName, inputValue)
   );
 
+  const handlePopupMessage = () => {
+    setIsPopupOpen(true);
+    setTimeout(() => setIsPopupOpen(false), 1000);
+  };
   const handleCloseClick = () => setIsModalOpen(false);
   const handleResetClick = () => {
     setInputValue('');
@@ -82,9 +88,17 @@ export default function SearchBusStop({
             editing.routes.filter((r) => r.routeId !== route.routeId) ?? [],
         });
 
-  const handleRoutesConfirmClick = () => {
+  const handleNavigateBefore = () => {
     navigate(-1);
   };
+
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+  });
 
   if (!comId || isStationsError || isRouteError) return <NotFound />;
 
@@ -98,7 +112,7 @@ export default function SearchBusStop({
               <InputContainer.Label.Input
                 ref={inputRef}
                 onChange={handleInputChange}
-                className="bg-Gray-100"
+                className="truncate bg-Gray-100 pr-10"
                 placeholder="정류장 검색"
               />
             </InputContainer.Label>
@@ -120,7 +134,7 @@ export default function SearchBusStop({
           </Error.Text>
         </Error>
       ) : (
-        <List className="pl-4">
+        <List>
           {isStationsLoading ? (
             <LoadingWithDelay />
           ) : (
@@ -128,7 +142,7 @@ export default function SearchBusStop({
               <List.Item
                 key={station.stationId}
                 onClick={() => handleStationClick(station)}
-                className="pl-4"
+                className="pl-4 focus:bg-Primary-400"
               >
                 <List.Title>
                   <Highlighter
@@ -144,7 +158,7 @@ export default function SearchBusStop({
           )}
         </List>
       )}
-      <BaseModal>
+      <BaseModal className="h-full w-full overflow-hidden ">
         <BaseModal.Content
           className={tw(
             'fixed inset-0 top-56 z-50 h-[calc(100%-14rem)] w-full rounded-t-2xl bg-White transition duration-300 ease-in-out',
@@ -152,13 +166,17 @@ export default function SearchBusStop({
           )}
         >
           <List className="rounded-t-2xl">
-            <List.Item
-              onClick={handleCloseClick}
-              className="rounded-t-2xl pl-6"
-            >
-              <List.Title>{selectedStation?.stationName}</List.Title>
-              <List.Icon icon={ChevronDownIcon} />
-            </List.Item>
+            <div className="flex h-20 items-center justify-between rounded-t-2xl border-b border-Gray-100 pl-6 pr-4">
+              <List.Title className="w-40 truncate">
+                {selectedStation?.stationName}
+              </List.Title>
+              <TextButton
+                onClick={handleNavigateBefore}
+                className="bg-transparent text-body2"
+              >
+                완료
+              </TextButton>
+            </div>
             {!isRouteLoading &&
               routes?.map(({ routeName, routeId }) => (
                 <List.Item key={routeId} className="relative pl-4">
@@ -171,6 +189,8 @@ export default function SearchBusStop({
                             { routeName, routeId },
                             e.target.checked
                           );
+                          handlePopupMessage();
+                          setTargetId(routeId);
                         }}
                         type="checkbox"
                         className="hidden"
@@ -180,7 +200,7 @@ export default function SearchBusStop({
                           'absolute top-6 right-4 h-7 w-7',
                           !editing.routes.find((r) => r.routeId === routeId)
                             ? 'bg-White fill-White stroke-Gray-300'
-                            : 'bg-White fill-Primary-700'
+                            : 'bg-White fill-Primary-400'
                         )}
                         icon={
                           !editing.routes.find((r) => r.routeId === routeId)
@@ -192,14 +212,18 @@ export default function SearchBusStop({
                   </InputContainer>
                 </List.Item>
               ))}
+            <div
+              className={tw(
+                'absolute left-1/2 bottom-10 -translate-x-1/2 -translate-y-1/2 rounded-md bg-Gray-600 py-1 px-2 text-center text-Gray-100 transition-opacity',
+                isPopupOpen ? 'opacity-100' : 'opacity-0'
+              )}
+            >
+              {!editing.routes.find((e) => e.routeId === targetId)
+                ? '제거 '
+                : '추가 '}
+              되었습니다.
+            </div>
           </List>
-          <StatusButton
-            onClick={handleRoutesConfirmClick}
-            disabled={!editing.routes.length}
-            className="fixed left-4 bottom-8 w-[calc(100%-32px)]"
-          >
-            확인
-          </StatusButton>
         </BaseModal.Content>
         <BaseModal.DimBg
           onClick={handleCloseClick}
