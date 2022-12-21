@@ -20,16 +20,12 @@ export function Notification({
     setIsClosed(true, 1);
   };
   if (isClosed) return null;
+  if (isError) return null;
 
   return (
-    <Toast
-      className={tw('mb-2 h-9 pl-4 pr-4 font-bold', className)}
-      {...restProps}
-    >
-      {isError ? (
-        <Toast.Content className="pl-2">
-          🦋 타까마까에 오신 것을 환영합니다!
-        </Toast.Content>
+    <Toast className={tw('mb-2 h-9 pl-4 pr-4', className)} {...restProps}>
+      {isLoading ? (
+        <Toast.Content className="p-2" />
       ) : (
         <Link to={`/menu/notice/${data && data[0].noticeId}`}>
           <Toast.Content className="pl-2">

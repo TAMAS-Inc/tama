@@ -1,9 +1,7 @@
-/* eslint-disable no-nested-ternary */
 import { useParams } from 'react-router-dom';
 import { tw } from '@/utils/tailwindMerge';
 import { LoadingWithDelay, NavigationHeader, Error } from '@/components';
 import { useNotice } from '@/pages/Main/hooks/useNotice';
-import NotFound from '@/pages/404';
 
 type NoticeProps<T extends React.ElementType> = Component<T>;
 
@@ -14,16 +12,12 @@ export default function Notice({
   const { id } = useParams();
   const { isError, isLoading, data } = useNotice();
 
-  if (isError) <NotFound />;
-
   const notice = data?.find((d) => d.noticeId === id);
 
-  if (isError) return <NotFound />;
-
-  return (
-    <div className={tw('', className)} {...restProps}>
-      <NavigationHeader>{notice?.title}</NavigationHeader>
-      {isError ? (
+  if (isError)
+    return (
+      <div className={tw('', className)} {...restProps}>
+        <NavigationHeader>{notice?.title}</NavigationHeader>
         <Error>
           <Error.SVG />
           <Error.Text>
@@ -37,7 +31,13 @@ export default function Notice({
             문의하러 가기
           </Error.InduceLink>
         </Error>
-      ) : isLoading ? (
+      </div>
+    );
+
+  return (
+    <div className={tw('', className)} {...restProps}>
+      <NavigationHeader>{notice?.title}</NavigationHeader>
+      {isLoading ? (
         <LoadingWithDelay />
       ) : (
         <div>

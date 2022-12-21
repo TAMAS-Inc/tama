@@ -17,7 +17,7 @@ export function BusCard({
   return (
     <div
       className={tw(
-        'relative flex h-16 items-center border-b border-Gray-100 pl-6',
+        'relative flex h-16 items-center border-b border-Gray-100 pl-4',
         className
       )}
       {...restProps}
@@ -32,7 +32,7 @@ type RouteNameProps<T extends React.ElementType> = Component<T>;
 function RouteName({ children, className, ...restProps }: RouteNameProps<'p'>) {
   return (
     <p
-      className={tw('w-32 pl-2 text-body1 text-Primary-700', className)}
+      className={tw('w-20 text-body1 font-bold text-Primary-700', className)}
       {...restProps}
     >
       {children}
@@ -58,7 +58,7 @@ type InfoProps<T extends React.ElementType> = Component<T>;
 
 function Info({ children, className, ...restProps }: InfoProps<'div'>) {
   return (
-    <div className={tw('  flex-col text-left', className)} {...restProps}>
+    <div className={tw('flex-col text-left', className)} {...restProps}>
       {children}
     </div>
   );

@@ -48,7 +48,7 @@ export default function Edit({
         >
           <div>
             <BusCard.Info className="static left-0 flex translate-x-0 flex-row">
-              <BusCard.Content className="w-28 text-body1 line-clamp-1">
+              <BusCard.Content className="w-28 text-body1 font-bold line-clamp-1">
                 {comName}
               </BusCard.Content>
               <BusCard.StationName className="mb-0 flex items-center justify-center">

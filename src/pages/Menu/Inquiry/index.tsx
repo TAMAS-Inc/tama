@@ -112,7 +112,7 @@ export default function Inquiry({
     <div className={tw('', className)} {...restProps}>
       <NavigationHeader>이메일 문의하기</NavigationHeader>
       <form
-        className="mt-8 mr-4 ml-4 flex flex-col gap-4"
+        className="mr-4 ml-4 flex flex-col gap-4 pt-4"
         onSubmit={handleSubmit(onSubmit)}
       >
         {schemes
@@ -120,7 +120,7 @@ export default function Inquiry({
           .map(({ key, label, placeholder, validator }) => (
             <InputContainer key={key} className="h-full w-full">
               <InputContainer.Label className=" block">
-                <span className="text-body2 font-bold">{label}</span>
+                <span className="text-body2">{label}</span>
                 <InputContainer.Label.Input
                   className="mt-2 h-12 border border-Gray-300 text-body3 focus-visible:border-2 focus-visible:border-Black"
                   placeholder={placeholder}
@@ -134,7 +134,7 @@ export default function Inquiry({
           ))}
         <InputContainer className="h-full w-full">
           <InputContainer.Label className=" block">
-            <span className="text-body2 font-bold">
+            <span className="text-body2">
               {schemes.find((scheme) => scheme.key === 'content')?.label}
             </span>
             <textarea
@@ -168,7 +168,7 @@ export default function Inquiry({
 
         <button
           type="button"
-          className="w-full text-right font-bold text-Gray-500"
+          className="w-full text-right text-Gray-500"
           onClick={handleClick}
         >
           {readMore ? '숨기기 ▲' : '개인정보 수집 및 이용 동의 내용보기 ▼'}
@@ -208,11 +208,7 @@ export default function Inquiry({
             보호법」제15조제3항).
           </p>
         )}
-        <StatusButton
-          type="submit"
-          className="font-bold"
-          disabled={!formState.isValid}
-        >
+        <StatusButton type="submit" disabled={!formState.isValid}>
           작성 완료
         </StatusButton>
       </form>

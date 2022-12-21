@@ -1,5 +1,5 @@
 import { tw } from '@/utils/tailwindMerge';
-import { AD, NavigationHeader } from '@/components';
+import { NavigationHeader } from '@/components';
 import { TERMS_OF_SERVICE } from '@/assets/data/termsOfServices';
 
 type TermsProps<T extends React.ElementType> = Component<T>;
