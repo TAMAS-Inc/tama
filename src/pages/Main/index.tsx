@@ -1,5 +1,3 @@
-/* eslint-disable no-nested-ternary */
-import { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import {
@@ -11,7 +9,6 @@ import {
 } from '@/components';
 import { currentCommuteState } from '@/state/atom';
 import { getCurrentDate } from '@/utils/date';
-import NotFound from '../404';
 import { MainHeader } from './components';
 import {
   RealtimeInfo,
@@ -23,14 +20,11 @@ export default function Main() {
   const navigate = useNavigate();
   const currentCommute = useRecoilValue(currentCommuteState);
 
-  const params: RealtimeReqParams = useMemo(
-    () => ({
-      stationId: currentCommute.station?.stationId as string,
-      routeIds: currentCommute.routes.flatMap((r) => r.routeId),
-      predictDate: getCurrentDate(),
-    }),
-    [currentCommute.routes, currentCommute.station?.stationId]
-  );
+  const params: RealtimeReqParams = {
+    stationId: currentCommute.station?.stationId as string,
+    routeIds: currentCommute.routes.flatMap((r) => r.routeId),
+    predictDate: getCurrentDate(),
+  };
 
   const { isError, isLoading, data: Routes, mutation } = useRealtime(params);
 
@@ -38,23 +32,11 @@ export default function Main() {
     mutation.mutate({ ...params, predictDate: getCurrentDate() });
   };
 
-  useEffect(() => {
-    const timeId = setInterval(() => {
-      mutation.mutate({ ...params, predictDate: getCurrentDate() });
-    }, 16000);
-    return () => {
-      clearInterval(timeId);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params]);
-
-  if (isError) return <NotFound />;
-
-  return (
-    <>
-      <MainHeader />
-      <Notification />
-      {isError ? (
+  if (isError)
+    return (
+      <div>
+        <MainHeader />
+        <Notification />
         <Error>
           <Error.SVG />
           <Error.Text>
@@ -68,7 +50,14 @@ export default function Main() {
             문의하러 가기
           </Error.InduceLink>
         </Error>
-      ) : isLoading ? (
+      </div>
+    );
+
+  return (
+    <div>
+      <MainHeader />
+      <Notification />
+      {isLoading ? (
         <LoadingWithDelay />
       ) : (
         Routes?.map(
@@ -115,6 +104,6 @@ export default function Main() {
         )
       )}
       <SyncButton onClick={handleSyncButtonClick} />
-    </>
+    </div>
   );
 }

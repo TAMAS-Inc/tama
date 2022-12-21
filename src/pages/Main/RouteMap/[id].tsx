@@ -4,13 +4,13 @@ import { ArrowDownCircleIcon } from '@heroicons/react/24/outline';
 import { TruckIcon } from '@heroicons/react/24/solid';
 import { tw } from '@/utils/tailwindMerge';
 import {
-  AD,
   NavigationHeader,
   Notification,
   BusCard,
   Icon,
   SyncButton,
   LoadingWithDelay,
+  Error,
 } from '@/components';
 
 import { useRouteMap, RouteMapInfo } from '../hooks/useRouteMap';
@@ -59,19 +59,32 @@ export default function RouteMap({
 
   if (isLoading)
     return (
-      <>
+      <div className={tw('', className)} {...restProps}>
         <NavigationHeader>로딩중...</NavigationHeader>
         <Notification />
         <LoadingWithDelay />
-      </>
+      </div>
     );
 
   if (isError)
     return (
-      <>
+      <div className={tw('', className)} {...restProps}>
         <NavigationHeader>에러발생...</NavigationHeader>
         <Notification />
-      </>
+        <Error>
+          <Error.SVG />
+          <Error.Text>
+            현재 보고 계신 페이지를 이용할 수 없습니다.
+            <br />
+            재접속 후에도 화면이 나타나지 않는다면
+            <br />
+            아래 버튼을 눌러 알려주세요!
+          </Error.Text>
+          <Error.InduceLink path="/menu/inquiry">
+            문의하러 가기
+          </Error.InduceLink>
+        </Error>
+      </div>
     );
 
   const { routeInfo, routeLocations, routePassingStations } = data;
@@ -95,11 +108,11 @@ export default function RouteMap({
         </BusCard.StationName>
         <BusCard.Info className="flex items-center text-Gray-400">
           <BusCard.Content>
-            {routeInfo.regionName} | {routeInfo.startStationName} ↔{' '}
+            {routeInfo.regionName} | {routeInfo.startStationName} ↔
             {routeInfo.endStationName}
           </BusCard.Content>
           <BusCard.Content>
-            {routeInfo.upFirstTime} ~ {routeInfo.upLastTime} ∙ 배차간격{' '}
+            {routeInfo.upFirstTime} ~ {routeInfo.upLastTime} ∙ 배차간격
             {routeInfo.peekAlloc}-{routeInfo.nPeekAlloc}분
           </BusCard.Content>
           <BusCard.Content>{routeLocations.length}대 운행중</BusCard.Content>
