@@ -15,7 +15,7 @@ const meta = {
 
 export default meta;
 
-const Template: ComponentStory<typeof Intro> = (args) => <Intro {...args} />;
+const Template: ComponentStory<typeof Intro> = () => <Intro />;
 
 export const Default = Template.bind({});
 

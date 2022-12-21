@@ -1,20 +1,20 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import { SyncButton } from './SyncButtonWithoutTime';
+import { SyncButtonWithoutTime } from './SyncButtonWithoutTime';
 
 const meta = {
-  component: SyncButton,
-  title: 'Toast/SyncButton',
+  component: SyncButtonWithoutTime,
+  title: 'Toast/SyncButtonWithoutTime',
   parameters: {
     design: {
       type: 'figma',
       url: 'figmaURL',
     },
   },
-} as ComponentMeta<typeof SyncButton>;
+} as ComponentMeta<typeof SyncButtonWithoutTime>;
 
 export default meta;
 
-export const Default: ComponentStory<typeof SyncButton> = (args) => (
-  <SyncButton {...args} />
+export const Default: ComponentStory<typeof SyncButtonWithoutTime> = (args) => (
+  <SyncButtonWithoutTime {...args} />
 );

@@ -97,10 +97,10 @@ export default function Commute({
     navigate('/main');
   };
 
-  return (
-    <div className="" {...restProps}>
-      <NavigationHeader>출근길 관리</NavigationHeader>
-      {isError ? (
+  if (isError)
+    return (
+      <div className="" {...restProps}>
+        <NavigationHeader>출근길 관리</NavigationHeader>
         <Error>
           <Error.SVG />
           <Error.Text>
@@ -114,66 +114,68 @@ export default function Commute({
             문의하러 가기
           </Error.InduceLink>
         </Error>
-      ) : (
-        <>
-          <div className="mt-8 px-4">
-            <h2 className="mb-2 text-body2">내 정류장 별칭 입력</h2>
-            <InputContainer className="relative h-12 w-full">
-              <InputContainer.Label>
-                <InputContainer.Label.Input
-                  ref={inputRef}
-                  className="truncate border border-Gray-300 pr-10 focus:border-2 focus:border-Primary-500"
-                  onChange={handleComNameChange}
-                />
-              </InputContainer.Label>
-              <InputContainer.ResetButton
-                onClick={handleResetClick}
-                className="absolute top-3 right-3 h-6 w-6 fill-Gray-500"
-              />
-            </InputContainer>
-          </div>
-          <div className="mt-8 px-4">
-            <h2 className="mb-2 text-body2">정류장 이름</h2>
-            <Link to={`/commute/searchStation/${comId}`}>
-              <TextButton
-                className={tw(
-                  'relative h-12 w-full truncate rounded-lg border border-Gray-300 bg-White text-left text-body2',
-                  !editing.station?.stationName ? 'text-Gray-400' : 'text-Black'
-                )}
-              >
-                {editing.station?.stationName ?? '정류장 선택'}
-              </TextButton>
-            </Link>
-          </div>
-          <div className="mt-8 px-4">
-            <h2 className="mb-2 text-body2">버스 번호</h2>
-            <TextButton
-              disabled={!editing.station}
-              onClick={handleOpenClick}
-              className={tw(
-                'relative h-12 w-full truncate rounded-lg border border-Gray-300 bg-White text-left text-body2',
-                !editing.station?.stationName ||
-                  editing.routes.map((r) => r.routeName).length === 0
-                  ? 'text-Gray-400'
-                  : 'text-Black'
-              )}
-            >
-              {!editing.station?.stationName
-                ? '정류장을 먼저 선택해주세요'
-                : editing.routes.map((r) => r.routeName).length !== 0
-                ? editing.routes.map((r) => r.routeName).join(', ')
-                : '버스를 선택해주세요'}
-            </TextButton>
-          </div>
-          <StatusButton
-            disabled={!editing.routes.length}
-            className="fixed left-4 bottom-8 w-[calc(100%-32px)]"
-            onClick={handleConfirmClick}
+      </div>
+    );
+
+  return (
+    <div className="" {...restProps}>
+      <NavigationHeader>출근길 관리</NavigationHeader>
+      <div className="mt-8 px-4">
+        <h2 className="mb-2 text-body2">내 정류장 별칭 입력</h2>
+        <InputContainer className="relative h-12 w-full">
+          <InputContainer.Label>
+            <InputContainer.Label.Input
+              ref={inputRef}
+              className="truncate border border-Gray-300 pr-10 focus:border-2 focus:border-Primary-500"
+              onChange={handleComNameChange}
+            />
+          </InputContainer.Label>
+          <InputContainer.ResetButton
+            onClick={handleResetClick}
+            className="absolute top-3 right-3 h-6 w-6 fill-Gray-500"
+          />
+        </InputContainer>
+      </div>
+      <div className="mt-8 px-4">
+        <h2 className="mb-2 text-body2">정류장 이름</h2>
+        <Link to={`/commute/searchStation/${comId}`}>
+          <TextButton
+            className={tw(
+              'relative h-12 w-full truncate rounded-lg border border-Gray-300 bg-White text-left text-body2',
+              !editing.station?.stationName ? 'text-Gray-400' : 'text-Black'
+            )}
           >
-            확인
-          </StatusButton>
-        </>
-      )}
+            {editing.station?.stationName ?? '정류장 선택'}
+          </TextButton>
+        </Link>
+      </div>
+      <div className="mt-8 px-4">
+        <h2 className="mb-2 text-body2">버스 번호</h2>
+        <TextButton
+          disabled={!editing.station}
+          onClick={handleOpenClick}
+          className={tw(
+            'relative h-12 w-full truncate rounded-lg border border-Gray-300 bg-White text-left text-body2',
+            !editing.station?.stationName ||
+              editing.routes.map((r) => r.routeName).length === 0
+              ? 'text-Gray-400'
+              : 'text-Black'
+          )}
+        >
+          {!editing.station?.stationName
+            ? '정류장을 먼저 선택해주세요'
+            : editing.routes.map((r) => r.routeName).length !== 0
+            ? editing.routes.map((r) => r.routeName).join(', ')
+            : '버스를 선택해주세요'}
+        </TextButton>
+      </div>
+      <StatusButton
+        disabled={!editing.routes.length}
+        className="fixed left-4 bottom-8 w-[calc(100%-32px)]"
+        onClick={handleConfirmClick}
+      >
+        확인
+      </StatusButton>
       <BaseModal>
         <BaseModal.Content
           className={tw(

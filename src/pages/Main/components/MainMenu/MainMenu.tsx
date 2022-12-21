@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { tw } from '@/utils/tailwindMerge';
 import { IconButton, List } from '@/components';
 import { BaseModal } from '../../../../components/BaseModal/BaseModal';
-import { animatedBaseModal } from '../../../../constants/style';
 
 type MainMenuProps<T extends React.ElementType> = {
   isModalOpen: boolean;
@@ -26,10 +25,10 @@ export function MainMenu({
     '오픈소스 이용': 'opensource',
   };
   return (
-    <BaseModal className={tw('', className)} {...restProps}>
+    <BaseModal className={tw('relative', className)} {...restProps}>
       <BaseModal.Content
         className={tw(
-          'fixed top-0 right-0 z-50 h-full w-[300px] rounded-t-2xl bg-White transition duration-500 ease-in-out',
+          'fixed top-0 right-0 z-50 h-full w-[300px] rounded-tl-2xl bg-White transition duration-500 ease-in-out',
           isModalOpen ? 'translate-x-0' : 'translate-x-full'
         )}
       >
@@ -41,8 +40,8 @@ export function MainMenu({
             <IconButton.Icon icon={XMarkIcon} className="h-6 w-6" />
           </IconButton>
           <List.Item className="h-25 mt-9 pl-4 pb-6">
-            <List.Title className="text-left">
-              <span>오늘도 산뜻한 출근길 되세요!</span>
+            <List.Title className="text-left font-bold">
+              오늘도 산뜻한 출근길 되세요!
             </List.Title>
           </List.Item>
           {Object.entries(data).map(([content, path]) => (
