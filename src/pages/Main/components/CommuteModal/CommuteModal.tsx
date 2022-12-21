@@ -67,14 +67,14 @@ export function CommuteModal({
             onClick={() => handleBusCardClick(comId)}
           >
             <BusCard.Info className="static left-0 flex translate-x-0 flex-row">
-              <BusCard.Content className="mr-4 w-28 text-ellipsis text-body1 line-clamp-1">
+              <BusCard.Content className="mr-4 w-28 truncate text-body1">
                 {comName}
               </BusCard.Content>
-              <BusCard.StationName className="mb-0 flex items-center justify-center">
+              <BusCard.StationName className="mb-0 w-40 truncate pt-1 pl-4 text-body2">
                 {(station as Station).stationName}
               </BusCard.StationName>
             </BusCard.Info>
-            <BusCard.Content className="text-Gray-400">
+            <BusCard.Content className="w-40 whitespace-pre-wrap text-Gray-400">
               {routes.flatMap(({ routeName }) => routeName).join(', ')}
             </BusCard.Content>
             {comId === currentComId && <BusCard.CheckIcon isChecked />}

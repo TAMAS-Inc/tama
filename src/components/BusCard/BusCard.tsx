@@ -99,7 +99,7 @@ function CheckIcon({ className, isChecked }: CheckIconProps<'button'>) {
     <ToggleIconButton.Icon
       className={tw(
         'absolute right-6 flex h-full w-7 items-center justify-center',
-        isChecked ? ' fill-Primary-700' : 'text-Gray-300',
+        isChecked ? ' fill-Primary-400' : 'text-Gray-300',
         className
       )}
       icon={isChecked ? CheckCircleIcon : PlusCircleIcon}
