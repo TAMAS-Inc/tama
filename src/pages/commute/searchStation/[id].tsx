@@ -136,6 +136,9 @@ export default function SearchBusStop({
                     textToHighlight={station.stationName}
                   />
                 </List.Title>
+                <div className="text-[12px] text-Gray-500">
+                  {station.mobileNo ?? '번호 없음'}
+                </div>
               </List.Item>
             ))
           )}
