@@ -36,7 +36,6 @@ export default function Main() {
     return (
       <div>
         <MainHeader />
-        <Notification />
         <Error>
           <Error.SVG />
           <Error.Text>
