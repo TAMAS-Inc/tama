@@ -21,13 +21,16 @@ export function ConfirmModal({
         </MessageModal.Content>
         <MessageModal.ButtonContainer>
           <MessageModal.Button
-            className="br-0 border-Gray-100"
+            className="border-r border-Gray-300 "
+            onClick={handleCancelClick}
+          >
+            취소
+          </MessageModal.Button>
+          <MessageModal.Button
+            className="font-bold"
             onClick={handleDeleteClick}
           >
             삭제
-          </MessageModal.Button>
-          <MessageModal.Button onClick={handleCancelClick}>
-            취소
           </MessageModal.Button>
         </MessageModal.ButtonContainer>
       </MessageModal.ModalContainer>
