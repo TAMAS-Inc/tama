@@ -3,7 +3,9 @@ import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { tw } from '@/utils/tailwindMerge';
 import { IconButton } from '@/components';
 
-type SyncButtonProps<T extends React.ElementType> = Component<T>;
+type SyncButtonProps<T extends React.ElementType> = {
+  onClick: () => void;
+} & Component<T>;
 
 export function SyncButton({
   children,
@@ -17,17 +19,23 @@ export function SyncButton({
 
   useEffect(() => {
     const timeId = setInterval(() => {
-      setFetchTime((time) => time - 1);
+      setFetchTime((time) => {
+        if (time === 0) {
+          handleClick();
+          return INTERVAL_TIME;
+        }
+        return time - 1;
+      });
     }, 1000);
+
     return () => {
-      if (fetchTime === 0) setFetchTime(INTERVAL_TIME);
       clearInterval(timeId);
     };
-  }, [fetchTime]);
+  }, [fetchTime, handleClick]);
 
   const handleSyncClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     setFetchTime(INTERVAL_TIME);
-    if (handleClick) handleClick(e);
+    if (handleClick) handleClick();
   };
 
   return (

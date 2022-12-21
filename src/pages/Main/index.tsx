@@ -23,30 +23,17 @@ export default function Main() {
   const navigate = useNavigate();
   const currentCommute = useRecoilValue(currentCommuteState);
 
-  const params: RealtimeReqParams = useMemo(
-    () => ({
-      stationId: currentCommute.station?.stationId as string,
-      routeIds: currentCommute.routes.flatMap((r) => r.routeId),
-      predictDate: getCurrentDate(),
-    }),
-    [currentCommute.routes, currentCommute.station?.stationId]
-  );
+  const params: RealtimeReqParams = {
+    stationId: currentCommute.station?.stationId as string,
+    routeIds: currentCommute.routes.flatMap((r) => r.routeId),
+    predictDate: getCurrentDate(),
+  };
 
   const { isError, isLoading, data: Routes, mutation } = useRealtime(params);
 
   const handleSyncButtonClick = () => {
     mutation.mutate({ ...params, predictDate: getCurrentDate() });
   };
-
-  useEffect(() => {
-    const timeId = setInterval(() => {
-      mutation.mutate({ ...params, predictDate: getCurrentDate() });
-    }, 16000);
-    return () => {
-      clearInterval(timeId);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params]);
 
   if (isError) return <NotFound />;
 
