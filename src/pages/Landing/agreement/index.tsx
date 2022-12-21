@@ -24,13 +24,10 @@ function Checkbox({
   children,
   className,
 }: CheckboxProps) {
-  const inputRef = useRef(null);
-
   return (
     <InputContainer className={tw('mt-4 flex rounded-none', className)}>
       <InputContainer.Label className="cursor-pointer">
         <InputContainer.Label.Input
-          ref={inputRef}
           name={name}
           type="checkbox"
           className="absolute h-0 w-0 cursor-pointer opacity-0"
