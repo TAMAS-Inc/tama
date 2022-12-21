@@ -1,15 +1,14 @@
 import { useNavigate } from 'react-router-dom';
+import { ReactComponent as FullLogo } from '@/assets/logo/full_logo.svg';
 
-type IntroProps<T extends React.ElementType> = Component<T>;
-
-export default function Intro({ className, ...restProps }: IntroProps<'div'>) {
+export default function Intro() {
   const navigate = useNavigate();
 
   setTimeout(() => navigate('/main'), 1000);
 
   return (
-    <div className="" {...restProps}>
-      로고띄움
+    <div className="mt-64 p-12">
+      <FullLogo className="w-full" />
     </div>
   );
 }

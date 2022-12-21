@@ -11,7 +11,7 @@ export function Error({
   ...restProps
 }: ErrorProps<'div'>) {
   return (
-    <div className={tw('', className)} {...restProps}>
+    <div className={tw('mt-8', className)} {...restProps}>
       {children}
     </div>
   );
@@ -52,7 +52,7 @@ function InduceLink({
 }: InduceLinkProps<'a'>) {
   return (
     <Link to={path} className={tw('', className)} {...restProps}>
-      <TextButton className="fixed bottom-8 h-12 w-[calc(100%-32px)] bg-Primary-200 px-4 text-body1 font-bold">
+      <TextButton className="fixed left-4 bottom-8 h-12 w-[calc(100%-32px)] bg-Primary-200 text-body1">
         {children}
       </TextButton>
     </Link>

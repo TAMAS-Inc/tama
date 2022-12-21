@@ -17,6 +17,7 @@ interface Route {
 }
 
 interface Station {
+  mobileNo: number;
   stationId: string;
   stationName: string;
 }

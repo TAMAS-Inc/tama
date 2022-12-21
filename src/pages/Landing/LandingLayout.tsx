@@ -19,7 +19,7 @@ export function LandingLayout({
       {children}
       <StatusButton
         disabled={!agree}
-        className="fixed bottom-8 w-[calc(100%-32px)] font-bold"
+        className="fixed bottom-8 w-[calc(100%-32px)]"
       >
         확인
       </StatusButton>

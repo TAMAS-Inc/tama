@@ -19,4 +19,15 @@ input, select, textarea, button, a, label {
     font-weight: 500;
     src: url("/assets/fonts/LINE_Seed_Sans_KR/Webfont/WOFF2/LINESeedKR-Bd.woff2") format("woff2");
   }
+  @font-face {
+    font-family: "Pretandard";
+    font-weight: 400;
+    src: url("/assets/fonts/Pretendard/Webfont/WOFF2/Pretendard-Regular.woff2") format("woff2");
+  }
+
+  @font-face {
+    font-family: "Pretandard";
+    font-weight: 700;
+    src: url("/assets/fonts/Pretendard/Webfont/WOFF2/Pretendard-Bold.woff2") format("woff2");
+  }
 }

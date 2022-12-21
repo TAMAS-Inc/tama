@@ -1,15 +1,13 @@
-/* eslint-disable no-nested-ternary */
 import { Bar, XAxis, YAxis, Legend, LabelList, BarChart, Cell } from 'recharts';
 import { Link } from 'react-router-dom';
 import { tw } from '@/utils/tailwindMerge';
 import {
-  AD,
   NavigationHeader,
   Notification,
-  SyncButton,
   TextButton,
   Error,
   LoadingWithDelay,
+  SyncButtonWithoutTime,
 } from '@/components';
 import {
   CurrentInfo,
@@ -20,7 +18,6 @@ import {
 } from '../hooks/useAnalysis';
 import { getCurrentDate } from '@/utils/date';
 import { useQueryString } from '@/hooks/useQueryString';
-import NotFound from '@/pages/404';
 
 type AnalysisProps<T extends React.ElementType> = Component<T>;
 
@@ -47,8 +44,6 @@ export default function Analysis({
   };
 
   const { isLoading, isError, data, mutation } = useAnalysis(testParams);
-
-  if (isError) return <NotFound />;
 
   const getSortedData = (predictsInfo: PredictInfo[]) =>
     predictsInfo.sort((a, b) => b.remainStationCnt - a.remainStationCnt);
@@ -93,11 +88,9 @@ export default function Analysis({
     mutation.mutate({ ...testParams, predictDate: getCurrentDate() });
   };
 
-  return (
-    <div className={tw('', className)} {...restProps}>
-      <NavigationHeader>실시간 분석</NavigationHeader>
-      <Notification />
-      {isError ? (
+  if (isError)
+    return (
+      <div className={tw('', className)} {...restProps}>
         <Error>
           <Error.SVG />
           <Error.Text>
@@ -111,16 +104,23 @@ export default function Analysis({
             문의하러 가기
           </Error.InduceLink>
         </Error>
-      ) : !isLoading && !mutation.isLoading ? (
-        <div className="flex flex-col gap-4 pt-8 pl-7 pr-7 text-body1 font-bold">
+      </div>
+    );
+
+  return (
+    <div className={tw('', className)} {...restProps}>
+      <NavigationHeader>실시간 분석</NavigationHeader>
+      <Notification />
+      {!isLoading ? (
+        <div className="flex flex-col gap-4 pt-8 pl-7 pr-7 text-body1">
           <p>
-            <strong className="font-bold text-Primary-600">
+            <strong className="text-Primary-600">
               {data.target.stationName}
             </strong>
             에서
             <br />
-            <strong className="font-bold text-Primary-600">
-              {isLoading || mutation.isLoading ? <> </> : data.routeName}번
+            <strong className="text-Primary-600">
+              {isLoading ? <LoadingWithDelay /> : data.routeName}번
             </strong>
             버스의 예상 잔여 좌석은
             <br />
@@ -128,7 +128,7 @@ export default function Analysis({
               '현재 알 수 없어요!'
             ) : (
               <>
-                <strong className="font-bold text-Primary-600">
+                <strong className="text-Primary-600">
                   {data.target.predictRemainSeatCnt}석
                 </strong>
                 일 것 같아요!
@@ -140,10 +140,10 @@ export default function Analysis({
           ) : (
             <>
               <p>
-                <strong>타까마까의 실시간 예측 정보</strong>는 <br />{' '}
+                <strong>타까마까의 실시간 예측 정보</strong>는 <br />
                 <strong>평일 아침 6시부터 10시 사이</strong>에 제공됩니다.
               </p>
-              <TextButton className="h-12 bg-Primary-400 px-4 text-body1 font-bold">
+              <TextButton className="h-12 bg-Primary-400 px-4 text-body1 text-White">
                 <Link to="/main">타까마까 홈으로 가기</Link>
               </TextButton>
             </>
@@ -152,7 +152,7 @@ export default function Analysis({
       ) : (
         <LoadingWithDelay />
       )}
-      <SyncButton onClick={handleSyncButtonClick} />
+      {data?.exist && <SyncButtonWithoutTime onClick={handleSyncButtonClick} />}
     </div>
   );
 }

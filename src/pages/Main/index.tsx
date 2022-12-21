@@ -1,9 +1,6 @@
-/* eslint-disable no-nested-ternary */
-import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import {
-  AD,
   BusCard,
   Error,
   Notification,
@@ -12,7 +9,6 @@ import {
 } from '@/components';
 import { currentCommuteState } from '@/state/atom';
 import { getCurrentDate } from '@/utils/date';
-import NotFound from '../404';
 import { MainHeader } from './components';
 import {
   RealtimeInfo,
@@ -20,66 +16,50 @@ import {
   useRealtime,
 } from './hooks/useRealtime';
 
-const INTERVAL_TIME = 15;
-
 export default function Main() {
   const navigate = useNavigate();
-  const [fetchTime, setFetchTime] = useState(INTERVAL_TIME);
   const currentCommute = useRecoilValue(currentCommuteState);
 
-  const testParams: RealtimeReqParams = {
+  const params: RealtimeReqParams = {
     stationId: currentCommute.station?.stationId as string,
     routeIds: currentCommute.routes.flatMap((r) => r.routeId),
     predictDate: getCurrentDate(),
   };
 
-  const {
-    isError,
-    isLoading,
-    data: Routes,
-    mutation,
-  } = useRealtime(testParams);
+  const { isError, isLoading, data: Routes, mutation } = useRealtime(params);
 
   const handleSyncButtonClick = () => {
-    mutation.mutate({ ...testParams, predictDate: getCurrentDate() });
-    setFetchTime(INTERVAL_TIME);
+    mutation.mutate({ ...params, predictDate: getCurrentDate() });
   };
 
-  useEffect(() => {
-    const timeId = setInterval(() => {
-      setFetchTime((time) => time - 1);
-    }, 1000);
-    return () => {
-      if (fetchTime === 0) {
-        setFetchTime(INTERVAL_TIME);
-        mutation.mutate({ ...testParams, predictDate: getCurrentDate() });
-      }
-      clearInterval(timeId);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchTime]);
-
-  if (isError) return <NotFound />;
-
-  return (
-    <>
-      <MainHeader />
-      <Notification />
-      {isError ? (
+  if (!Routes && isError)
+    return (
+      <div>
+        <MainHeader />
         <Error>
           <Error.SVG />
           <Error.Text>
             현재 보고 계신 페이지를 이용할 수 없습니다.
             <br />
-            재접속 후에도 화면이 나타나지 않는다면
-            <br />
-            아래 버튼을 눌러 알려주세요!
+            아래의 버튼을 눌러 재시도 해주세요.
           </Error.Text>
-          <Error.InduceLink path="/menu/inquiry">
-            문의하러 가기
+          <Error.InduceLink
+            path="/main"
+            onClick={() => {
+              window.location.reload();
+            }}
+          >
+            재시도
           </Error.InduceLink>
         </Error>
-      ) : isLoading ? (
+      </div>
+    );
+
+  return (
+    <div>
+      <MainHeader />
+      <Notification />
+      {isLoading && !mutation.isLoading ? (
         <LoadingWithDelay />
       ) : (
         Routes?.map(
@@ -125,7 +105,7 @@ export default function Main() {
           )
         )
       )}
-      <SyncButton fetchTime={fetchTime} onClick={handleSyncButtonClick} />
-    </>
+      <SyncButton onClick={handleSyncButtonClick} />
+    </div>
   );
 }

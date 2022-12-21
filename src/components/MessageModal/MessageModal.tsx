@@ -64,7 +64,7 @@ function ButtonContainer({
   return (
     <div
       className={tw(
-        'flex h-10 w-[278px] justify-evenly text-body3 font-bold',
+        'flex h-12 w-[278px] justify-evenly border-t border-Gray-300',
         className
       )}
       {...restProps}
@@ -77,7 +77,7 @@ function ButtonContainer({
 function Button({ children, className, ...restProps }: ButtonProps<'button'>) {
   return (
     <MessageModal.TextButton
-      className="h-full w-full rounded-none bg-Primary-300"
+      className={tw('h-full w-full rounded-none text-body2 ', className)}
       {...restProps}
     >
       {children}

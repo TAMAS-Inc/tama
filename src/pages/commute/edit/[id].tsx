@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import { ChangeEventHandler, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
@@ -28,7 +29,9 @@ export default function Commute({
   ...restProps
 }: CommuteProps<'div'>) {
   const navigate = useNavigate();
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [targetId, setTargetId] = useState<string | null>(null);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentComId, setCurrentComId] = useRecoilState(currentComIdState);
 
   const { commutes, editing, editCommute, addCommute } = useCommutes();
@@ -82,8 +85,10 @@ export default function Commute({
       });
     }
   };
-  const handleRoutesConfirmClick = () => {
-    setIsModalOpen(false);
+
+  const handlePopupMessage = () => {
+    setIsPopupOpen(true);
+    setTimeout(() => setIsPopupOpen(false), 1000);
   };
 
   const handleConfirmClick = () => {
@@ -92,10 +97,10 @@ export default function Commute({
     navigate('/main');
   };
 
-  return (
-    <div className="pl-4 pr-4" {...restProps}>
-      <NavigationHeader className="-ml-4">출근길 관리</NavigationHeader>
-      {isError ? (
+  if (isError)
+    return (
+      <div className="" {...restProps}>
+        <NavigationHeader>출근길 관리</NavigationHeader>
         <Error>
           <Error.SVG />
           <Error.Text>
@@ -109,51 +114,68 @@ export default function Commute({
             문의하러 가기
           </Error.InduceLink>
         </Error>
-      ) : (
-        <>
-          <div className="mt-8">
-            <h2 className="mb-2 text-body2">내 정류장 별칭 입력</h2>
-            <InputContainer className="relative h-12 w-full">
-              <InputContainer.Label>
-                <InputContainer.Label.Input
-                  ref={inputRef}
-                  className="border border-Gray-300"
-                  onChange={handleComNameChange}
-                />
-              </InputContainer.Label>
-              <InputContainer.ResetButton
-                onClick={handleResetClick}
-                className="absolute top-3 right-3 h-6 w-6 fill-Gray-500"
-              />
-            </InputContainer>
-          </div>
-          <div className="mt-8">
-            <h2 className="mb-2 text-body2">정류장 이름</h2>
-            <Link to={`/commute/searchStation/${comId}`}>
-              <TextButton className="relative h-12 w-full rounded-lg border border-Gray-300 bg-White text-left text-body2 text-Gray-400">
-                {editing.station?.stationName ?? '정류장 선택'}
-              </TextButton>
-            </Link>
-          </div>
-          <div className="mt-8">
-            <h2 className="mb-2 text-body2">버스 번호</h2>
-            <TextButton
-              disabled={!editing.station}
-              onClick={handleOpenClick}
-              className="relative h-12 w-full rounded-lg border border-Gray-300 bg-White text-left text-body2 text-Gray-400"
-            >
-              {editing.routes.map((r) => r.routeName).join(', ') ?? '버스 선택'}
-            </TextButton>
-          </div>
-          <StatusButton
-            disabled={!editing.routes.length}
-            className="fixed bottom-8 w-[calc(100%-32px)]"
-            onClick={handleConfirmClick}
+      </div>
+    );
+
+  return (
+    <div className="" {...restProps}>
+      <NavigationHeader>출근길 관리</NavigationHeader>
+      <div className="mt-8 px-4">
+        <h2 className="mb-2 text-body2">내 정류장 별칭 입력</h2>
+        <InputContainer className="relative h-12 w-full">
+          <InputContainer.Label>
+            <InputContainer.Label.Input
+              ref={inputRef}
+              className="truncate border border-Gray-300 pr-10 focus:border-2 focus:border-Primary-500"
+              onChange={handleComNameChange}
+            />
+          </InputContainer.Label>
+          <InputContainer.ResetButton
+            onClick={handleResetClick}
+            className="absolute top-3 right-3 h-6 w-6 fill-Gray-500"
+          />
+        </InputContainer>
+      </div>
+      <div className="mt-8 px-4">
+        <h2 className="mb-2 text-body2">정류장 이름</h2>
+        <Link to={`/commute/searchStation/${comId}`}>
+          <TextButton
+            className={tw(
+              'relative h-12 w-full truncate rounded-lg border border-Gray-300 bg-White text-left text-body2',
+              !editing.station?.stationName ? 'text-Gray-400' : 'text-Black'
+            )}
           >
-            확인
-          </StatusButton>
-        </>
-      )}
+            {editing.station?.stationName ?? '정류장 선택'}
+          </TextButton>
+        </Link>
+      </div>
+      <div className="mt-8 px-4">
+        <h2 className="mb-2 text-body2">버스 번호</h2>
+        <TextButton
+          disabled={!editing.station}
+          onClick={handleOpenClick}
+          className={tw(
+            'relative h-12 w-full truncate rounded-lg border border-Gray-300 bg-White text-left text-body2',
+            !editing.station?.stationName ||
+              editing.routes.map((r) => r.routeName).length === 0
+              ? 'text-Gray-400'
+              : 'text-Black'
+          )}
+        >
+          {!editing.station?.stationName
+            ? '정류장을 먼저 선택해주세요'
+            : editing.routes.map((r) => r.routeName).length !== 0
+            ? editing.routes.map((r) => r.routeName).join(', ')
+            : '버스를 선택해주세요'}
+        </TextButton>
+      </div>
+      <StatusButton
+        disabled={!editing.routes.length}
+        className="fixed left-4 bottom-8 w-[calc(100%-32px)]"
+        onClick={handleConfirmClick}
+      >
+        확인
+      </StatusButton>
       <BaseModal>
         <BaseModal.Content
           className={tw(
@@ -166,7 +188,9 @@ export default function Commute({
               onClick={handleCloseClick}
               className="rounded-t-2xl pl-6"
             >
-              <List.Title>{editing.station?.stationName}</List.Title>
+              <List.Title className="w-40 truncate text-left">
+                {editing.station?.stationName}
+              </List.Title>
               <List.Icon icon={ChevronDownIcon} />
             </List.Item>
             {isLoading ? (
@@ -183,6 +207,8 @@ export default function Commute({
                             { routeName, routeId },
                             !editing.routes.find((e) => e.routeId === routeId)
                           );
+                          handlePopupMessage();
+                          setTargetId(routeId);
                         }}
                         type="checkbox"
                         className="hidden"
@@ -190,46 +216,36 @@ export default function Commute({
                           !editing.routes.find((e) => e.routeId === routeId)
                         }
                       />
-
-                      <InputContainer.Label.Input
-                        onChange={() => {
-                          handleRouteCheckChange(
-                            { routeName, routeId },
-                            !editing.routes.find((r) => r.routeId === routeId)
-                          );
-                        }}
-                        type="checkbox"
-                        className="hidden"
-                        checked={
-                          !editing.routes.find((r) => r.routeId === routeId)
+                      <List.Icon
+                        className={tw(
+                          'absolute top-6 right-4 h-7 w-7',
+                          !editing.routes.find((e) => e.routeId === routeId)
+                            ? 'bg-White fill-White stroke-Gray-300'
+                            : 'bg-White fill-Primary-400'
+                        )}
+                        icon={
+                          !editing.routes.find((e) => e.routeId === routeId)
+                            ? PlusCircleIcon
+                            : CheckCircleIcon
                         }
                       />
                     </InputContainer.Label>
-                    <List.Icon
-                      className={tw(
-                        'absolute top-6 right-4 h-7 w-7',
-                        !editing.routes.find((e) => e.routeId === routeId)
-                          ? 'bg-White fill-White stroke-Gray-300'
-                          : 'bg-White fill-Primary-700'
-                      )}
-                      icon={
-                        !editing.routes.find((e) => e.routeId === routeId)
-                          ? PlusCircleIcon
-                          : CheckCircleIcon
-                      }
-                    />
                   </InputContainer>
                 </List.Item>
               ))
             )}
+            <div
+              className={tw(
+                'absolute left-1/2 bottom-10 -translate-x-1/2 -translate-y-1/2 rounded-md bg-Gray-600 py-1 px-2 text-center text-Gray-100 transition-opacity',
+                isPopupOpen ? 'opacity-100' : 'opacity-0'
+              )}
+            >
+              {!editing.routes.find((e) => e.routeId === targetId)
+                ? '제거 '
+                : '추가 '}
+              되었습니다.
+            </div>
           </List>
-          <StatusButton
-            onClick={handleRoutesConfirmClick}
-            disabled={!editing.routes.length}
-            className="fixed left-4 bottom-8 w-[calc(100%-32px)]"
-          >
-            확인
-          </StatusButton>
         </BaseModal.Content>
         <BaseModal.DimBg
           onClick={handleCloseClick}

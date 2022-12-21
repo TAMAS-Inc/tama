@@ -1,6 +1,7 @@
 import { ChangeEventHandler } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
+import { CheckIcon } from '@heroicons/react/24/solid';
 import { InputContainer, StatusButton } from '@/components';
 import { useCommutes } from '@/hooks/useCommutes';
 import { agreementState } from '@/state/atom';
@@ -29,10 +30,18 @@ function Checkbox({
         <InputContainer.Label.Input
           name={name}
           type="checkbox"
-          className="mx-2 h-6 w-6 accent-Primary-400 hover:accent-Primary-300"
+          className="absolute h-0 w-0 cursor-pointer opacity-0"
           onChange={onChange}
           checked={state}
         />
+        <div
+          className={tw(
+            'abosolute top-0 left-0 mx-2 h-6 w-6 rounded-lg',
+            state ? 'bg-Primary-400' : 'border-[1px] bg-White'
+          )}
+        >
+          {state && <CheckIcon className="fill-White" />}
+        </div>
         {children}
       </InputContainer.Label>
     </InputContainer>

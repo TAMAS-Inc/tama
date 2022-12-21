@@ -46,19 +46,17 @@ export default function Edit({
             setCurrentComId(comId);
           }}
         >
-          <div>
-            <BusCard.Info className="static left-0 flex translate-x-0 flex-row">
-              <BusCard.Content className="w-28 text-body1 line-clamp-1">
-                {comName}
-              </BusCard.Content>
-              <BusCard.StationName className="mb-0 flex items-center justify-center">
-                {station?.stationName}
-              </BusCard.StationName>
-            </BusCard.Info>
-            <BusCard.Content className="text-Gray-400">
-              {routes.map((route) => route.routeName).join(', ')}
+          <BusCard.Info className="static left-0 flex translate-x-0 flex-row">
+            <BusCard.Content className="w-28 truncate text-body1 font-bold">
+              {comName}
             </BusCard.Content>
-          </div>
+            <BusCard.StationName className="mb-0 w-40 truncate pt-1 pl-4 text-body2">
+              {station?.stationName}
+            </BusCard.StationName>
+          </BusCard.Info>
+          <BusCard.Content className="w-40 text-Gray-400">
+            {routes.map((route) => route.routeName).join(', ')}
+          </BusCard.Content>
           {comId === currentComId && (
             <BusCard.CheckIcon className="bottom-2" isChecked />
           )}
