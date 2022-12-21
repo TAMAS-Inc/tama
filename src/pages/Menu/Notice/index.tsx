@@ -13,7 +13,6 @@ export default function Notice({
 
   if (isError)
     <div className={tw('', className)} {...restProps}>
-      <NavigationHeader>공지사항</NavigationHeader>
       <Error>
         <Error.SVG />
         <Error.Text>

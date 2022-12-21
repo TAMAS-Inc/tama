@@ -91,7 +91,6 @@ export default function Analysis({
   if (isError)
     return (
       <div className={tw('', className)} {...restProps}>
-        <Notification />
         <Error>
           <Error.SVG />
           <Error.Text>

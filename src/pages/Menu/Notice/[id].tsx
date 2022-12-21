@@ -17,7 +17,6 @@ export default function Notice({
   if (isError)
     return (
       <div className={tw('', className)} {...restProps}>
-        <NavigationHeader>{notice?.title}</NavigationHeader>
         <Error>
           <Error.SVG />
           <Error.Text>
