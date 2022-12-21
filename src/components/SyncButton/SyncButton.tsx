@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import { useState, useEffect } from 'react';
 import { ReactComponent as RotateRightIcon } from '@/assets/icons/rotate_right.svg';
-// import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { tw } from '@/utils/tailwindMerge';
 import { IconButton } from '@/components';
 
