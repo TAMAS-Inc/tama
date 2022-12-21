@@ -1,4 +1,4 @@
-import { ChangeEventHandler, useRef } from 'react';
+import { ChangeEventHandler } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { CheckIcon } from '@heroicons/react/24/solid';
@@ -36,9 +36,8 @@ function Checkbox({
         />
         <div
           className={tw(
-            'abosolute top-0 left-0 mx-2 h-6 w-6 rounded ',
-            'after:absolute after:left-9 after:top-5 after:hidden after:h-10 after:w-5 after:border after:content-none',
-            state ? 'bg-Primary-400 after:block ' : 'border-[1px] bg-White'
+            'abosolute top-0 left-0 mx-2 h-6 w-6 rounded-lg',
+            state ? 'bg-Primary-400' : 'border-[1px] bg-White'
           )}
         >
           {state && <CheckIcon className="fill-White" />}
