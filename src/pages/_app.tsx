@@ -8,7 +8,10 @@ export default function App({
   ...restProps
 }: AppProps<'div'>) {
   return (
-    <div className={tw('font-line-seed-sans-kr', className)} {...restProps}>
+    <div
+      className={tw('mt-16 font-line-seed-sans-kr', className)}
+      {...restProps}
+    >
       {children}
     </div>
   );
