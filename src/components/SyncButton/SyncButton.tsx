@@ -1,27 +1,41 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { tw } from '@/utils/tailwindMerge';
 import { IconButton } from '@/components';
 
 type SyncButtonProps<T extends React.ElementType> = {
-  fetchTime?: number;
+  onClick: () => void;
 } & Component<T>;
 
 export function SyncButton({
   children,
   className,
   onClick: handleClick,
-  fetchTime,
   ...restProps
 }: SyncButtonProps<'button'>) {
-  const [isSyncing, setIsSyncing] = useState(false);
+  const INTERVAL_TIME = 15;
+
+  const [fetchTime, setFetchTime] = useState(INTERVAL_TIME);
+
+  useEffect(() => {
+    const timeId = setInterval(() => {
+      setFetchTime((time) => {
+        if (time === 0) {
+          handleClick();
+          return INTERVAL_TIME;
+        }
+        return time - 1;
+      });
+    }, 1000);
+
+    return () => {
+      clearInterval(timeId);
+    };
+  }, [fetchTime, handleClick]);
 
   const handleSyncClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-    setIsSyncing(true);
-    setTimeout(() => {
-      setIsSyncing(false);
-    }, 1000);
-    if (handleClick) handleClick(e);
+    setFetchTime(INTERVAL_TIME);
+    if (handleClick) handleClick();
   };
 
   return (
@@ -36,7 +50,7 @@ export function SyncButton({
       <IconButton.Icon
         icon={ArrowPathIcon}
         className={tw(
-          isSyncing ? 'animate-spin' : '',
+          fetchTime === INTERVAL_TIME ? 'animate-spin' : '',
           'absolute h-12 w-12 stroke-White stroke-1'
         )}
       />

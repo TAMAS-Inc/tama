@@ -93,8 +93,8 @@ export default function Commute({
   };
 
   return (
-    <div className="pl-4 pr-4" {...restProps}>
-      <NavigationHeader className="-ml-4">출근길 관리</NavigationHeader>
+    <div className="" {...restProps}>
+      <NavigationHeader>출근길 관리</NavigationHeader>
       {isError ? (
         <Error>
           <Error.SVG />
@@ -111,7 +111,7 @@ export default function Commute({
         </Error>
       ) : (
         <>
-          <div className="mt-8">
+          <div className="mt-8 px-4">
             <h2 className="mb-2 text-body2">내 정류장 별칭 입력</h2>
             <InputContainer className="relative h-12 w-full">
               <InputContainer.Label>
@@ -127,7 +127,7 @@ export default function Commute({
               />
             </InputContainer>
           </div>
-          <div className="mt-8">
+          <div className="mt-8 px-4">
             <h2 className="mb-2 text-body2">정류장 이름</h2>
             <Link to={`/commute/searchStation/${comId}`}>
               <TextButton className="relative h-12 w-full rounded-lg border border-Gray-300 bg-White text-left text-body2 text-Gray-400">
@@ -135,7 +135,7 @@ export default function Commute({
               </TextButton>
             </Link>
           </div>
-          <div className="mt-8">
+          <div className="mt-8 px-4">
             <h2 className="mb-2 text-body2">버스 번호</h2>
             <TextButton
               disabled={!editing.station}
@@ -147,7 +147,7 @@ export default function Commute({
           </div>
           <StatusButton
             disabled={!editing.routes.length}
-            className="fixed bottom-8 w-[calc(100%-32px)]"
+            className="fixed left-4 bottom-8 w-[calc(100%-32px)]"
             onClick={handleConfirmClick}
           >
             확인

@@ -18,3 +18,4 @@ export { ToggleIconButton } from './ToggleIconButton';
 export { Notification } from './Notification';
 export { MessageModal } from './MessageModal';
 export { LoadingWithDelay } from './LoadingWithDelay';
+export { SyncButtonWithoutTime } from './SyncButtonWithoutTime';
