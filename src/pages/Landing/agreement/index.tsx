@@ -66,7 +66,7 @@ export default function Agreement({
   };
 
   const handleConfirmButtonClick = () => {
-    const comId = createNewCommute('춘식이네');
+    const comId = createNewCommute('우리 집');
     navigate(`/commute/edit/${comId}`);
   };
 
