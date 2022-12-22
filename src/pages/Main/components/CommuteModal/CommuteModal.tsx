@@ -32,7 +32,7 @@ export function CommuteModal({
   };
 
   const addCommute = () => {
-    const newComId = createNewCommute('라이언네');
+    const newComId = createNewCommute('우리 집');
     navigate(`/commute/edit/${newComId}`);
   };
 
