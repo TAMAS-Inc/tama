@@ -120,8 +120,8 @@ export default function Commute({
   return (
     <div className="" {...restProps}>
       <NavigationHeader>출근길 관리</NavigationHeader>
-      <div className="mt-8 px-4">
-        <h2 className="mb-2 text-body2">내 정류장 별칭 입력</h2>
+      <div className="px-4 pt-8">
+        <h2 className="mb-2  text-body2">내 정류장 별칭 입력</h2>
         <InputContainer className="relative h-12 w-full">
           <InputContainer.Label>
             <InputContainer.Label.Input
