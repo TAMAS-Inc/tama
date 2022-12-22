@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
+import { ReactComponent as RotateRightIcon } from '@/assets/icons/rotate_right.svg';
 import { tw } from '@/utils/tailwindMerge';
 import { IconButton } from '@/components';
 
@@ -11,13 +12,15 @@ export function SyncButtonWithoutTime({
   onClick: handleClick,
   ...restProps
 }: SyncButtonProps<'button'>) {
-  const [isSyncing, setIsSyncing] = useState(false);
-
-  const handleSyncClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-    setIsSyncing(true);
+  const [isSpinning, setIsSpinning] = useState(false);
+  const spin = () => {
+    setIsSpinning(true);
     setTimeout(() => {
-      setIsSyncing(false);
+      setIsSpinning(false);
     }, 1000);
+  };
+  const handleSyncClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    spin();
     if (handleClick) handleClick(e);
   };
 
@@ -30,14 +33,13 @@ export function SyncButtonWithoutTime({
       onClick={handleSyncClick}
       {...restProps}
     >
-      <IconButton.Icon
-        icon={ArrowPathIcon}
+      <RotateRightIcon
         className={tw(
-          isSyncing ? 'animate-spin' : '',
-          'absolute h-12 w-12 stroke-White stroke-1'
+          // fetchTime === INTERVAL_TIME + 1 || fetchTime === 0
+          isSpinning ? 'animate-spin' : 'animate-none',
+          'color absolute h-8 w-8 stroke-White stroke-1'
         )}
       />
-      {children}
     </IconButton>
   );
 }

@@ -112,7 +112,7 @@ export default function Analysis({
       <NavigationHeader>실시간 분석</NavigationHeader>
       <Notification />
       {!isLoading ? (
-        <div className="flex flex-col gap-4 pt-8 pl-7 pr-7 text-body1">
+        <div className="flex flex-col gap-4 pt-4 pl-7 pr-7 text-body1">
           <p>
             <strong className="text-Primary-600">
               {data.target.stationName}
@@ -159,11 +159,15 @@ export default function Analysis({
 
 function Chart({ data }: { data: (CurrentInfo | PredictInfo)[] }) {
   return (
-    <BarChart width={350} height={400} data={data}>
+    <BarChart width={400} height={350} data={data} className="-ml-10 mt-6">
       <XAxis dataKey="label" fontSize="14px" />
       <YAxis fontSize="12px" />
       <Legend
-        wrapperStyle={{ fontSize: '16px', fontWeight: '400' }}
+        wrapperStyle={{
+          fontSize: '16px',
+          fontWeight: '400',
+          marginLeft: '36px',
+        }}
         verticalAlign="bottom"
         height={20}
       />
@@ -185,7 +189,7 @@ function Chart({ data }: { data: (CurrentInfo | PredictInfo)[] }) {
         barSize={20}
         dataKey="predictRemainSeatCnt"
         fill="#bababa"
-        className="fill-Gray-300"
+        className=" fill-Gray-300"
       >
         {data.map((entry, index) => (
           <Cell
@@ -197,6 +201,7 @@ function Chart({ data }: { data: (CurrentInfo | PredictInfo)[] }) {
           fontSize="14px"
           dataKey="predictRemainSeatCnt"
           position="top"
+          className="font-bold"
         />
       </Bar>
     </BarChart>

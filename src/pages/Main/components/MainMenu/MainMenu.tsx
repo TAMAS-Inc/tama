@@ -28,7 +28,7 @@ export function MainMenu({
     <BaseModal className={tw('relative', className)} {...restProps}>
       <BaseModal.Content
         className={tw(
-          'fixed top-0 right-0 z-50 h-full w-[300px] rounded-tl-2xl bg-White transition duration-500 ease-in-out',
+          'fixed top-0 right-0 z-50 h-full w-[300px]  bg-White transition duration-500 ease-in-out',
           isModalOpen ? 'translate-x-0' : 'translate-x-full'
         )}
       >

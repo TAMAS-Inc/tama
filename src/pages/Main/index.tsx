@@ -62,7 +62,11 @@ export default function Main() {
       {isLoading && !mutation.isLoading ? (
         <LoadingWithDelay />
       ) : (
-        Routes?.map(
+        Routes?.sort((a, b) => {
+          if (a.routeName > b.routeName) return 1;
+          if (a.routeName < b.routeName) return -1;
+          return 0;
+        }).map(
           ({
             exist,
             routeId,
@@ -89,14 +93,17 @@ export default function Main() {
                 </BusCard.Content>
                 {exist && (
                   <BusCard.Content>
-                    {remainStationCnt}번째 전 (실시간
-                    {remainSeatCnt < 0 ? '정보 없음' : `${remainSeatCnt}석`},
-                    예측
-                    {predictRemainSeatCnt === -1
-                      ? '정보 없음'
-                      : ` 
+                    {remainStationCnt}번째 전{' '}
+                    <span className=" text-Gray-500">|</span> 실시간
+                    {remainSeatCnt < 0 ? '정보 없음' : ` ${remainSeatCnt}석`},
+                    <span className="font-bold text-Primary-600">
+                      {' '}
+                      예측
+                      {predictRemainSeatCnt === -1
+                        ? '정보 없음'
+                        : ` 
                     ${predictRemainSeatCnt}석`}
-                    )
+                    </span>
                   </BusCard.Content>
                 )}
               </BusCard.Info>

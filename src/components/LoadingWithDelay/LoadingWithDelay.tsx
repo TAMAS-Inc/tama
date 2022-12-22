@@ -22,7 +22,7 @@ export function LoadingWithDelay({
   });
 
   return showLoadingIndicator ? (
-    <div className="mt-8 flex flex-col items-center text-Gray-400">
+    <div className="mt-8 flex flex-col items-center pt-8 text-Gray-400">
       <ClipLoader
         color="#ffd677"
         className={tw('mb-2', className)}
