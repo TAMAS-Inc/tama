@@ -80,7 +80,7 @@ function InfoIcon({ className }: InfoIconProps<'button'>) {
   return (
     <button
       type="button"
-      className="absolute right-6 flex h-full items-center justify-center"
+      className="absolute right-6 flex h-full items-center justify-center px-4"
     >
       <Icon
         icon={InformationCircleIcon}

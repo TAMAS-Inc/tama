@@ -159,10 +159,11 @@ export default function Analysis({
 
 function Chart({ data }: { data: (CurrentInfo | PredictInfo)[] }) {
   return (
-    <BarChart width={400} height={350} data={data} className="-ml-10 mt-6">
-      <XAxis dataKey="label" fontSize="14px" />
-      <YAxis fontSize="12px" />
-      <Legend
+    <>
+      <BarChart width={400} height={350} data={data} className="-ml-10 mt-6">
+        <XAxis dataKey="label" fontSize="14px" />
+        <YAxis fontSize="12px" />
+        {/* <Legend
         wrapperStyle={{
           fontSize: '16px',
           fontWeight: '400',
@@ -170,8 +171,8 @@ function Chart({ data }: { data: (CurrentInfo | PredictInfo)[] }) {
         }}
         verticalAlign="bottom"
         height={20}
-      />
-      <Bar
+      /> */}
+        {/* <Bar
         name="실시간 좌석"
         dataKey="remainSeatCnt"
         barSize={20}
@@ -182,29 +183,40 @@ function Chart({ data }: { data: (CurrentInfo | PredictInfo)[] }) {
         {data.map((entry) => (
           <Cell key={`${entry}`} className="fill-none" />
         ))}
-      </Bar>
-      <Bar
-        name="예측 좌석"
-        type="monotone"
-        barSize={20}
-        dataKey="predictRemainSeatCnt"
-        fill="#bababa"
-        className=" fill-Gray-300"
-      >
-        {data.map((entry, index) => (
-          <Cell
-            key={`${entry}`}
-            className={index === 0 ? 'fill-Primary-500' : 'fill-Gray-300'}
-          />
-        ))}
-        <LabelList
-          fontSize="14px"
+      </Bar> */}
+        <Bar
+          name="예측 좌석"
+          type="monotone"
+          barSize={20}
           dataKey="predictRemainSeatCnt"
-          position="top"
-          className="font-bold"
-        />
-      </Bar>
-    </BarChart>
+          fill="#bababa"
+          className=" fill-Gray-300"
+        >
+          {data.map((entry, index) => (
+            <Cell
+              key={`${entry}`}
+              className={index === 0 ? 'fill-Primary-500' : 'fill-Gray-300'}
+            />
+          ))}
+          <LabelList
+            fontSize="14px"
+            dataKey="predictRemainSeatCnt"
+            position="top"
+            className="font-bold"
+          />
+        </Bar>
+      </BarChart>
+      <div className="ml-[78px] -mt-4 flex gap-5">
+        <div className="flex items-center gap-3">
+          <div className="h-3 w-3 bg-Primary-500" />
+          <div className="text-[15px]">실시간 좌석</div>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="h-3 w-3 bg-Gray-300" />
+          <div className="text-[15px]">예측 좌석</div>
+        </div>
+      </div>
+    </>
   );
 }
 
