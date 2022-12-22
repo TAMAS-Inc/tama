@@ -165,7 +165,14 @@ export default function Commute({
           {!editing.station?.stationName
             ? '정류장을 먼저 선택해주세요'
             : editing.routes.map((r) => r.routeName).length !== 0
-            ? editing.routes.map((r) => r.routeName).join(', ')
+            ? editing.routes
+                .sort((a, b) => {
+                  if (a.routeName < b.routeName) return -1;
+                  if (a.routeName > b.routeName) return 1;
+                  return 0;
+                })
+                .map((r) => r.routeName)
+                .join(', ')
             : '버스를 선택해주세요'}
         </TextButton>
       </div>
