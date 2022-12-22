@@ -112,7 +112,7 @@ export default function SearchBusStop({
               <InputContainer.Label.Input
                 ref={inputRef}
                 onChange={handleInputChange}
-                className="truncate bg-Gray-100 pr-10"
+                className="truncate bg-Gray-100 pr-10 text-[14px] "
                 placeholder="정류장 검색"
               />
             </InputContainer.Label>
@@ -178,40 +178,46 @@ export default function SearchBusStop({
               </TextButton>
             </div>
             {!isRouteLoading &&
-              routes?.map(({ routeName, routeId }) => (
-                <List.Item key={routeId} className="relative pl-4">
-                  <InputContainer className="h-full w-full pl-2 text-body1 text-Primary-700">
-                    <InputContainer.Label>
-                      {routeName}
-                      <InputContainer.Label.Input
-                        onChange={(e) => {
-                          handleRouteCheckChange(
-                            { routeName, routeId },
-                            e.target.checked
-                          );
-                          handlePopupMessage();
-                          setTargetId(routeId);
-                        }}
-                        type="checkbox"
-                        className="hidden"
-                      />
-                      <List.Icon
-                        className={tw(
-                          'absolute top-6 right-4 h-7 w-7',
-                          !editing.routes.find((r) => r.routeId === routeId)
-                            ? 'bg-White fill-White stroke-Gray-300'
-                            : 'bg-White fill-Primary-400'
-                        )}
-                        icon={
-                          !editing.routes.find((r) => r.routeId === routeId)
-                            ? PlusCircleIcon
-                            : CheckCircleIcon
-                        }
-                      />
-                    </InputContainer.Label>
-                  </InputContainer>
-                </List.Item>
-              ))}
+              routes
+                ?.sort((a, b) => {
+                  if (a.routeName < b.routeName) return -1;
+                  if (a.routeName > b.routeName) return 1;
+                  return 0;
+                })
+                .map(({ routeName, routeId }) => (
+                  <List.Item key={routeId} className="relative pl-4">
+                    <InputContainer className="h-full w-full pl-2 text-body1 text-Primary-700">
+                      <InputContainer.Label>
+                        {routeName}
+                        <InputContainer.Label.Input
+                          onChange={(e) => {
+                            handleRouteCheckChange(
+                              { routeName, routeId },
+                              e.target.checked
+                            );
+                            handlePopupMessage();
+                            setTargetId(routeId);
+                          }}
+                          type="checkbox"
+                          className="hidden"
+                        />
+                        <List.Icon
+                          className={tw(
+                            'absolute top-6 right-4 h-7 w-7',
+                            !editing.routes.find((r) => r.routeId === routeId)
+                              ? 'bg-White fill-White stroke-Gray-300'
+                              : 'bg-White fill-Primary-400'
+                          )}
+                          icon={
+                            !editing.routes.find((r) => r.routeId === routeId)
+                              ? PlusCircleIcon
+                              : CheckCircleIcon
+                          }
+                        />
+                      </InputContainer.Label>
+                    </InputContainer>
+                  </List.Item>
+                ))}
             <div
               className={tw(
                 'absolute left-1/2 bottom-10 -translate-x-1/2 -translate-y-1/2 rounded-md bg-Gray-600 py-1 px-2 text-center text-Gray-100 transition-opacity',

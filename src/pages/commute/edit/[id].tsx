@@ -120,7 +120,7 @@ export default function Commute({
   return (
     <div className="" {...restProps}>
       <NavigationHeader>출근길 관리</NavigationHeader>
-      <div className="px-4 pt-8">
+      <div className="px-4 pt-6">
         <h2 className="mb-2  text-body2">내 정류장 별칭 입력</h2>
         <InputContainer className="relative h-12 w-full">
           <InputContainer.Label>
@@ -196,43 +196,49 @@ export default function Commute({
             {isLoading ? (
               <LoadingWithDelay />
             ) : (
-              routes?.map(({ routeName, routeId }) => (
-                <List.Item key={routeId} className="relative pl-4">
-                  <InputContainer className="h-full w-full pl-2 text-body1 text-Primary-700">
-                    <InputContainer.Label>
-                      {routeName}
-                      <InputContainer.Label.Input
-                        onChange={() => {
-                          handleRouteCheckChange(
-                            { routeName, routeId },
+              routes
+                ?.sort((a, b) => {
+                  if (a.routeName < b.routeName) return -1;
+                  if (a.routeName > b.routeName) return 1;
+                  return 0;
+                })
+                .map(({ routeName, routeId }) => (
+                  <List.Item key={routeId} className="relative pl-4">
+                    <InputContainer className="h-full w-full pl-2 text-body1 text-Primary-700">
+                      <InputContainer.Label>
+                        {routeName}
+                        <InputContainer.Label.Input
+                          onChange={() => {
+                            handleRouteCheckChange(
+                              { routeName, routeId },
+                              !editing.routes.find((e) => e.routeId === routeId)
+                            );
+                            handlePopupMessage();
+                            setTargetId(routeId);
+                          }}
+                          type="checkbox"
+                          className="hidden"
+                          checked={
                             !editing.routes.find((e) => e.routeId === routeId)
-                          );
-                          handlePopupMessage();
-                          setTargetId(routeId);
-                        }}
-                        type="checkbox"
-                        className="hidden"
-                        checked={
-                          !editing.routes.find((e) => e.routeId === routeId)
-                        }
-                      />
-                      <List.Icon
-                        className={tw(
-                          'absolute top-6 right-4 h-7 w-7',
-                          !editing.routes.find((e) => e.routeId === routeId)
-                            ? 'bg-White fill-White stroke-Gray-300'
-                            : 'bg-White fill-Primary-400'
-                        )}
-                        icon={
-                          !editing.routes.find((e) => e.routeId === routeId)
-                            ? PlusCircleIcon
-                            : CheckCircleIcon
-                        }
-                      />
-                    </InputContainer.Label>
-                  </InputContainer>
-                </List.Item>
-              ))
+                          }
+                        />
+                        <List.Icon
+                          className={tw(
+                            'absolute top-6 right-4 h-7 w-7',
+                            !editing.routes.find((e) => e.routeId === routeId)
+                              ? 'bg-White fill-White stroke-Gray-300'
+                              : 'bg-White fill-Primary-400'
+                          )}
+                          icon={
+                            !editing.routes.find((e) => e.routeId === routeId)
+                              ? PlusCircleIcon
+                              : CheckCircleIcon
+                          }
+                        />
+                      </InputContainer.Label>
+                    </InputContainer>
+                  </List.Item>
+                ))
             )}
             <div
               className={tw(
